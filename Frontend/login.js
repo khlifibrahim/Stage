@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 
 function App() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); 
+
+    const formData = {
+      username,
+      password,
+    };
+
+    // send data b post
+    axios.post('api', formData)
+      .then((response) => {
+        setMessage(response.data.message); // msg dyl success
+        console.log('Login successful', response.data.token); 
+      })
+      .catch((error) => {
+        setError(error.response.data.message); // msg dyl error
+        console.error('Error logging in:', error.response.data.message);
+      });
+    }
   return (
     <div 
       className="min-vh-100 d-flex flex-column justify-content-center align-items-center bg-light"
@@ -32,14 +57,17 @@ function App() {
         </div>
 
         {/* Formulaire */}
-        <form>
+        <form  onSubmit={handleSubmit}>
           <div className="mb-3">
           
             <input
               type="text"
               id="username"
               className="form-control"
-              placeholder="Entrer votre email"
+              placeholder="Entrer votre nom d'utilisateur"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+  
             />
           </div>
 
@@ -50,6 +78,9 @@ function App() {
               id="password"
               className="form-control"
               placeholder="Entrer votre mot de passe"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+  
             />
           </div>
 
@@ -63,7 +94,10 @@ function App() {
           </button>
         </form>
 
-        {/* Liens secondaires */}
+         {/* Display messages */}
+         {message && <div className="alert alert-success mt-3">{message}</div>}
+        {error && <div className="alert alert-danger mt-3">{error}</div>}
+
         
       </div>
     </div>
