@@ -65,7 +65,6 @@ function App() {
         {/* Formulaire */}
         <form  onSubmit={handleSubmit}>
           <div className="mb-3">
-          
             <input
               type="text"
               id="username"
@@ -73,7 +72,6 @@ function App() {
               placeholder="Entrer votre nom d'utilisateur"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-  
             />
           </div>
 
@@ -94,7 +92,7 @@ function App() {
           <button
             type="submit"
             className="btn w-50 mt-4 "
-            style={{ backgroundColor: '#081640', color: 'white' ,display: 'block', marginLeft: 'auto', marginRight: 'auto'  }} // Set button background color
+style={{ backgroundColor: '#081640', color: 'white' ,display: 'block', marginLeft: 'auto', marginRight: 'auto'  }} // Set button background color
           >
             Se connecter
           </button>
