@@ -34,6 +34,7 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'react/jsx-uses-vars': 'on',
     },
   },
 ]

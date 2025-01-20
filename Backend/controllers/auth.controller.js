@@ -1,84 +1,123 @@
+import {connectSQL} from '../database/connectDB.js'
 import bcryptjs from 'bcryptjs';
-import { generateVerificationCode } from '../utils/generateVerificationCode.js';
-import { User } from '../modules/user.module.js';
+import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
 
 
 export const login = async (req, res) => {
     const {username, password} = req.body; 
     try {
-        const user = await User.findOne({username})
-        console.log(user)
-        if(!user) {
-            return res.status(400).json({success: false, message: "invalid credentials"})
-        }
-        const isPasswordValid = await bcryptjs.compare(password, user.password)
+        const  connection = await connectSQL();
+        const [rows] = await connection.query('SELECT * FROM stage.utilisateur WHERE username = ?', [username])
+        
+        if(rows.length === 0) {
+            return res.status(400).json({
+                success: false, 
+                message: "invalid credentials"
+            })}
+
+        const userData = rows[0]
+        console.log(userData)
+
+        const isPasswordValid = await bcryptjs.compare(password, userData.mot_de_passe)
         if(!isPasswordValid) {
             return res.status(400).json({success: false, message: "Invalid credentials"})
         }
 
-        generateVerificationCode(res, user._id);
-        user.lastLogin = new Date();
+        const token = generateTokenAndSetCookie(res, userData.id_utilisateur);
+        console.log(token)
 
-        await user.save();
+        await connection.execute(
+            'UPDATE stage.utilisateur SET lastlogin = ? WHERE id_utilisateur = ?', 
+            [new Date(), userData.id_utilisateur])
 
-        res.status(200).json({
+            // console.log('error stop here')
+        return res.status(200).json({
             success: true,
             message: "Logged succefully",
             user: {
-                ...user._doc,
-                password: undefined
-            }
+                id_utilisateur: userData.id_utilisateur,
+                username: userData.username,
+                email: userData.email,
+                statut: userData.statut,
+                token: userData.token,
+                
+                lastLogin: new Date(),
+            },
         })
 
     }catch (e) {
         console.log("Error in login: ", e);
-        res.status(400).json({success: false, message: e.message})
+        return res.status(400).json({success: false, message: e.message})
     }
 }
+
+
 export const logout = async (req, res) => {
     res.clearCookie('token');
-    res.status(200).json({success: true, message: "logged out successfully"})
+    return res.status(200).json({success: true, message: "logged out successfully"})
 }
+
+
 export const signup = async (req, res) => {
-    const {username, email, password, first_name, last_name, phone, status} = req.body
+    const {username, email, password, first_name, last_name, phone, status, profile} = req.body
     try {
-        if(!username || !email || !password || !first_name || !last_name || !phone || !status) {
-            throw new Error('All fields are required')
-        }
-        const userAlreadyExists = await User.findOne({username})
-        console.log("line 30", userAlreadyExists)
-        if(userAlreadyExists) {
-            return res.status(400).json({message: "User already exists"})
+
+        const  connection = await connectSQL();
+
+        const [existingUser] = await connection.query(
+            'SELECT * from stage.utilisateur WHERE username = ? OR email = ?',
+            [username, email]
+        );
+
+        if(existingUser.length > 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'User aleady exists'
+            })
         }
 
-        const hashedPassword = await bcryptjs.hash(password, 10)
+        const hashPassword = await bcryptjs.hash(password, 10);
         const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+        const verificationTokenExpiredAt = new Date(Date.now() + 24 * 60 * 60 * 1000)
+                .toISOString()
+                .slice(0, 19)
+                .replace("T", " ");
 
-        const user = new User({
-            username, 
-            email, 
-            password: hashedPassword,
-            first_name,
-            last_name,
-            phone,
-            status,
-            verificationToken,
-            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
-        })
-
-        await user.save()
-        generateVerificationCode(res, user._id)
-
-        res.status(201).json({
-            success: true,
-            message: "User created successfully",
-            user: {
-                ...user._doc,
-                password: undefined
+        const checkProfile = () => {
+            switch (profile) {
+                case 'Directeur':
+                    return 1;
+                case 'Cadre':
+                    return 2;
+                case 'Chef de Service':
+                    return 3;
+                case 'Secritaire':
+                    return 4;
+                default:
+                    throw new Error('Invalid profile type');
             }
+        }
+
+        await connection.execute(
+            'INSERT INTO stage.utilisateur (nom, prenom, username, email, Numero_tel, mot_de_passe, statut, verification_token, verification_token_expires_at, id_profile, date_creation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [first_name, last_name, username, email, phone, hashPassword, status, verificationToken, verificationTokenExpiredAt, checkProfile(), new Date()]
+        )
+        // generateVerificationCode(res, )
+
+        return res.status(201).json({
+            success: true,
+            message: "User created successfully"
         })
 
     }catch (error) {
-        res.status(400).json({success: false, message: error.message})
+        return res.status(400).json({success: false, message: error.message})
     }
 }
+
+
+
+
+
+
+
+
