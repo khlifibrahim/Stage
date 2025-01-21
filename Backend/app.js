@@ -14,14 +14,18 @@ dotenv.config();
 const app = express();
 
 
+// Middlewares
 app.use(cors({ 
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     credentials: true,
 }));
 app.use(express.json())
+
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/orderMission', orderMission)
+
 
 app.get("/", (req, res) => {
     

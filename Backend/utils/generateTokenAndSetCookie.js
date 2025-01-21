@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 
-export const generateTokenAndSetCookie = (res, userId) => {
+export const generateTokenAndSetCookie = (res, userId, profile) => {
     try {
         // console.log('Generating verification code for user:', userId);
-        const token = jwt.sign({id: userId}, process.env.JWT_SECRET, 
-            {expiresIn: "7d",
+        const token = jwt.sign({id: userId, profile: profile}, process.env.JWT_SECRET, 
+            {expiresIn: "1h",
         });
     
         res.cookie("token", token, {

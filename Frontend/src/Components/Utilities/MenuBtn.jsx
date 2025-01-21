@@ -36,10 +36,12 @@ function MenuBtn({icon, content, subMenu}) {
             <div className="px-2">
               {
                 subMenu.map((e, i) => (
-                  <div key={i} className='flex items-center justify-start gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer'>
-                      <span className="icon hover:stroke-blue">{e.icon}</span>
-                      <p className='font-poppins font-medium text-[14px] leading-5 '> {e.content} </p>
-                  </div>
+                  <Link to={e.path} >
+                    <div key={i} className='flex items-center justify-start gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer'>
+                        <span className="icon hover:stroke-blue">{e.icon}</span>
+                        <p className='font-poppins font-medium text-[14px] leading-5 '> {e.content} </p>
+                    </div>
+                  </Link>
                 ))
               }
             </div>

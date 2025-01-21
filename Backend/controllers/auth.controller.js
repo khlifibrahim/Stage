@@ -1,6 +1,7 @@
 import {connectSQL} from '../database/connectDB.js'
 import bcryptjs from 'bcryptjs';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
+import { redirect } from 'react-router-dom';
 
 
 export const login = async (req, res) => {
@@ -23,13 +24,33 @@ export const login = async (req, res) => {
             return res.status(400).json({success: false, message: "Invalid credentials"})
         }
 
-        const token = generateTokenAndSetCookie(res, userData.id_utilisateur);
+        const token = generateTokenAndSetCookie(res, userData.id_utilisateur, userData.id_profile);
         console.log(token)
 
         await connection.execute(
             'UPDATE stage.utilisateur SET lastlogin = ? WHERE id_utilisateur = ?', 
             [new Date(), userData.id_utilisateur])
 
+
+        let redirectURL = '/directeur';
+
+        switch (userData.id_profile) {
+            case 1:
+                redirectURL = '/directeur';
+            case 3:
+                redirectURL = '/chef-de-service';
+                break;
+            case 2:
+                redirectURL = '/cadre';
+                break;
+            case 4:
+                redirectURL = '/secretaire';
+                break;
+            default:
+                redirectURL = '/default-page';
+                break;
+        }
+        
             // console.log('error stop here')
         return res.status(200).json({
             success: true,
@@ -39,10 +60,12 @@ export const login = async (req, res) => {
                 username: userData.username,
                 email: userData.email,
                 statut: userData.statut,
+                profile: userData.id_profile,
                 token: userData.token,
                 
                 lastLogin: new Date(),
             },
+            redirect: redirectURL,
         })
 
     }catch (e) {

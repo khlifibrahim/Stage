@@ -16,8 +16,6 @@ const FullForm = () => {
     typeV:'',
     personnelV:'',
     accompagne:''
-
-
   })
 
   const handleChange=(e)=>{
@@ -37,7 +35,7 @@ const FullForm = () => {
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="nom">Nom</label>
-            <input type="text" name="nom" placeholder="Nom..." onChange={(e)=>handleChange(e)} required />
+            <input type="text" name="nom" value={values.nom} placeholder="Nom..." onChange={(e)=>handleChange(e)} required />
           </div>
           <div className="form-group">
             <label htmlFor="titre">Titre</label>

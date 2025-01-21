@@ -14,7 +14,7 @@ const Sidebar = () => {
           <ul>
             <li className="flex items-center py-2 px-4 hover:bg-blue-500">
               <FaHome className="mr-2" /> 
-              <Link to="/">Dashboard</Link>
+              <Link to="/">{axios || 'Dashboard'}</Link>
             </li>
             <li className="flex items-center py-2 px-4 hover:bg-blue-500">
               <FaBox className="mr-2" /> 

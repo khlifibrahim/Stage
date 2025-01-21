@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import MenuBtn from '../Utilities/MenuBtn';
 import logo from '../../assets/small-logo.png';
 

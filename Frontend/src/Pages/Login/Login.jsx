@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom';
 import Instance from '../../Api/axios';
 import Btn from '../../Components/Utilities/btn'
 
@@ -6,6 +7,7 @@ import Btn from '../../Components/Utilities/btn'
 import logo from '../../assets/small-logo.png'
 
 function Login() {
+    const navigate = useNavigate();
     const [isLogin, setLogin] = useState({
         username: '',
         password: ''
@@ -29,6 +31,12 @@ function Login() {
             console.log('login successful:', response.data)
 
             const token = response.data.token
+
+            if(response.data.success) {
+                navigate(response.data.redirect)
+            }else {
+                console.log('redirect error')
+            }
 
         }
         catch (e) {
