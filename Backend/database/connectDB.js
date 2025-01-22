@@ -1,27 +1,36 @@
-import mongoose from "mongoose";
+import fs from "fs";
+import path from "path";
+// import mongoose from "mongoose";
 import mysql from 'mysql2/promise';
 
 
-export const connectDB = async () => {
-    try {
-        console.log("mongo_uri(line 5): " , process.env.MONGO_URI)
-        const con = await mongoose.connect(process.env.MONGO_URI)
-        console.log(`Mongo connected: ${con.connection.host}`)
-    }catch (e) {
-        console.log(`Error connect => `,e.message)
-        process.exit(1)
-    }
-}
+// export const connectDB = async () => {
+//     try {
+//         console.log("mongo_uri(line 5): " , process.env.MONGO_URI)
+//         const con = await mongoose.connect(process.env.MONGO_URI)
+//         console.log(`Mongo connected: ${con.connection.host}`)
+//     }catch (e) {
+//         console.log(`Error connect => `,e.message)
+//         process.exit(1)
+//     }
+// }
 
 
 
 export const connectSQL = async () => {
+
     try {
+        const caPath = path.resolve("./Backend/database/ca.pem");
+        if (!fs.existsSync(caPath)) {
+          console.error(`CA certificate file not found at(line:5): ${caPath}`);
+          process.exit(1);
+        }
+
         const connection = await mysql.createConnection({
           host: process.env.DB_HOST,
           user: process.env.DB_USER,
           password: process.env.DB_PASSWORD,
-          database: process.env.DB_NAME,
+          database: process.env.DB_NAME
         });
     
         console.log('Connected to the MySQL database.', process.env.DB_NAME);
@@ -35,6 +44,6 @@ export const connectSQL = async () => {
 
         return connection;
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error conect to the database:', error);
       }
 }

@@ -4,9 +4,9 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 
 
-import { connectDB, connectSQL } from './database/connectDB.js'
+import { connectSQL } from './database/connectDB.js'
 import authRoutes from './routes/auth.route.js'
-import orderMission from './routes/orderMission.route.js';
+import mission from './routes/orderMission.route.js';
 
 
 const port = process.env.PORT || 3000
@@ -24,7 +24,7 @@ app.use(express.json())
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/orderMission', orderMission)
+app.use('/api/missions', mission)
 
 
 app.get("/", (req, res) => {
