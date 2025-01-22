@@ -20,3 +20,4 @@ dist/
 
 # Other files
 *.log
+.vercel

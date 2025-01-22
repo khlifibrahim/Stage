@@ -19,7 +19,12 @@ export const getCarsAndCadres = async (req, res)=> {
         const cadreData = cadre[0]
         const carData = vehicles[0]
         const gradeData = grade[0]
-        const fullData = {...cadreData, ...gradeData, ...carData}
+        const fullData = {
+            ...cadreData, 
+            ...gradeData, 
+            ...carData
+            
+        }
         console.log(fullData);
 
         res.status(200).json({
