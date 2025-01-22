@@ -16,7 +16,7 @@ function SideBar({menuListLink}) {
         <div className="menu px-6 flex flex-col gap-2">
             {
                 menuListLink.map((element, index) => (
-                    <div>
+                    <div key={index}>
                         <MenuBtn key={index} icon={element.icon} content={element.content} subMenu={element.subMenu}/>
                     </div>
                 ))

@@ -1,6 +1,14 @@
 import React from 'react'
+import Instance from '../../Api/axios'
 
 function NewMission() {
+  try {
+    const response = Instance.get('/getCarsAndCadres', getCarsAndCadres)
+    console.log(response)
+  } catch (error) {
+    console.log(error)
+  }
+
   return (
     <div className='flex flex-col gap-8'>
       <div className="header">
