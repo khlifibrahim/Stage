@@ -48,7 +48,7 @@ function Layout() {
             <SideBar menuListLink={menuListLink} />
             <div className="content relative flex flex-col gap-3 px-[32px] w-full ">
                 <Header />
-                <div className="page-content w-full  overflow-x-hidden">
+                <div className="page-content w-full  overflow-x-hidden overflow-y-scroll no-scrollbar">
                     <Outlet className=""/>
                 </div>
             </div>

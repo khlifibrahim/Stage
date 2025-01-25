@@ -129,9 +129,7 @@ function NewMission() {
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Créer Ordre Mission</h1>
-        <div className="">
+      
           {/* Header */}
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-800">Créer Ordre Mission</h1>
@@ -366,22 +364,21 @@ function NewMission() {
             <div className="flex justify-end gap-4 mt-6">
               <button
                 type="button"
-                className="px-6 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+                className="px-6 py-2 bg-bg-blue text-blue font-medium font-poppins text-xl rounded-[10px] hover:bg-blue hover:text-white transition-colors"
               >
                 Imprimer
               </button>
 
               <button
                 type="submit"
-                className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+                className="px-6 py-2 bg-bg-blue text-blue font-medium font-poppins text-xl rounded-[10px] hover:bg-blue hover:text-white transition-colors"
               >
                 Sauvegarder
               </button>
             </div>
           </form>
         </div>
-      </div>
-    </div>
+    
       );
 }
 

@@ -10,11 +10,6 @@ function ListMissions() {
       try {
         const response = await Instance.get('/missions/getOrderMission')
         console.log(response.data)
-        
-        // setMissionsList(prevMission => [
-        //   ...prevMission,
-        //   response.data.missions
-        // ])
         setMissionsList(response.data.missions)
       } catch (error) {
         console.log('Error fetching missions list: ',error)
@@ -35,7 +30,7 @@ function ListMissions() {
 
 
   return (
-    <div className='flex flex-col gap-8 '>
+    <div className='flex flex-col gap-8 mb-4'>
       <div className="header">
         <h1 className='font-poppins font-bold text-[36px]'>List des Order Missions</h1>
       </div>
@@ -51,8 +46,8 @@ function ListMissions() {
           </div>
 
 
-          {missionsList.map((mission, i) => (
-            <div key={i} className="table-rows flex items-center justify-evenly border-[#E4E4E4] rounded-[4px]">
+          {missionsList.slice(0,7).map((mission, i) => (
+            <div key={i} className="table-rows flex items-center justify-evenly border-b border-b-[#E4E4E4] rounded-[4px]">
               <div className="table-base-row p-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{mission.Titre || 'Mission name'}</p></div>
               <div className="table-base-row p-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{mission.destination || 'Oujda angade'}</p></div>
               <div className="table-base-row p-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{dateFormat(mission.departure_date) || 'August 1, 2024'}</p></div>
@@ -67,6 +62,14 @@ function ListMissions() {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="navigation flex items-center justify-between ">
+        <button className='px-3 py-2 bg-transparent border-2 border-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:!bg-blue hover:text-white transition-colors'>Précédente</button>
+
+        <div></div>
+
+        <button className='px-3 py-2 bg-transparent border-2 border-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:!bg-blue hover:text-white transition-colors'>Suivante</button>
       </div>
     </div>
   )
