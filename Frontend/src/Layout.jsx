@@ -44,12 +44,12 @@ function Layout() {
 
 
     return (
-        <div className='flex gap-6'>
+        <div className='flex gap-6 h-screen overflow-auto'>
             <SideBar menuListLink={menuListLink} />
-            <div className="content flex flex-col items-start justify-start gap-3 px-[32px] w-full h-full ">
+            <div className="content relative flex flex-col gap-3 px-[32px] w-full ">
                 <Header />
-                <div className="page-content w-full">
-                    <Outlet />
+                <div className="page-content w-full  overflow-x-hidden">
+                    <Outlet className=""/>
                 </div>
             </div>
         </div>

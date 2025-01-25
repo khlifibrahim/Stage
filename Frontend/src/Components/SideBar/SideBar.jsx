@@ -8,7 +8,7 @@ function SideBar({menuListLink}) {
       
 
   return (
-    <div className='min-w-[280px] w-[280px] h-screen flex flex-col gap-6 border-r border-r-[#B6B6B6] '>
+    <div className='min-w-[280px] w-[280px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6] '>
         <div className="head flex items-center gap-3 p-6">
             <img src={logo} className='!w-[47px] ' alt="MCINET.GOV.MA" />
             <p className='font-poppins font-semibold leading-[140%] text-[20px] '>MCINET</p>

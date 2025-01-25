@@ -4,14 +4,17 @@ import {
         createOrderMission, 
         updateOrderMission, 
         deleteOrderMission,
-        getCarsAndCadres
+        searchCadre,
+        getServiceCars
     } from '../controllers/orderMission.controller.js'
 
 const router = express.Router();
 
-router.get('/getCarsAndCadres', getCarsAndCadres)
+
 router.get('/getOrderMission', getOrderMission)
-router.get('/createOrderMission', createOrderMission)
+router.get('/getServiceCars', getServiceCars)
+router.post('/searchCadre', searchCadre)
+router.post('/createOrderMission', createOrderMission)
 router.get('/updateOrderMission', updateOrderMission)
 router.get('/deleteOrderMission', deleteOrderMission)
 

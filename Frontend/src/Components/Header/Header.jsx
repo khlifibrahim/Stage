@@ -3,7 +3,7 @@ import Profile from '../Utilities/Profile'
 
 function Header({name, role}) {
   return (
-    <div className='w-full h-[102px] flex justify-between items-center '>
+    <div className='sticky top-0 z-50 w-full min-h-[102px] flex justify-between items-center '>
             <div className='globalSearch'>
                 <div className='searchBox flex justify-center items-center w-[334px] h-[38px] px-3 rounded-[10px] border-border border focus-within:border-blue overflow-hidden'>
                     <span className=''>
