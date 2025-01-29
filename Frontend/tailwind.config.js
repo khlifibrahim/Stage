@@ -9,6 +9,7 @@ export default {
       colors: {
         'blue': 'rgba(70, 134, 229, 1)',
         'bg-blue':'rgba(70, 134, 229, 0.25)',
+        'bg-gray': '#727272',
         'border': 'rgba(0, 0, 30, 0.6)',
         'borderGray': '#B6B6B6'
       },

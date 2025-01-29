@@ -1,9 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logOut } from '../../Redux/Actions/auth.actions';
 
 function Profile() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isprofileMenuActive, setprofileMenuActive] = useState(false)
+  const userInfo = JSON.parse(localStorage.getItem('auth'))
+  console.log("UserInfo",userInfo)
+
   const handleProfileMenu = () => {
     setprofileMenuActive(!isprofileMenuActive)
+  }
+
+  const handleLogout = async (e) => {
+      await dispatch(logOut())
+      navigate('/login')
+      console.log('user logedout successfully!!')
   }
 
   return (
@@ -12,8 +26,8 @@ function Profile() {
         {/* <img src="" alt="" /> */}
       </div>
       <div className=''>
-        <p className='font-poppins font-medium leading-5 text-[12px]'>Ch. de service</p>
-        <p>Brahim Khlifi</p>
+        <p className='font-poppins font-medium leading-5 text-[12px]'>{ userInfo?.user?.profile || 'Ch. de service'}</p>
+        <p>{userInfo?.user?.nom ? `${userInfo.user.nom} ${userInfo.user.prenom}` : 'Brahim Khlifi'}</p>
       </div>
       <div className={`rotate-90 ${isprofileMenuActive ? '' : 'rotate-0'}`} onClick={handleProfileMenu}>
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className={`hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-chevron-right`}><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
@@ -33,7 +47,7 @@ function Profile() {
               <span className="icon hover:svg>stroke-blue">
                 <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue  icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
               </span>
-              <p className='font-poppins font-medium text-[14px] leading-5 '>Deconnexion</p>
+              <p onClick={handleLogout} className='font-poppins font-medium text-[14px] leading-5 '>Deconnexion</p>
             </div>
             
           </div>

@@ -1,14 +1,21 @@
 import {connectSQL} from '../database/connectDB.js'
 import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import { generateTokenAndSetCookie } from '../utils/generateTokenAndSetCookie.js';
-import { redirect } from 'react-router-dom';
 
 
 export const login = async (req, res) => {
     const {username, password} = req.body; 
     try {
         const  connection = await connectSQL();
-        const [rows] = await connection.query('SELECT * FROM stage.utilisateur WHERE username = ?', [username])
+        const [rows] = await connection.query(`
+            SELECT *, p.nom_profile 
+            FROM stage.utilisateur u
+            LEFT JOIN profile p 
+            ON u.id_profile = p.id_profile
+            WHERE username = ?
+            `, [username])
         
         if(rows.length === 0) {
             return res.status(400).json({
@@ -25,47 +32,33 @@ export const login = async (req, res) => {
         }
 
         const token = generateTokenAndSetCookie(res, userData.id_utilisateur, userData.id_profile);
-        console.log(token)
+        // console.log(token)
 
         await connection.execute(
             'UPDATE stage.utilisateur SET lastlogin = ? WHERE id_utilisateur = ?', 
             [new Date(), userData.id_utilisateur])
 
-
-        let redirectURL = '/directeur';
-
-        switch (userData.id_profile) {
-            case 1:
-                redirectURL = '/directeur';
-            case 3:
-                redirectURL = '/chef-de-service';
-                break;
-            case 2:
-                redirectURL = '/cadre';
-                break;
-            case 4:
-                redirectURL = '/secretaire';
-                break;
-            default:
-                redirectURL = '/default-page';
-                break;
+        const user = {
+            id_utilisateur: userData.id_utilisateur,
+            nom: userData.nom,
+            prenom: userData.prenom,
+            username: userData.username,
+            email: userData.email,
+            statut: userData.statut,
+            profile: userData.nom_profile,
+            lastLogin: new Date(),
         }
-        
-            // console.log('error stop here')
+        console.log(
+            {
+                userData,
+                token: token
+            }
+        )
         return res.status(200).json({
             success: true,
             message: "Logged succefully",
-            user: {
-                id_utilisateur: userData.id_utilisateur,
-                username: userData.username,
-                email: userData.email,
-                statut: userData.statut,
-                profile: userData.id_profile,
-                token: userData.token,
-                
-                lastLogin: new Date(),
-            },
-            redirect: redirectURL,
+            user: user,
+            token: token
         })
 
     }catch (e) {
@@ -137,6 +130,29 @@ export const signup = async (req, res) => {
     }
 }
 
+
+export const verifyToken = async (req, res) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+
+    if(!token) {
+        return res.status(401).json({
+            message: 'Access denied, no token found'
+        })
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
+        res.json({
+            valid: true,
+            user: req.user
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: 'Invalid token'
+        })
+    }
+}
 
 
 

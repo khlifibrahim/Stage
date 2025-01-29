@@ -364,14 +364,14 @@ function NewMission() {
             <div className="flex justify-end gap-4 mt-6">
               <button
                 type="button"
-                className="px-6 py-2 bg-bg-blue text-blue font-medium font-poppins text-xl rounded-[10px] hover:bg-blue hover:text-white transition-colors"
+                className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors "
               >
                 Imprimer
               </button>
 
               <button
                 type="submit"
-                className="px-6 py-2 bg-bg-blue text-blue font-medium font-poppins text-xl rounded-[10px] hover:bg-blue hover:text-white transition-colors"
+                className="px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors"
               >
                 Sauvegarder
               </button>
