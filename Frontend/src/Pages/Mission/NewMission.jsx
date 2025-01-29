@@ -9,6 +9,15 @@ function NewMission() {
   const [cadreList, setCadreList] = useState([]);
   const [selectedCadre, setSelectedCadre] = useState(null);
   const [serviceCars, setServiceCars] = useState([]);
+  
+  const [accompaniedSearch, setAccompaniedSearch] = useState("");
+  const [accompaniedList, setAccompaniedList] = useState([]); // Liste des cadres accompagnateurs
+  const [selectedAccompanied, setSelectedAccompanied] = useState(null);
+
+  const [objectOptions, setObjectOptions] = useState([]);
+
+
+
 
   const [cadre, setCadre] = useState(
     {
@@ -43,6 +52,63 @@ function NewMission() {
   console.log('useState - cadres(40)', cadre)
   console.log('useState - selected cadres(41)', selectedCadre)
   console.log('useState - cars(42)', serviceCars)
+
+  //useEffect OBJET//
+  useEffect(() => {
+    const fetchObjectOptions = async () => {
+      try {
+        const response = await Instance.get('/missions/getObjectOptions'); 
+        setObjectOptions(response.data || []);
+      } catch (error) {
+        console.error( error);
+      }
+    };
+  
+    fetchObjectOptions();
+  }, []);
+  
+//useEffect ACCOMPAGNE//
+  useEffect(() => {
+    const fetchAccompaniedCadres = async () => {
+      if (accompaniedSearch.trim() === "") {
+        setAccompaniedList([]);
+        return;
+      }
+  
+      try {
+        const response = await Instance.post('/missions/searchCadre', { name: accompaniedSearch });
+        setAccompaniedList(response.data.cadres || []);
+      } catch (error) {
+        console.error(error);
+        setAccompaniedList([]);
+      }
+    };
+  
+    const timer = setTimeout(fetchAccompaniedCadres, 300);
+    return () => clearTimeout(timer);
+  }, [accompaniedSearch]);
+
+  const handleAccompaniedChange = (selected) => {
+    setSelectedAccompanied(selected);
+    setAccompaniedSearch(`${selected.nom} ${selected.prenom}`);
+  };
+
+  //useEffect DESTINATION//
+
+  useEffect(() => {
+    const fetchDestinationList = async () => {
+      try {
+        const response = await Instance.get('/missions/getDestinations'); 
+        setDestinationList(response.data || []);
+      } catch (error) {
+        console.error( error);
+      }
+    };
+  
+    fetchDestinationList();
+  }, []);
+  
+
 
   useEffect(() => {
     const fetchServiceCars = async () => {
@@ -196,31 +262,48 @@ function NewMission() {
                   required
                 />
               </div>
+
+              {/*  Destination */}
               <div className="flex flex-col flex-1">
                 <label className="font-medium text-sm mb-1">Destination*</label>
-                <input
-                  type="text"
+                <select
                   name="destination"
                   value={mission.destination}
                   onChange={handleMissionChange}
-                  placeholder="Destination..."
                   className="border rounded-lg px-4 py-2 focus:outline-blue"
                   required
-                />
+                >
+                  <option value="" disabled>Sélectionnez une destination</option>
+                  {destinationList.map((destination, i) => (
+                    <option key={i} value={destination.name }> 
+                      {destination.name || "Aucune destination"} 
+                    </option>
+                  ))}
+                </select>
               </div>
+
             </div>
 
+            
             {/* Objet */}
-            <div className="flex flex-col mb-4">
-              <label className="font-medium text-sm mb-1">Objet</label>
-              <textarea
-                name="purpose"
-                value={mission.purpose}
-                onChange={handleMissionChange}
-                placeholder="Objet..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue"
-              />
-            </div>
+              <div className="flex flex-col mb-4">
+                <label className="font-medium text-sm mb-1">Objet</label>
+                <select
+                  name="purpose"
+                  value={mission.purpose}
+                  onChange={handleMissionChange}
+                  className="border rounded-lg px-4 py-2 focus:outline-blue"
+                  required
+                >
+                  <option value="" disabled>Sélectionnez un objet...</option>
+                  {objectOptions.map((object, index) => (
+                    <option key={index} value={object.value || ""}>
+                      {object.label || "Aucun objet"}  
+                    </option>
+                  ))}
+                </select>
+              </div>
+
 
             {/* Groupe: Date et Heure */}
             <div className="flex gap-6 mb-4">
@@ -349,15 +432,28 @@ function NewMission() {
             {/* Sera accompagné de */}
             <div className="flex flex-col">
               <label className="font-medium text-sm mb-1">Sera accompagné de</label>
-              <input
-                type="text"
-                name="companion"
-                value={mission.companion}
-                onChange={handleMissionChange}
-                placeholder="Indiquez les noms..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue"
-              />
+              <div className="relative flex flex-col">
+                <input
+                  type="text"
+                  value={accompaniedSearch}
+                  onChange={(e) => setAccompaniedSearch(e.target.value)}
+                  placeholder="Nom d'accompagnateur..."
+                  className="border rounded-lg px-4 py-2 focus:outline-blue"
+                />
+                <div className={`absolute top-11 left-0 w-full bg-white border rounded-lg ${accompaniedList.length > 0 ? 'border' : ''}`}>
+                  {accompaniedList.map((cadre, i) => (
+                    <div
+                      key={i}
+                      onClick={() => handleAccompaniedChange(cadre)}
+                      className="px-4 py-2 cursor-pointer hover:bg-bg-blue hover:text-blue"
+                    >
+                      {cadre.prenom} {cadre.nom}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
+
 
             
             {/* Groupe: Boutons */}
