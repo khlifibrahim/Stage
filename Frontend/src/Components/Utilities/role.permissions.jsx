@@ -2,84 +2,87 @@ export const ROLES = {
     DIRECTEUR: 1,
     CHEFSERVICE: 3,
     CADRE: 2,
-    SECRETAIRE: 4
+    SECRÉTAIRE: 4
 };
 
 export const ROLE_NAMES = {
     [ROLES.DIRECTEUR]: 'Directeur',
     [ROLES.CHEFSERVICE]: 'Chef de Service',
     [ROLES.CADRE]: 'Cadre',
-    [ROLES.SECRETAIRE]: 'Secrétaire'
+    [ROLES.SECRÉTAIRE]: 'Secrétaire'
 };
 export const ROLE_TO_ID = {
     DIRECTEUR: ROLES.DIRECTEUR,
     CHEFSERVICE: ROLES.CHEFSERVICE,
     CADRE: ROLES.CADRE,
-    SECRETAIRE: ROLES.SECRETAIRE
+    SECRÉTAIRE: ROLES.SECRÉTAIRE
   };
 
-// Define permissions for each role, grouped by feature/module
+  
 export const ROLE_PERMISSIONS = {
     [ROLES.DIRECTEUR]: {
-        dashboard: {
-            canViewDashboard: true,
-        },
-        orderMission: {
-            canCreateMissionOrders: true,
-            canEditMissionOrders: true,
-            canDeleteMissionOrders: true,
-        },
-        userProfile: {
-            canViewUserProfiles: true,
-            canEditUserProfiles: true,
-        }
+        dashboard: ["canViewDashboard"],
+        
+        listMission: ["canViewMissionOrders"],
+
+        addOrderMission: [
+            "canCreateMissionOrders",
+            "canEditMissionOrders",
+            "canDeleteMissionOrders"
+        ],
+
+        userProfile: [
+            "canViewUserProfiles",
+            "canEditUserProfiles"
+        ],
     },
     [ROLES.CHEFSERVICE]: {
-        dashboard: {
-            canViewDashboard: true,
-        },
-        orderMission: {
-            canCreateMissionOrders: true,
-            canEditMissionOrders: true,
-            canDeleteMissionOrders: true,
-        },
-        userProfile: {
-            canViewUserProfiles: true,
-            canEditUserProfiles: true,
-        }
+        dashboard: ["canViewDashboard"],
+        listMission: ["canViewMissionOrders"],
+        addOrderMission: [
+            "canCreateMissionOrders",
+            "canEditMissionOrders",
+            "canDeleteMissionOrders"
+        ],
+        userProfile: [
+            "canViewUserProfiles",
+            "canEditUserProfiles"
+        ]
     },
     [ROLES.CADRE]: {
-        dashboard: {
-            canViewDashboard: true,
-        },
-        orderMission: {
-            canCreateMissionOrders: false,
-            canEditMissionOrders: false,
-            canDeleteMissionOrders: false,
-        },
-        userProfile: {
-            canViewUserProfiles: true,
-            canEditUserProfiles: false,
-        }
+        dashboard: ["canViewDashboard"],
+        listMission: [
+            "canViewMissionOrders",
+        ],
+        addOrderMission: [],
+        userProfile:[
+            "canViewUserProfiles",
+            "canEditUserProfiles",
+        ],
+        
     },
-    [ROLES.SECRETAIRE]: {
-        dashboard: {
-            canViewDashboard: false,
-        },
-        orderMission: {
-            canCreateMissionOrders: true,
-            canEditMissionOrders: true,
-            canDeleteMissionOrders: true,
-        },
-        userProfile: {
-            canViewUserProfiles: true,
-            canEditUserProfiles: true,
-        }
+    [ROLES.SECRÉTAIRE]: {
+        dashboard: [],
+        listMission: [
+            "canViewMissionOrders",
+        ],
+        addOrderMission: [
+            "canCreateMissionOrders",
+            "canEditMissionOrders",
+            "canDeleteMissionOrders",
+        ],
+        userProfile: [
+            "canViewUserProfiles",
+            "canEditUserProfiles",
+        ]
     }
-};
+}
 
 
 
-export const hasPermission = (role, feature, permission) => {
-    return ROLE_PERMISSIONS[role]?.[feature]?.[permission] || false;
+export const hasPermission = (roleName, feature, permission) => {
+    const roleId = ROLE_TO_ID[roleName];
+    const featurePermissions = ROLE_PERMISSIONS[roleId]?.[feature] || [];
+    const hasAccess = featurePermissions.includes(permission);
+    return hasAccess;
 };

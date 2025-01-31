@@ -8,17 +8,19 @@ import logo from '../../assets/small-logo.png'
 function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { loading, error, user, token, role } = useSelector(state => state.auth)
-    console.log(
-        "User: ", user,
-        "Token: ", token,
-        "Role: ", role
-    )
+    const { loading, error } = useSelector(state => state.auth)
+    // console.log(
+    //     "Login - User: ", user,
+    //     '\n',
+    //     "Login - Token: ", token,
+    //     '\n',
+    //     "Login - Role: ", role
+    // )
     const [isLogin, setLogin] = useState({
         username: '',
         password: ''
     })
-    console.log(error)
+    // console.log(error)
     // const [error, setError] = useState('')
 
     const handleChange = (e) => {
@@ -31,14 +33,9 @@ function Login() {
     };
     const handleLogin = async (e) => {
         e.preventDefault();
-        // setError('')
-
         try {
             await dispatch(loginUser(isLogin));
-
-            if(user) {
-                navigate('/dashboard')
-            }
+            navigate('/dashboard')
         }
         catch (e) {
             console.log('Login failed: ', e)

@@ -10,17 +10,12 @@ import {
 } from './Types.actions';
 
 export const loginUser = (credentials) => async (dispatch) => {
-
+    // const navigate = useNavigate();
     try {
         dispatch({ type: LOGINREQUEST })
 
         const response = await Instance.post('/auth/login', credentials);
-        console.log("Login response: ", response.data.user)
-        localStorage.setItem('auth', JSON.stringify({
-            user: response.data.user, 
-            token: response.data.token
-        }))
-
+        // )
         dispatch({
             type: LOGINSUCCESS,
             payload: {
@@ -29,6 +24,7 @@ export const loginUser = (credentials) => async (dispatch) => {
                 role: response.data.user.profile
             }
         })
+
     } catch (error) {
         dispatch({
             type: LOGINFAILED,
@@ -39,9 +35,11 @@ export const loginUser = (credentials) => async (dispatch) => {
 }
 
 export const logOut = () => (dispatch) => {
-    localStorage.removeItem('auth');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
     dispatch({ type: LOGOUT })
-    // Navigate('/login')
+    // navigate('/')
 }
 
 export const verifyUser = () => (dispatch) => {

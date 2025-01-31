@@ -1,25 +1,29 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { ProtectedRoute } from './Routes/Protected.route'
-import AppRoutes from './Routes/App.routes'
+import { Navigate, Outlet } from 'react-router-dom'
 import SideBar from './Components/SideBar/SIdeBar'
 import Header from './Components/Header/Header'
+import AppRoutes from './Routes/App.routes'
+import { useSelector } from 'react-redux'
 
 function Layout() {
-    const { isAuthenticated } = useSelector((state) => state.auth);
-
+    console.log("(Layout accessed...")
+    const { role } = useSelector(state => state.auth)
+    if (!role) {
+        console.log("❌ No role found! Redirecting to login...");
+        return <Navigate to="/login" replace />;
+    }
 
     return (
-        <div className='flex gap-6 h-screen overflow-auto'>
-            {/* <SideBar /> */}
-            <div className="content relative flex flex-col gap-3 px-[32px] w-full ">
-                {/* <Header /> */}
-                <div className="page-content w-full  overflow-x-hidden overflow-y-scroll no-scrollbar">
-                    {/* <AppRoutes /> */}
-                </div>
-            </div>
-        </div>
+      <div className='flex gap-6 h-screen overflow-auto'>
+        {console.log("Rendering App Component")}
+          <SideBar role={getRole}/>
+          <div className="content relative flex flex-col gap-3 px-[32px] w-full ">
+              <Header />
+              <div className="page-content w-full  overflow-x-hidden overflow-y-scroll no-scrollbar">
+                  <Outlet />
+              </div>
+          </div>
+      </div>
     )
 }
 

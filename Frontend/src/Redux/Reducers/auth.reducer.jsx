@@ -1,15 +1,25 @@
 import { LOGINFAILED, LOGINREQUEST, LOGINSUCCESS, LOGOUT } from "../Actions/Types.actions";
+import { ROLE_PERMISSIONS, ROLE_NAMES,  ROLES } from '../../Components/Utilities/role.permissions'
+
+const storedUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+const storedToken = localStorage.getItem('token') || null;
+const storedRole = localStorage.getItem('role') || null;
+const isAuth = !!(storedUser && storedToken && storedRole)
+
+const getPermissions = (role) => {
+    if(!role || !ROLE_PERMISSIONS[ROLES[role.toUpperCase()]]) return [];
+    return ROLE_PERMISSIONS[ROLES[role.toUpperCase()]]
+}
 
 const initialState = {
-    isAuthenticated: false,
-    user: null,
-    permissions: [],
-    token: null,
-    role: null,
+    isAuthenticated: isAuth || false,
+    user: storedUser || null,
+    token: storedToken || null,
+    role: storedRole || null,
+    permissions: getPermissions(storedRole),
     loading: false,
     error: null,
 };
-console.log(initialState)
 
 
 const authReducer = (state = initialState, action) => {
@@ -22,13 +32,21 @@ const authReducer = (state = initialState, action) => {
                 error: null
             };
         case LOGINSUCCESS:
+            console.log('State update check: ')
+            console.log("-- State: ", state)
+            const permissions = getPermissions(action.payload.role.toUpperCase())
+            localStorage.setItem('user', JSON.stringify(action.payload.user));
+            localStorage.setItem('token', action.payload.token);
+            localStorage.setItem('role',  action.payload.role.toUpperCase());
+            localStorage.setItem('permissions',  JSON.stringify(permissions));
+
             return {
                 ...state,
                 isAuthenticated: true,
                 user: action.payload.user,
-                permissions: action.payload.permissions,
                 token: action.payload.token,
-                role: action.payload.role,
+                role: action.payload.role.toUpperCase(),
+                permissions: getPermissions(storedRole),
                 loading: false,
                 error: null
             };
@@ -52,6 +70,7 @@ const authReducer = (state = initialState, action) => {
         default:
             return state;
     }
+
 }
 
 export default authReducer;
