@@ -1,13 +1,14 @@
 // import { connect, connection } from "mongoose"
 import { connectSQL } from "../database/connectDB.js"
 
+
 export  const getOrderMission = async (req, res) => {
     try {
-        const connection = await connectSQL();
+        const connect = await connectSQL();
 
         // const [missions] = await connection.query('SELECT * FROM `mission`')
         const query = 'SELECT Titre, destination, departure_date, companion, statue FROM `mission`'
-        const [missions] = await connection.query(query)
+        const [missions] = await connect.query(query)
         const missionsData = missions[0]
         console.log('Missions List (line 12) ',missions)
 
@@ -43,6 +44,39 @@ export const getServiceCars = async (req, res) => {
     }
 }
 
+export const getObjectOptions = async (req, res) => {
+    try {
+        const connect = await connectSQL();
+        const query = 'SELECT * FROM defaultdb.Object';
+        const [objects] = await connect.query(query);
+        console.log([objects])
+        
+        res.status(200).json({
+            success: true,
+            objects: objects
+        })
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+export const getDestinations = async (req, res) => {
+    try {
+        const connect = await connectSQL();
+        const query = 'SELECT * FROM Destination';
+        const [destinations] = await connect.query(query);
+        console.log("Dest. endpoint: ",destinations)
+        
+        res.status(200).json({
+            success: true,
+            destinations: destinations
+        })
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ error: 'Error fetching destinations' });
+    }
+}
+
 export const searchCadre = async (req, res) => {
     try {
         const connect = await connectSQL();
@@ -55,7 +89,14 @@ export const searchCadre = async (req, res) => {
             })
         }
 
-        const [cadres] = await connect.query('SELECT * FROM `cadre` WHERE nom LIKE ?', [`%${name}%`])
+        // const [cadres] = await connect.query('SELECT * FROM `cadre` WHERE nom LIKE ?', [`%${name}%`])
+        const [cadres] = await connect.query(`
+            SELECT c.*, u.nom, u.prenom , g.grade_name 
+            FROM cadre c
+            INNER JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
+            INNER JOIN grade g ON c.grade_id = g.grade_id
+            WHERE u.nom LIKE ?;
+            `, [`%${name}%`])
         console.log(cadres)
 
         if(cadres.length === 0) {
@@ -83,7 +124,7 @@ export const searchCadre = async (req, res) => {
 export const createOrderMission  = async (req, res)=> {
 
     try {
-        const connection = await connectSQL();
+        const connect = await connectSQL();
 
         const {
             cadreId,
@@ -118,7 +159,7 @@ export const createOrderMission  = async (req, res)=> {
             })
         }
 
-        const [result] = await connection.execute(`INSERT INTO mission 
+        const [result] = await connect.execute(`INSERT INTO mission 
             (
             Titre, 
             destination, 
@@ -145,7 +186,7 @@ export const createOrderMission  = async (req, res)=> {
         ]);
 
         const missionId = result.insertId
-        const [insertIntoMissionCadreTable] = await connection.execute('INSERT INTO mission_cadre (mission_id, cadre_id) VALUES (?, ?)', [
+        const [insertIntoMissionCadreTable] = await connect.execute('INSERT INTO mission_cadre (mission_id, cadre_id) VALUES (?, ?)', [
             missionId,
             cadreId
         ])

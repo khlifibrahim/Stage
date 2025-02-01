@@ -1,167 +1,145 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import Instance from "../../Api/axios";
-// import selectBox from '../../Components/Utilities/'
+
 
 
 function NewMission() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("")
-  const [cadreList, setCadreList] = useState([]);
-  const [selectedCadre, setSelectedCadre] = useState(null);
-  const [serviceCars, setServiceCars] = useState([]);
-  
-  const [accompaniedSearch, setAccompaniedSearch] = useState("");
-  const [accompaniedList, setAccompaniedList] = useState([]); // Liste des cadres accompagnateurs
-  const [selectedAccompanied, setSelectedAccompanied] = useState(null);
 
-  const [objectOptions, setObjectOptions] = useState([]);
+// New code 
 
+const [search, setSearch] = useState("");
+const [cadreList, setCadreList] = useState([]);
+const [selectedCadre, setSelectedCadre] = useState(null);
+const [serviceCars, setServiceCars] = useState([]);
 
+const [accompaniedSearch, setAccompaniedSearch] = useState("");
+const [accompaniedList, setAccompaniedList] = useState([]);
+const [selectedAccompanied, setSelectedAccompanied] = useState(null);
 
+const [objectOptions, setObjectOptions] = useState([]);
+const [destinationList, setDestinationList] = useState([]);
 
-  const [cadre, setCadre] = useState(
-    {
-      id: "",
-      nom: "",
-      prenom: "",
-      delegation: "",
-      carPlat: ""
-    });
+const [cadre, setCadre] = useState({
+  id: "",
+  nom: "",
+  prenom: "",
+  delegation: "",
+  grade: "",
+  carPlat: ""
+});
 
+const [mission, setMission] = useState({
+  cadreId: "",
+  title: "",
+  destination: "",
+  purpose: "",
+  depDate: "",
+  depHour: "",
+  arrHour: "",
+  durationDays: "",
+  plateNumber: null,
+  companion: "",
+  status: "en attend",
+});
 
-  const [mission, setMission] = useState({
-    cadreId: cadre.id || "",
-    title: "",
-    destination: "",
-    purpose: "",
-    depDate: "",
-    depHour: "",
-    arrHour: "",
-    durationDays: "",
-    plateNumber: "" || null,
-    companion: "",
-    status: "" || "en attend",
-  });
+const [selectCar, setSelectCar] = useState("service");
 
-  const [selectCar, setSelectCar] = useState('personal')
-
-  console.log('Cadre List(36):', cadreList);
-  console.log('Car List(37):', serviceCars);
-  console.log('Search(38):', search);
-
-  console.log('useState - cadres(40)', cadre)
-  console.log('useState - selected cadres(41)', selectedCadre)
-  console.log('useState - cars(42)', serviceCars)
-
-  //useEffect OBJET//
-  useEffect(() => {
-    const fetchObjectOptions = async () => {
-      try {
-        const response = await Instance.get('/missions/getObjectOptions'); 
-        setObjectOptions(response.data || []);
-      } catch (error) {
-        console.error( error);
-      }
-    };
-  
-    fetchObjectOptions();
-  }, []);
-  
-//useEffect ACCOMPAGNE//
-  useEffect(() => {
-    const fetchAccompaniedCadres = async () => {
-      if (accompaniedSearch.trim() === "") {
-        setAccompaniedList([]);
-        return;
-      }
-  
-      try {
-        const response = await Instance.post('/missions/searchCadre', { name: accompaniedSearch });
-        setAccompaniedList(response.data.cadres || []);
-      } catch (error) {
-        console.error(error);
-        setAccompaniedList([]);
-      }
-    };
-  
-    const timer = setTimeout(fetchAccompaniedCadres, 300);
-    return () => clearTimeout(timer);
-  }, [accompaniedSearch]);
-
-  const handleAccompaniedChange = (selected) => {
-    setSelectedAccompanied(selected);
-    setAccompaniedSearch(`${selected.nom} ${selected.prenom}`);
+// Fetch Object Options
+useEffect(() => {
+  const fetchObjectOptions = async () => {
+    try {
+      const response = await Instance.get("/missions/getObjectOptions");
+      console.log("Objects response: ",response.data.objects)
+      setObjectOptions(response.data.objects || []);
+    } catch (error) {
+      console.error(error);
+    }
   };
+  fetchObjectOptions();
+}, []);
 
-  //useEffect DESTINATION//
+// Fetch Accompanied Cadres
+useEffect(() => {
+  const fetchAccompaniedCadres = async () => {
+    if (accompaniedSearch.trim() === "") {
 
-  useEffect(() => {
-    const fetchDestinationList = async () => {
-      try {
-        const response = await Instance.get('/missions/getDestinations'); 
-        setDestinationList(response.data || []);
-      } catch (error) {
-        console.error( error);
-      }
-    };
-  
-    fetchDestinationList();
-  }, []);
-  
-
-
-  useEffect(() => {
-    const fetchServiceCars = async () => {
-      try {
-        const response = await Instance.get('/missions/getServiceCars')
-        setServiceCars(response.data)
-      } catch (error) {
-        console.error(error)
-      }
+      setAccompaniedList([]);
+      return;
     }
-
-    fetchServiceCars()
-  }, [])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (search.trim() === "") {
-        setCadreList([])
-        return
-      }
-
-      try {
-        const response = await Instance.post('/missions/searchCadre', { name: search });
-        if (response.data) {
-          setCadreList(response.data.cadres || [])
-          console.log('response from API: ', response.data)
-        } else {
-          console.error('no data r fetched from API!!')
-        }
-      } catch (error) {
-        console.error('Error fetching data(cadres, cars): ', error)
-        setCadreList([])
-      }
-
+    try {
+      const response = await Instance.post("/missions/searchCadre", { name: accompaniedSearch });
+      setAccompaniedList(response.data.cadres || []);
+    } catch (error) {
+      console.error(error);
+      setAccompaniedList([]);
     }
-    // fetchData();
-    const timer = setTimeout(fetchData, 300)
-    return () => clearTimeout(timer)
+  };
+  const timer = setTimeout(fetchAccompaniedCadres, 200);
+  return () => clearTimeout(timer);
+}, [accompaniedSearch]);
 
-  }, [search]);
+// Fetch Destination List
+useEffect(() => {
+  const fetchDestinationList = async () => {
+    try {
+      const response = await Instance.get("/missions/getDestinations");
+      console.log("Destinations response: ",response.data.destinations)
+      setDestinationList(response.data.destinations);
+      console.log("Detination state: ",destinationList)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  fetchDestinationList();
+}, []);
+console.log("Detination state: ",destinationList)
+
+// Fetch Service Cars
+useEffect(() => {
+  const fetchServiceCars = async () => {
+    try {
+      const response = await Instance.get("/missions/getServiceCars");
+      setServiceCars(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  fetchServiceCars();
+}, []);
+
+// Fetch Cadres Based on Search Input
+useEffect(() => {
+  const fetchData = async () => {
+    if (search.trim() === "") {
+      setCadreList([]);
+      return;
+    }
+    try {
+      const response = await Instance.post("/missions/searchCadre", { name: search });
+      setCadreList(response.data.cadres || []);
+    } catch (error) {
+      console.log(error);
+      setCadreList([]);
+    }
+  };
+  const timer = setTimeout(fetchData, 300);
+  return () => clearTimeout(timer);
+}, [search]);
 
 
   // handling inputs values
   const handleCadreChange = (selected) => {
     setSelectedCadre(selected);
-    setSearch(`${selected.nome} ${selected.prenom}`);
+    setSearch(`${selected.nom} ${selected.prenom}`);
 
     setCadre({
       id: selected.cadre_id,
       nom: selected.nom,
       prenom: selected.prenom,
       delegation: selected.delegation,
+      grade: selected.grade,
       carPlat: selected.p_matricule
     })
     setMission(prev => ({
@@ -185,7 +163,7 @@ function NewMission() {
       const result = await Instance.post('/missions/createOrderMission', mission)
       console.log(result)
       if (result.status === 201) {
-        navigate('/directeur/listMission')
+        navigate('/dashboard/orderMissions/listMissionOrders')
       }
     } catch (error) {
       console.log('error submite the mission', error)
@@ -239,9 +217,9 @@ function NewMission() {
                 <label className="">Titre*</label>
                 <input
                   type="text"
-                  name="title"
-                  value={mission.title}
-                  onChange={handleMissionChange}
+                  name="grade"
+                  value={cadre.grade}
+                  onChange={handleCadreChange}
                   placeholder="Titre..."
                   className="border rounded-lg px-4 py-2 focus:outline-blue"
                   required
@@ -275,9 +253,9 @@ function NewMission() {
                   required
                 >
                   <option value="" disabled>Sélectionnez une destination</option>
-                  {destinationList.map((destination, i) => (
-                    <option key={i} value={destination.name }> 
-                      {destination.name || "Aucune destination"} 
+                  {destinationList.map(destination => (
+                    <option key={destination.Id_des} value={destination.Id_des }>
+                      {destination.Destination || "Aucune destination"}
                     </option>
                   ))}
                 </select>
@@ -297,9 +275,9 @@ function NewMission() {
                   required
                 >
                   <option value="" disabled>Sélectionnez un objet...</option>
-                  {objectOptions.map((object, index) => (
-                    <option key={index} value={object.value || ""}>
-                      {object.label || "Aucun objet"}  
+                  {objectOptions.map(object => (
+                    <option key={object.Id_object} value={object.Object_type || ""}>
+                      {object.Object_type || "Aucun objet"}  
                     </option>
                   ))}
                 </select>
@@ -316,7 +294,7 @@ function NewMission() {
                   value={mission.depDate}
                   onChange={handleMissionChange}
                   className="border rounded-lg px-4 py-2 focus:outline-blue"
-                  required
+                  
                 />
               </div>
               <div className="flex flex-col flex-1">
@@ -327,7 +305,7 @@ function NewMission() {
                   value={mission.depHour}
                   onChange={handleMissionChange}
                   className="border rounded-lg px-4 py-2 focus:outline-blue"
-                  required
+                  
                 />
               </div>
             </div>
@@ -342,7 +320,7 @@ function NewMission() {
                   value={mission.arrHour}
                   onChange={handleMissionChange}
                   className="border rounded-lg px-4 py-2 focus:outline-blue"
-                  required
+                  
                 />
               </div>
               <div className="flex flex-col flex-1">
@@ -354,7 +332,7 @@ function NewMission() {
                   onChange={handleMissionChange}
                   placeholder="Durée (en heures)..."
                   className="border rounded-lg px-4 py-2 focus:outline-blue"
-                  required
+                  
                 />
               </div>
             </div>

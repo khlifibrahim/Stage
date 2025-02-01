@@ -9,7 +9,8 @@ import Dashboard from '../Pages/Dashboards/Dashboard'
 import ListMissions from '../Pages/Mission/ListMissions'
 import NewMission from '../Pages/Mission/NewMission'
 import Unauthorized from '../Pages/unauthorized/unauthorized'
-import Layout from '../Layout';
+// import Layout from '../Layout';
+import CarsList from '../Pages/Cars/CarsList'
 
 
 
@@ -26,9 +27,14 @@ function AppRoutes() {
 
 
         <Route path="/dashboard" element={<Dashboard />} >
-          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-          <Route path="listMissionOrders" element={<ListMissions />} />
-          <Route path="addMissionOrders" element={<NewMission />} />
+          <Route path="dashboard" element={<h2>dashboard page</h2>} />
+
+          <Route path="orderMissions" >
+            <Route path="listMissionOrders" element={<ListMissions />} />
+            <Route path="addMissionOrders" element={<NewMission />} />
+          </Route>
+
+          <Route path="voitures" element={<CarsList />} />
         </Route>
         {/* <Route element={<ProtectedRoute feature="dashboard" reqPermission={["canViewDashboard"]} />}>
           <Route path="/dashboard" element={<Dashboard />}>

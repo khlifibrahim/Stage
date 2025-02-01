@@ -11,8 +11,8 @@ export const login = async (req, res) => {
         const  connection = await connectSQL();
         const [rows] = await connection.query(`
             SELECT *, p.nom_profile 
-            FROM stage.utilisateur u
-            LEFT JOIN profile p 
+            FROM Utilisateur u
+            LEFT JOIN Profile p 
             ON u.id_profile = p.id_profile
             WHERE username = ?
             `, [username])
@@ -35,7 +35,7 @@ export const login = async (req, res) => {
         // console.log(token)
 
         await connection.execute(
-            'UPDATE stage.utilisateur SET lastlogin = ? WHERE id_utilisateur = ?', 
+            'UPDATE utilisateur SET lastlogin = ? WHERE id_utilisateur = ?', 
             [new Date(), userData.id_utilisateur])
 
         const user = {

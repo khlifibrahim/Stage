@@ -4,21 +4,46 @@ import {thunk} from 'redux-thunk';
 import authReducer from './Reducers/auth.reducer.jsx'
 
 const rootReducer = combineReducers({
-    auth: authReducer
+    auth: authReducer,
+    // auth : {
+        // isAuthenticated: true,
+        // user: {
+        //  username: brahimkhlifi,
+        //  email: brahimkhlifi@gmail.com
+        //  ...
+        // },
+        // token: $dkdkncljdshczoohvlz.eihveezhvez.aeeuveuzvgiuzevez,
+        // role: DIRICTEUR,
+
+        // permissions: {
+            //     dashboard: ["canViewDashboard"],
+                
+            //     listMission: ["canViewMissionOrders"],
+
+            //     addOrderMission: [
+            //         "canCreateMissionOrders",
+            //         "canEditMissionOrders",
+            //         "canDeleteMissionOrders"
+            //     ],
+
+            //     userProfile: [
+            //         "canViewUserProfiles",
+            //         "canEditUserProfiles"
+            //     ],
+            // },
+        // loading: false,
+        // error: null
+    // }
 });
 
 const initialState = {};
 const middleware = [thunk];
-// const middleware = {thunk};
-const composerEnhancer = 
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+const composerEnhancer = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 
 const store = createStore(
     rootReducer,
     initialState,
     applyMiddleware(...middleware)
-    // composeWithDevTools(applyMiddleware(...middleware)),
-    
 );
 
 export default store;
