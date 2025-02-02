@@ -19,7 +19,7 @@ router.get('/getObjectOptions', getObjectOptions)
 router.get('/getDestinations', getDestinations)
 router.post('/searchCadre', searchCadre)
 router.post('/createOrderMission', createOrderMission)
-router.get('/updateOrderMission', updateOrderMission)
-router.get('/deleteOrderMission', deleteOrderMission)
+router.put('/updateOrderMission/:id', updateOrderMission)
+router.delete('/deleteOrderMission/:id', deleteOrderMission)
 
 export default router;

@@ -1,4 +1,5 @@
 // import { connect, connection } from "mongoose"
+import { connect } from "mongoose";
 import { connectSQL } from "../database/connectDB.js"
 
 
@@ -6,8 +7,24 @@ export  const getOrderMission = async (req, res) => {
     try {
         const connect = await connectSQL();
 
-        // const [missions] = await connection.query('SELECT * FROM `mission`')
-        const query = 'SELECT Titre, destination, departure_date, companion, statue FROM `mission`'
+        const query = `
+            SELECT 
+                m.*,
+                c.cadre_id,
+                c.delegation,
+                c.p_matricule AS carPlate,
+                u.nom AS cadre_nom,
+                u.prenom AS cadre_prenom,
+                g.grade_name,
+                d.Destination
+            FROM mission m
+            JOIN mission_cadre mc ON m.mission_id = mc.mission_id
+            JOIN cadre c ON mc.cadre_id = c.cadre_id
+            JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
+            JOIN grade g ON c.grade_id = g.grade_id
+            JOIN Destination d ON m.Id_des = d.id_des;
+        `
+        // const query = 'SELECT * FROM defaultdb.mission;'
         const [missions] = await connect.query(query)
         const missionsData = missions[0]
         console.log('Missions List (line 12) ',missions)
@@ -47,9 +64,9 @@ export const getServiceCars = async (req, res) => {
 export const getObjectOptions = async (req, res) => {
     try {
         const connect = await connectSQL();
-        const query = 'SELECT * FROM defaultdb.Object';
+        const query = 'SELECT * FROM Object';
         const [objects] = await connect.query(query);
-        console.log([objects])
+        console.log(objects)
         
         res.status(200).json({
             success: true,
@@ -128,31 +145,29 @@ export const createOrderMission  = async (req, res)=> {
 
         const {
             cadreId,
-            title,
-            destination,
-            purpose,
+            destinationId,
+            objectId,
             depDate,
             depHour,
             arrHour,
             durationDays,
             plateNumber,
-            companion,
-            status
+            companion
         } = req.body
-
         if(
             !cadreId ||
-            !title ||
-            !destination ||
-            !purpose ||
+            !destinationId ||
+            !objectId ||
             !depDate ||
-            !depHour ||
-            !arrHour ||
-            !durationDays ||
-            !plateNumber ||
-            !companion ||
-            !status
+            !durationDays
         ) {
+            console.log(
+                cadreId ,
+            destinationId ,
+            objectId ,
+            depDate ,
+            durationDays
+            )
             return res.status(400).json({
                 success: false,
                 message: 'All fields required'
@@ -161,28 +176,25 @@ export const createOrderMission  = async (req, res)=> {
 
         const [result] = await connect.execute(`INSERT INTO mission 
             (
-            Titre, 
-            destination, 
-            purpose, 
-            departure_date, 
-            duration_days, 
-            companion, 
-            s_matricule, 
-            heure_de_depart, 
-            heure_arrive, 
-            statue) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            departure_date,
+            duration_days,
+            companion,
+            s_matricule,
+            heure_de_depart,
+            heure_arrive,
+            Id_des,
+            Id_object
+            ) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [
-            title,
-            destination,
-            purpose,
             depDate,
             durationDays,
             companion || null,
             plateNumber || null,
             depHour,
             arrHour,
-            status
+            destinationId,
+            objectId
         ]);
 
         const missionId = result.insertId
@@ -204,35 +216,58 @@ export const createOrderMission  = async (req, res)=> {
                 missionId: IDs
             })
         }else {
-            return res.status(500).json({
+            return res.status(400).json({
                 success: false,
                 message: 'Failed to create Mission'
             })
         }
 
 
-    // res.status(201).json({
-    //     success: true,
-    //     message: "Mission created successfully",
-    //     // missionId
-    // })
-
-
     }catch(error) {
         console.log('Error getting Cadres', error)
         res.status(400).json({
             success: false,
-            message: 'Error inserting from database data from database'
+            message: 'Error inserting data to database'
         })
     }
 }
 
 export const updateOrderMission = async (req, res) => {
-    res.send('updateOrderMission controller')
+    try {
+        const { id } = req.params;
+        const { } = req.body;
+    } catch (error) {
+        
+    }
 }
 
 export const deleteOrderMission = async (req, res) => {
-    res.send('deleteOrderMission')
+    const { id } = req.params;
+
+    try {
+        const connect = await connectSQL();
+
+        await connect.query('DELETE FROM mission_cadre WHERE mission_id = ?', [id]);
+
+        const [ result ] = await connect.query(
+            `DELETE FROM mission WHERE mission_id = ?`,
+            [id]
+        )
+
+        if(result.affectedRows > 0 ) {
+            return res.status(200).json({
+                success: true,
+                massage: 'Mission deleted successfully'
+            })
+        }else {
+            return res.status(404).json({
+                success: false,
+                message: 'Mission not found'
+            })
+        }
+
+    }catch (error) {
+        console.error('error deleting mission', error)
+        return res.status(500).send('Server Error')
+    }
 }
-
-

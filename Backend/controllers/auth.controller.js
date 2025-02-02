@@ -35,7 +35,7 @@ export const login = async (req, res) => {
         // console.log(token)
 
         await connection.execute(
-            'UPDATE utilisateur SET lastlogin = ? WHERE id_utilisateur = ?', 
+            'UPDATE Utilisateur SET lastLogin = ? WHERE id_utilisateur = ?', 
             [new Date(), userData.id_utilisateur])
 
         const user = {

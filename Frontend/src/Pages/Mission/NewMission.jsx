@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Instance from "../../Api/axios";
 
 
 
 function NewMission() {
+  const location = useLocation();
   const navigate = useNavigate();
 
-// New code 
-
+const [editMode, setEditMode] = useState(false)
 const [search, setSearch] = useState("");
 const [cadreList, setCadreList] = useState([]);
 const [selectedCadre, setSelectedCadre] = useState(null);
@@ -18,8 +18,8 @@ const [accompaniedSearch, setAccompaniedSearch] = useState("");
 const [accompaniedList, setAccompaniedList] = useState([]);
 const [selectedAccompanied, setSelectedAccompanied] = useState(null);
 
-const [objectOptions, setObjectOptions] = useState([]);
 const [destinationList, setDestinationList] = useState([]);
+const [objectOptions, setObjectOptions] = useState([]);
 
 const [cadre, setCadre] = useState({
   id: "",
@@ -27,22 +27,22 @@ const [cadre, setCadre] = useState({
   prenom: "",
   delegation: "",
   grade: "",
-  carPlat: ""
+  carPlat: null
 });
 
 const [mission, setMission] = useState({
+  missionId: null,
   cadreId: "",
-  title: "",
-  destination: "",
-  purpose: "",
+  destinationId: "",
+  objectId: "",
   depDate: "",
-  depHour: "",
-  arrHour: "",
+  depHour: null,
+  arrHour: null,
   durationDays: "",
-  plateNumber: null,
-  companion: "",
-  status: "en attend",
+  plateNumber:null,
+  companion: null
 });
+
 
 const [selectCar, setSelectCar] = useState("service");
 
@@ -51,7 +51,7 @@ useEffect(() => {
   const fetchObjectOptions = async () => {
     try {
       const response = await Instance.get("/missions/getObjectOptions");
-      console.log("Objects response: ",response.data.objects)
+      // console.log("Objects response: ",response.data.objects)
       setObjectOptions(response.data.objects || []);
     } catch (error) {
       console.error(error);
@@ -85,16 +85,16 @@ useEffect(() => {
   const fetchDestinationList = async () => {
     try {
       const response = await Instance.get("/missions/getDestinations");
-      console.log("Destinations response: ",response.data.destinations)
+      // console.log("Destinations response: ",response.data.destinations)
       setDestinationList(response.data.destinations);
-      console.log("Detination state: ",destinationList)
+      // console.log("Detination state: ",destinationList)
     } catch (error) {
       console.error(error);
     }
   };
   fetchDestinationList();
 }, []);
-console.log("Detination state: ",destinationList)
+
 
 // Fetch Service Cars
 useEffect(() => {
@@ -120,7 +120,7 @@ useEffect(() => {
       const response = await Instance.post("/missions/searchCadre", { name: search });
       setCadreList(response.data.cadres || []);
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
       setCadreList([]);
     }
   };
@@ -128,6 +128,44 @@ useEffect(() => {
   return () => clearTimeout(timer);
 }, [search]);
 
+// Edite Mssion 
+useEffect(() => {
+  const fetchMissionDetails = async ()=> {
+    const id = new URLSearchParams(window.location.search).get("id")
+  }
+
+  fetchMissionDetails();
+}, [])
+
+useEffect(() => {
+  if( location.state?.missionData) {
+    const formatDepDate = location.state.missionData.departure_date.split("T")[0]
+    
+    setCadre(prev => ({
+      ...prev,
+      id: location.state.missionData.cadre_id,
+      nom:  location.state.missionData.cadre_nom,
+      prenom: location.state.missionData.cadre_prenom,
+      delegation: location.state.missionData.delegation,
+      grade: location.state.missionData.grade_name,
+      carPlat: null
+    }))
+    setMission(prev => ({
+      ...prev,
+          missionId: location.state.missionData.mission_id,
+          destinationId : location.state.missionData.Id_des,
+          objectId: location.state.missionData.Id_object,
+          depDate: formatDepDate,
+          depHour: location.state.missionData.heure_de_depart,
+          arrHour: location.state.missionData.heure_arrive,
+          durationDays: location.state.missionData.duration_days,
+          plateNumber:location.state.missionData.s_matricule,
+          companion: location.state.missionData.companion,
+    }))
+    setSearch(`${location.state.missionData.cadre_nom} ${location.state.missionData.cadre_prenom}`)
+    setEditMode(true)
+  }
+}, [location.state])
 
   // handling inputs values
   const handleCadreChange = (selected) => {
@@ -139,12 +177,12 @@ useEffect(() => {
       nom: selected.nom,
       prenom: selected.prenom,
       delegation: selected.delegation,
-      grade: selected.grade,
+      grade: selected.grade_name,
       carPlat: selected.p_matricule
     })
     setMission(prev => ({
       ...prev,
-      cadreId: selected.cadre_id
+      cadreId: selected.cadre_id,
     }))
   };
 
@@ -153,23 +191,49 @@ useEffect(() => {
     setMission((prev) => ({ ...prev, [name]: value }))
   };
 
+
+
   // when submite the form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('UseState of cadre: ', cadre);
-    console.log('useState of mission: ', mission);
+    console.log("---- Check State not empty: ")
+    console.log('-- Cadre state:', cadre);
+    console.log('-- Mission state:', mission);
 
     try {
-      const result = await Instance.post('/missions/createOrderMission', mission)
-      console.log(result)
-      if (result.status === 201) {
-        navigate('/dashboard/orderMissions/listMissionOrders')
+
+      if(editMode) {
+        const result = await Instance.put(`/missions/updateOrderMission/${mission.missionId}`, mission)
+        console.log("-- Result of edit: ", result)
+        if(result.status === 200) {
+          navigate('/dashboard/orderMissions/listMissionOrders')
+        }else {
+          console.log("error edit mission")
+        }
+      }else {
+        const result = await Instance.post('/missions/createOrderMission', mission)
+        console.log("-- Result of submit: ", result)
+        if (result.status === 201) {
+          navigate('/dashboard/orderMissions/listMissionOrders')
+        }
       }
+
     } catch (error) {
-      console.log('error submite the mission', error)
+      console.log('error submite the mission', error.response?.data || error)
     }
 
   };
+
+  const handleIgnore = () => {
+    setCadreList([])
+    setAccompaniedList([])
+    setSearch("")
+    setAccompaniedSearch("")
+    setDestinationList([])
+    setObjectOptions([])
+    setEditMode(false)
+    navigate('/dashboard/orderMissions/listMissionOrders')
+  }
 
   return (
     <div className="p-6">
@@ -177,7 +241,7 @@ useEffect(() => {
       
           {/* Header */}
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-800">Créer Ordre Mission</h1>
+            <h1 className="text-3xl font-bold text-gray-800">{editMode ? "Modifier l'Ordre de Mission" : "Créer Ordre Mission"}</h1>
           </div>
 
           {/* Form */}
@@ -206,7 +270,7 @@ useEffect(() => {
                           key={i}
                           onClick={() => handleCadreChange(cadre)}
                           className="px-4 py-2 cursor-pointer hover:bg-bg-blue hover:text-blue">
-                          {cadre.prenom} {cadre.nom}
+                          {cadre.nom} {cadre.prenom}
                         </div>
                       ))
                     }
@@ -246,8 +310,8 @@ useEffect(() => {
               <div className="flex flex-col flex-1">
                 <label className="font-medium text-sm mb-1">Destination*</label>
                 <select
-                  name="destination"
-                  value={mission.destination}
+                  name="destinationId"
+                  value={mission.destinationId}
                   onChange={handleMissionChange}
                   className="border rounded-lg px-4 py-2 focus:outline-blue"
                   required
@@ -268,15 +332,15 @@ useEffect(() => {
               <div className="flex flex-col mb-4">
                 <label className="font-medium text-sm mb-1">Objet</label>
                 <select
-                  name="purpose"
-                  value={mission.purpose}
+                  name="objectId"
+                  value={mission.objectId}
                   onChange={handleMissionChange}
                   className="border rounded-lg px-4 py-2 focus:outline-blue"
                   required
                 >
                   <option value="" disabled>Sélectionnez un objet...</option>
                   {objectOptions.map(object => (
-                    <option key={object.Id_object} value={object.Object_type || ""}>
+                    <option key={object.Id_object} value={object.Id_object || ""}>
                       {object.Object_type || "Aucun objet"}  
                     </option>
                   ))}
@@ -436,20 +500,29 @@ useEffect(() => {
 
             
             {/* Groupe: Boutons */}
-            <div className="flex justify-end gap-4 mt-6">
+            <div className="flex justify-between mt-6">
               <button
                 type="button"
-                className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors "
+                onClick={handleIgnore}
+                className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626]  transition-colors "
               >
-                Imprimer
+                Annuler
               </button>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors "
+                >
+                  Imprimer
+                </button>
 
-              <button
-                type="submit"
-                className="px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors"
-              >
-                Sauvegarder
-              </button>
+                <button
+                  type="submit"
+                  className="px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors"
+                >
+                  { editMode ? "Mettre à jour" : "Sauvegarder"}
+                </button>
+              </div>
             </div>
           </form>
         </div>

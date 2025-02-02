@@ -5,35 +5,6 @@ import authReducer from './Reducers/auth.reducer.jsx'
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    // auth : {
-        // isAuthenticated: true,
-        // user: {
-        //  username: brahimkhlifi,
-        //  email: brahimkhlifi@gmail.com
-        //  ...
-        // },
-        // token: $dkdkncljdshczoohvlz.eihveezhvez.aeeuveuzvgiuzevez,
-        // role: DIRICTEUR,
-
-        // permissions: {
-            //     dashboard: ["canViewDashboard"],
-                
-            //     listMission: ["canViewMissionOrders"],
-
-            //     addOrderMission: [
-            //         "canCreateMissionOrders",
-            //         "canEditMissionOrders",
-            //         "canDeleteMissionOrders"
-            //     ],
-
-            //     userProfile: [
-            //         "canViewUserProfiles",
-            //         "canEditUserProfiles"
-            //     ],
-            // },
-        // loading: false,
-        // error: null
-    // }
 });
 
 const initialState = {};

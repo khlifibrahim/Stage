@@ -7,12 +7,9 @@ function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, role } = useSelector(state => state.auth)
-  // console.log("Role on profile comp: ", role)
-  // console.log("user on profile comp: ", user)
   const [isprofileMenuActive, setprofileMenuActive] = useState(false)
   const userInfo = JSON.parse(localStorage.getItem('user'));
   const userToken = localStorage.getItem('token');
-  // console.log("userinfo: ",userInfo)
   const userRole = localStorage.getItem('role');
   const handleProfileMenu = () => {
     setprofileMenuActive(!isprofileMenuActive)
