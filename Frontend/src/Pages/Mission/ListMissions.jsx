@@ -112,7 +112,7 @@ function ListMissions() {
                 </div>
             </span>
               { isFilterMenuOpen &&
-                (<div className='absolute top-12 right-0 bg-[#E4E4E4] rounded-[10px] overflow-hidden'>
+                (<div className='absolute top-12 right-0 z-50 bg-[#E4E4E4] rounded-[10px] overflow-hidden'>
                 {
                   statusList.map(status => (
                         <div key={status.id} onClick={() => {
@@ -144,7 +144,7 @@ function ListMissions() {
 
           {handleFilterChange.slice(start, end).map((mission, i) => (
             <div key={i} className="table-rows flex items-center justify-evenly border-b border-b-[#E4E4E4] rounded-[4px]">
-              <div className="table-base-row p-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{mission.cadre_name || 'Mission name'}</p></div>
+              <div className="table-base-row p-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${mission.cadre_nom} ${mission.cadre_prenom}` || 'Mission name'}</p></div>
               <div className="table-base-row p-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{mission.grade_name || 'Wireframing and Prototyping'}</p></div>
               <div className="table-base-row p-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
               <div className="table-base-row p-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{dateFormat(mission.departure_date) || 'August 1, 2024'}</p></div>
@@ -154,14 +154,15 @@ function ListMissions() {
                   <p className={`rounded bg-transparent border-none ${mission.status === "En Attente" ? " text-[#DC2626]" : mission.status === "En Cours" ? " text-[#3083FF]" : " text-[#259800]"}`}>{mission.status || 'En Attente'}</p>
                 </div>
               </div>
-              <div onClick={() => toggleMissionMenu(mission.mission_id)} className="relative table-base-row p-3 w-full border-[#E4E4E4] rounded-[4px] "><p className="text-[#727272] rounded bg-transparent border-none">
+              <div className="relative table-base-row p-3 w-full border-[#E4E4E4] rounded-[4px] ">
+                <span className="text-[#727272] rounded bg-transparent border-none">
                 {
-                  (<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>)
+                  (<svg onClick={() => toggleMissionMenu(mission.mission_id)}  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>)
                   
-                }</p>
+                }</span>
                 {
                   openMissionMenu === mission.mission_id && (
-                  <div  className='absolute top-6 left-12 shadow-lg bg-[#E4E4E4] rounded-[12px] overflow-hidden'>
+                  <div  className='absolute top-6 left-12 z-50 shadow-lg bg-[#E4E4E4] rounded-[12px] overflow-hidden'>
                     <p className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Voire plus</p>
                     <p onClick={()=> hendleEdit(mission)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Modifier</p>
                     <p onClick={()=> handleDelete(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626] cursor-pointer'>Supprimer</p>

@@ -152,6 +152,7 @@ useEffect(() => {
     }))
     setMission(prev => ({
       ...prev,
+          cadreId: location.state.missionData.cadre_id,
           missionId: location.state.missionData.mission_id,
           destinationId : location.state.missionData.Id_des,
           objectId: location.state.missionData.Id_object,
@@ -169,6 +170,7 @@ useEffect(() => {
 
   // handling inputs values
   const handleCadreChange = (selected) => {
+    console.log('detec the selected cadre: ', selected.cadre_id)
     setSelectedCadre(selected);
     setSearch(`${selected.nom} ${selected.prenom}`);
 

@@ -235,9 +235,63 @@ export const createOrderMission  = async (req, res)=> {
 export const updateOrderMission = async (req, res) => {
     try {
         const { id } = req.params;
-        const { } = req.body;
-    } catch (error) {
+        const { 
+            arrHour,
+            cadreId,
+            companion,
+            depDate,
+            depHour,
+            destinationId,
+            durationDays,
+            missionId,
+            objectId,
+            plateNumber
+         } = req.body
+
+        console.log(id)
+        if(!id || !cadreId) {
+            return res.status(400).json({
+                success: false,
+                message: "Mission id and Cadre id required!"
+            })
+        }
         
+        const connect = await connectSQL();
+        await connect.beginTransaction();
+        
+        const missionQuery = `
+            UPDATE mission SET 
+                departure_date = ?, 
+                duration_days = ?, 
+                companion = ?, 
+                s_matricule = ?, 
+                heure_de_depart = ?, 
+                heure_arrive = ?, 
+                Id_des = ?, 
+                Id_object = ? 
+            WHERE mission_id = ?`;
+        await connect.query(missionQuery, [
+            depDate, durationDays, companion, plateNumber, 
+            depHour, arrHour, destinationId, objectId, missionId
+        ]);
+
+        await connect.query("DELETE FROM mission_cadre WHERE mission_id = ?", [id]);
+        await connect.query("INSERT INTO mission_cadre (mission_id, cadre_id) VALUES (?, ?)", [id, cadreId]);
+
+        await connect.commit();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Mission updated successfully'
+        })
+
+
+    } catch (error) {
+        console.log('Error updating mission: ', error)
+        res.status(500).json({
+            success: false,
+            message: 'update mission failed while update it from db'
+        })
     }
 }
 
