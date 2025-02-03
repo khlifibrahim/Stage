@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom'
+import PrintableMission from '../../Components/Utilities/PrintableMission'
 import Instance from "../../Api/axios";
 
 
@@ -20,6 +21,7 @@ const [selectedAccompanied, setSelectedAccompanied] = useState(null);
 
 const [destinationList, setDestinationList] = useState([]);
 const [objectOptions, setObjectOptions] = useState([]);
+const [modalPopUpPrint, setModalPopUpPrint] = useState(false)
 
 const [cadre, setCadre] = useState({
   id: "",
@@ -34,7 +36,9 @@ const [mission, setMission] = useState({
   missionId: null,
   cadreId: "",
   destinationId: "",
+  destinationName: "",
   objectId: "",
+  objectName: "",
   depDate: "",
   depHour: null,
   arrHour: null,
@@ -46,6 +50,12 @@ const [mission, setMission] = useState({
 
 const [selectCar, setSelectCar] = useState("service");
 
+
+console.log("---- Check State not empty: ")
+console.log('-- Cadre state:', cadre);
+console.log('-- Mission state:', mission);
+console.log('-- Destination state:', destinationList === mission.destinationId);
+console.log('-- Mission state:', mission);
 // Fetch Object Options
 useEffect(() => {
   const fetchObjectOptions = async () => {
@@ -186,11 +196,35 @@ useEffect(() => {
       ...prev,
       cadreId: selected.cadre_id,
     }))
+
+    if(selectedCadre === "service") {
+      setCadre(prev => ({
+        ...prev,
+        carPlat: null
+      }))
+    }
   };
 
   const handleMissionChange = (e) => {
     const { name, value } = e.target
-    setMission((prev) => ({ ...prev, [name]: value }))
+
+    const selectedDestination = destinationList.find(destination => destination.Id_des === mission.destinationId);
+    const destinationName = selectedDestination ? selectedDestination.Destination : "Aucune destination";
+    const selectedObject = objectOptions.find(object => object.Id_object === mission.objectId);
+    const objectName = selectedObject ? selectedObject.Object_type : "Aucun objet";
+
+    setMission((prev) => ({ 
+      ...prev, 
+      [name]: value ,
+      destinationName: destinationName,
+      objectName: objectName,
+    }))
+    if(selectedCadre === "personal") {
+      setMission(prev => ({
+        ...prev,
+        plateNumber: null
+      }))
+    }
   };
 
 
@@ -198,9 +232,7 @@ useEffect(() => {
   // when submite the form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("---- Check State not empty: ")
-    console.log('-- Cadre state:', cadre);
-    console.log('-- Mission state:', mission);
+    
 
     try {
 
@@ -235,6 +267,21 @@ useEffect(() => {
     setObjectOptions([])
     setEditMode(false)
     navigate('/dashboard/orderMissions/listMissionOrders')
+  }
+
+  const handlepopUp = () => {
+    console.log(modalPopUpPrint)
+      setModalPopUpPrint(!modalPopUpPrint)
+  };
+
+  const handlePrint = ()=> {
+    const printContents = document.getElementById("print-area").innerHTML;
+    const originalContents = document.body.innerHTML;
+  
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload(); 
   }
 
   return (
@@ -513,6 +560,7 @@ useEffect(() => {
               <div className="flex justify-end gap-4">
                 <button
                   type="button"
+                  onClick={handlepopUp}
                   className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors "
                 >
                   Imprimer
@@ -527,6 +575,17 @@ useEffect(() => {
               </div>
             </div>
           </form>
+
+          {modalPopUpPrint &&
+            (
+            <div className="fixed top-0 left-0 z-50 flex justify-center  h-screen w-screen overflow-hidden bg-gray-600/55">
+              <span onClick={handlePrint} className='absolute top-6 left-[28%] -translate-x-1/2'>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+              </span>
+              <PrintableMission id="print-area"  cadre={cadre} mission={mission} close={modalPopUpPrint}/>
+            </div>
+            )
+          }
         </div>
     
       );

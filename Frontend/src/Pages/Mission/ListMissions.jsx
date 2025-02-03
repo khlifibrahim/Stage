@@ -92,6 +92,11 @@ function ListMissions() {
     })
   };
 
+  const handleSeeMore = () => {
+    console.log(modalPopUpPrint)
+      setModalPopUpPrint(!modalPopUpPrint)
+  };
+
 
 
   return (
@@ -163,7 +168,6 @@ function ListMissions() {
                 {
                   openMissionMenu === mission.mission_id && (
                   <div  className='absolute top-6 left-12 z-50 shadow-lg bg-[#E4E4E4] rounded-[12px] overflow-hidden'>
-                    <p className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Voire plus</p>
                     <p onClick={()=> hendleEdit(mission)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Modifier</p>
                     <p onClick={()=> handleDelete(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626] cursor-pointer'>Supprimer</p>
                   </div>
