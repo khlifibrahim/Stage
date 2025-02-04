@@ -281,7 +281,7 @@ useEffect(() => {
     document.body.innerHTML = printContents;
     window.print();
     document.body.innerHTML = originalContents;
-    window.location.reload(); 
+    // window.location.reload(); 
     navigate('/dashboard/orderMissions/listMissionOrders')
   }
 
