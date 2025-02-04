@@ -282,6 +282,7 @@ useEffect(() => {
     window.print();
     document.body.innerHTML = originalContents;
     window.location.reload(); 
+    navigate('/dashboard/orderMissions/listMissionOrders')
   }
 
   return (
@@ -553,7 +554,7 @@ useEffect(() => {
               <button
                 type="button"
                 onClick={handleIgnore}
-                className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626]  transition-colors "
+                className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626] transition-colors "
               >
                 Annuler
               </button>
