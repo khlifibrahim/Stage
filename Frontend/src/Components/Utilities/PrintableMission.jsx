@@ -45,7 +45,7 @@ function PrintableMission({ cadre, mission}) {
             <p>Heure arrivée: {` ${mission.arrHour || ""}`}</p>
           </div>
           <div className="mb-4 text-base">
-            <p>M. {`${cadre.cadre_nom} ${cadre.cadre_prenom}`} est autorisé à utiliser :</p>
+            <p>M. {`${cadre.nom} ${cadre.prenom}`} est autorisé à utiliser :</p>
             <ul className="list-disc ml-6">
               <li>la voiture de service n°: {`${mission.plateNumber || ""}`}</li>
               <li>sa voiture personnelle n°: {`${cadre.carPlat || ""}`}</li>
