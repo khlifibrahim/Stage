@@ -282,9 +282,8 @@ useEffect(() => {
     window.print();
     document.body.innerHTML = originalContents;
     // window.location.reload(); 
-    setModalPopUpPrint(!modalPopUpPrint)
     navigate('/dashboard/orderMissions/listMissionOrders')
-
+    setModalPopUpPrint(!modalPopUpPrint)
   }
 
   return (
