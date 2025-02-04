@@ -16,17 +16,19 @@ export  const getOrderMission = async (req, res) => {
                 u.nom AS cadre_nom,
                 u.prenom AS cadre_prenom,
                 g.grade_name,
-                d.Destination
+                d.Destination,
+                o.Object_type
             FROM mission m
             JOIN mission_cadre mc ON m.mission_id = mc.mission_id
             JOIN cadre c ON mc.cadre_id = c.cadre_id
             JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
             JOIN grade g ON c.grade_id = g.grade_id
-            JOIN Destination d ON m.Id_des = d.id_des;
-        `
-        // const query = 'SELECT * FROM defaultdb.mission;'
+            JOIN Destination d ON m.Id_des = d.id_des
+            JOIN Object o ON m.Id_object = o.Id_object
+            ;
+        `;
+
         const [missions] = await connect.query(query)
-        const missionsData = missions[0]
         console.log('Missions List (line 12) ',missions)
 
         res.status(200).json({
@@ -99,22 +101,22 @@ export const searchCadre = async (req, res) => {
         const connect = await connectSQL();
         const { name } = req.body;
 
+        
         if(!name) {
             return res.status(400).json({
                 success: false,
                 message: 'Cadre name required'
             })
         }
-
-        // const [cadres] = await connect.query('SELECT * FROM `cadre` WHERE nom LIKE ?', [`%${name}%`])
         const [cadres] = await connect.query(`
             SELECT c.*, u.nom, u.prenom , g.grade_name 
             FROM cadre c
             INNER JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
             INNER JOIN grade g ON c.grade_id = g.grade_id
-            WHERE u.nom LIKE ?;
-            `, [`%${name}%`])
+            WHERE u.nom LIKE ? OR u.prenom LIKE ? ;
+            `, [`%${name}%`, `%${name}%`])
         console.log(cadres)
+        
 
         if(cadres.length === 0) {
             return res.status(400).json({
@@ -122,15 +124,15 @@ export const searchCadre = async (req, res) => {
                 message: 'No cadre found!!'
             })
         }
-
-        res.status(200).json({
-            success: true,
-            message: 'Cadres fetched successfully',
-            cadres: cadres
-        })
+        
+        return res.status(200).json({
+                success: true,
+                message: 'Cadres fetched successfully',
+                cadres: cadres
+            })
     } catch (error) {
         console.log('Error fetching cadres: ', error);
-        return res.status(400).json({
+        return res.status(500).json({
             success: false,
             message: 'No cadre found!!'
         })
