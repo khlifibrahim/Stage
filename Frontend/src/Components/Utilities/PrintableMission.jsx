@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import logo from '../../assets/logo.png'
 
 function PrintableMission({ cadre, mission}) {

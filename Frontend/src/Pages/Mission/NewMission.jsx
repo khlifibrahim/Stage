@@ -201,13 +201,14 @@ function NewMission() {
     }
   };
 
+  const selectedDestination = destinationList.find(destination => { return destination.Id_des === mission.destinationId });
+  const destinationName = selectedDestination ? selectedDestination.Destination : "Aucune destination";
+  const selectedObject = objectOptions.find(object => { return object.Id_object === mission.objectId });
+  const objectName = selectedObject ? selectedObject.Object_type : "Aucun objet";
+
   const handleMissionChange = (e) => {
     const { name, value } = e.target
 
-    const selectedDestination = destinationList.find(destination => { return destination.Id_des === mission.destinationId });
-    const destinationName = selectedDestination ? selectedDestination.Destination : "Aucune destination";
-    const selectedObject = objectOptions.find(object => { return object.Id_object === mission.objectId });
-    const objectName = selectedObject ? selectedObject.Object_type : "Aucun objet";
 
     setMission((prev) => ({
       ...prev,
@@ -216,7 +217,6 @@ function NewMission() {
       objectName: objectName,
     }))
     if (selectCar === "personal") {
-      console.log("Check the selected car: ",selectCar)
       setMission(prev => ({
         ...prev,
         plateNumber: null
@@ -284,17 +284,15 @@ function NewMission() {
 
 
   const handlePrint = () => {
-    if (hidePrint) {
-      const printContents = document.getElementById("print-area").innerHTML;
-      const printWindow = document.body.innerHTML;
-      document.body.innerHTML = printContents;
+    if (!hidePrint) {
+      const printArea = document.getElementById("print-area").innerHTML;
+      
+      const printConten = document.body.innerHTML;
+
+      document.body.innerHTML = printArea;
       window.print()
-      document.body.innerHTML = printContents;
-      setHidePrint(false)
-    }
-    if (printWindow) {
-    } else {
-      alert("Please allow pop-ups to print.");
+      document.body.innerHTML = printConten;
+      window.location.reload()
     }
 
   }
