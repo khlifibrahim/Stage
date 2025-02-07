@@ -17,7 +17,8 @@ export default {
         'poppins': ['poppins', 'serif']
       },
       backgroundImage: {
-        'building': "url('/src/assets/background.png')"
+        'building': "url('/src/assets/background.png')",
+        'gradientBlue': "linear-gradient(115deg, #5efce8, #736efe)"
       }
     },
   },

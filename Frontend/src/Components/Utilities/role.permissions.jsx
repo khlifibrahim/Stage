@@ -18,7 +18,13 @@ export const ROLE_TO_ID = {
     SECRÉTAIRE: ROLES.SECRÉTAIRE
   };
 
-  
+export const ROLE_PRIMARY_ROUTE = {
+    [ROLES.DIRECTEUR]: '/dashboard',
+    [ROLES.CHEFSERVICE]: '/dashboard',
+    [ROLES.CADRE]: '/dashboard/orderMissions/listMissionOrders',
+    [ROLES.SECRÉTAIRE]: '/dashboard/orderMissions/listMissionOrders'
+};
+
 export const ROLE_PERMISSIONS = {
     [ROLES.DIRECTEUR]: {
         dashboard: ["canViewDashboard"],
@@ -77,6 +83,34 @@ export const ROLE_PERMISSIONS = {
         ]
     }
 }
+
+export const SIDEBAR_MENU = {
+    "DIRECTEUR": [
+        { "Dashboard": [] },
+        { "Missions": ["List Mission", "Nouv. Mission"] },
+        { "Cadre": ["List Cadres"] },
+        { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
+        { "Voitures": ["List Voitures", "Nouv. Voitures"] },
+    ],
+    "CHEFSERVICE": [
+        { "Dashboard": [] },
+        { "Missions": ["List Mission", "Nouv. Mission"] },
+        { "Cadre": ["List Cadres"] },
+        { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
+        { "Voitures": ["List Voitures", "Nouv. Voitures"] },
+    ],
+    "CADRE": [
+        { "Dashboard": [] },
+        { "Missions": ["List Mission"] },
+        { "Cadre": ["List Cadres"] },
+        { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
+        { "Voitures": ["List Voitures", "Nouv. Voitures"] }, // Added to match other roles
+    ],
+    "SECRÉTAIRE": [
+        { "Dashboard": [] },
+        { "Missions": ["List Mission", "Nouv. Mission"] },
+    ]
+};
 
 
 

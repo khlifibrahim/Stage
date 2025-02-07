@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 function Dashboard() {
   console.log("Dashboard Component Rendered");
-  const { role } = useSelector(state => state.auth)
+  const { role, user } = useSelector(state => state.auth)
 
   return (
     <div className='flex gap-6 h-screen overflow-auto'>

@@ -20,7 +20,7 @@ function Login() {
         username: '',
         password: ''
     })
-    // console.log(error)
+    console.log(error)
     // const [error, setError] = useState('')
 
     const handleChange = (e) => {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
 import { ProtectedRoute } from './Protected.route'
@@ -6,51 +7,83 @@ import { ProtectedRoute } from './Protected.route'
 import { ROLE_PERMISSIONS, ROLE_NAMES, ROLES } from '../Components/Utilities/role.permissions'
 import Login from '../Pages/Login/Login'
 import Dashboard from '../Pages/Dashboards/Dashboard'
+import Statistic from '../Pages/Statisctic/Statisctic'
 import ListMissions from '../Pages/Mission/ListMissions'
 import NewMission from '../Pages/Mission/NewMission'
 import Unauthorized from '../Pages/unauthorized/unauthorized'
-// import Layout from '../Layout';
 import CarsList from '../Pages/Cars/CarsList'
-
-
+import ProfilePage from '../Pages/Profile/ProfilePage'
 
 
 function AppRoutes() {
-  console.log("(App Rout accessed...")
+  const {role, user} = useSelector( state => state.auth)
+  console.log("App Rout accessed...")
   return (
     <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
 
 
+        {/* Routes without protection */}
         <Route path="/dashboard" element={<Dashboard />} >
-          <Route path="dashboard" element={<h2>dashboard page</h2>} />
+          <Route index element={<Statistic />} />
 
           <Route path="orderMissions" >
-            <Route path="listMissionOrders" element={<ListMissions />} />
+            <Route path="listMissionOrders" element={<ListMissions role={role} user={user} />} />
             <Route path="addMissionOrders" element={<NewMission />} />
           </Route>
 
           <Route path="voitures" element={<CarsList />} />
-        </Route>
-        {/* <Route element={<ProtectedRoute feature="dashboard" reqPermission={["canViewDashboard"]} />}>
-          <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<h1>Dashboard Content</h1>} />
-          </Route>
-        </Route>
 
-        <Route element={<ProtectedRoute feature="listMission" reqPermission={["canCreateMissionOrders", "canEditMissionOrders", "canDeleteMissionOrders"]} />}>
-          <Route path="/missions" element={<Dashboard />}>
-            <Route index element={<ListMissions />} />
-            <Route path="new" element={<NewMission />} />
+          <Route path="profile" element={<ProfilePage />} />
+        </Route>
+        
+        
+        {/* Routes with protections */}
+        {/* <Route element={<ProtectedRoute feature="dashboard" reqPermission="canViewDashboard" />}>
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<Statistic />} />
+            <Route path="orderMissions">
+              <Route path="listMissionOrders" feature="listMission" reqPermission="canViewMissionOrders" element={<ListMissions />} />
+              <Route path="addMissionOrders" element={<NewMission />} />
+            </Route>
+            <Route path="voitures" element={<CarsList />} />
           </Route>
         </Route> */}
 
-        {/* Catch-all Route (Optional) */}
+{/* <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute feature="dashboard" reqPermission="canViewDashboard">
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/dashboard/orderMissions/listMissionOrders" 
+          element={
+            <ProtectedRoute feature="listMission" reqPermission="canViewMissionOrders">
+              <ListMissions />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route 
+          path="/dashboard/orderMissions/addMissionOrders" 
+          element={
+            <ProtectedRoute feature="addOrderMission" reqPermission="canCreateMissionOrders">
+              <NewMission />
+            </ProtectedRoute>
+          } 
+        />
+
+      <Route element={<ProtectedRoute />}>
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Route> */}
 
     </Routes>
 

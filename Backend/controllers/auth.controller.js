@@ -10,12 +10,13 @@ export const login = async (req, res) => {
     try {
         const  connection = await connectSQL();
         const [rows] = await connection.query(`
-            SELECT *, p.nom_profile 
+            SELECT *, p.nom_profile
             FROM Utilisateur u
-            LEFT JOIN Profile p 
-            ON u.id_profile = p.id_profile
+            LEFT JOIN Profile p ON u.id_profile = p.id_profile
             WHERE username = ?
             `, [username])
+        
+        console.log("Logged user : ", rows)
         
         if(rows.length === 0) {
             return res.status(400).json({

@@ -26,6 +26,7 @@ export const loginUser = (credentials) => async (dispatch) => {
         })
 
     } catch (error) {
+        console.log("Error from Login page: ", error.response.data)
         dispatch({
             type: LOGINFAILED,
             payload: error.message

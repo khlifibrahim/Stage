@@ -1,36 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import MenuBtn from '../Utilities/MenuBtn';
+import { SIDEBAR_MENU } from '../Utilities/role.permissions'
 import logo from '../../assets/small-logo.png';
-import { useSelector } from 'react-redux';
 
 function SideBar({ role }) {
-    const { permissions } = useSelector(state => state.auth)
-    const [isSubMenuOpen, setIsSubMenuOpen] = useState({})
-    // console.log("menu status: ", isSubMenuOpen)
-    const toggleSubMenu = (menuContent) => {
-    if(menuContent.subMenu) {
-        setIsSubMenuOpen(prevState => ({
-            ...prevState,
-            [menuContent]: !prevState[menuContent.content]
-        }));
-    }    
-    }
+    const [submenuState, setSubmenuState] = useState({});
+    const toggleSubMenu = (item) => {
+    setSubmenuState((prevState) => ({
+        ...prevState,
+        [item.content]: !prevState[item.content],
+    }));
+    };
 
-    // console.log(role)
-    // const permissions = JSON.parse(localStorage.getItem('permissions'))
-    console.log("Permissions from localstorage : ", permissions)
-    // console.log("Permissions from localstorage - dashboard: ", permissions.dashboard)
-    // console.log("Permissions from localstorage - orderMission: ", permissions.orderMission)
-    // console.log("Permissions from localstorage - profile: ", permissions.userProfile)
-    
-    const rolePermissions = {
-        "DIRECTEUR": ["Dashboard", "Missions","Cadres", "Voitures", "Entreprise"],
-        "CHEFSERVICE": ["Dashboard", "Missions", "Entreprise"],
-        "CADRE": ["Dashboard", "Missions", "Entreprise"],
-        "SECRÉTAIRE": ["Dashboard", "Missions"]
-    }
 
     const menuListLink = [
         {
@@ -45,7 +26,7 @@ function SideBar({ role }) {
             subMenu: [
                 {
                     icon: (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 12h6" /><path d="M9 16h6" /></svg>),
-                    content: 'Liste Missions',
+                    content: 'List Mission',
                     path: "/dashboard/orderMissions/listMissionOrders"
                 },
                 {
@@ -62,8 +43,8 @@ function SideBar({ role }) {
             subMenu: [
                 {
                     icon: (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-users-group"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" /><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M17 10h2a2 2 0 0 1 2 2v1" /><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M3 13v-1a2 2 0 0 1 2 -2h2" /></svg>),
-                    content: 'Ajouter Cadre',
-                    path:'/dashboard/addCadre'
+                    content: 'List Cadres',
+                    path:'/dashboard/ListCadre'
                 }
             ],
         },
@@ -89,30 +70,79 @@ function SideBar({ role }) {
             path: '/dashboard/voitures',
         },
     ];
+    
+    const filterMenu = (menu, role) => {
+        const permissionsByRole = SIDEBAR_MENU[role];
+        
+        return menu .map(
+            (item, i) => {
+                const allowedMenu = permissionsByRole?.find(permission => permission[item.content])
+                if(allowedMenu) {
+                    const allowedSubMenu = allowedMenu[item.content]
+                    if(item.subMenu) {
+                        const filterSubMenu = item.subMenu.filter(subMenuItem => allowedSubMenu.includes(subMenuItem.content))
+                        return {
+                            ...item,
+                            subMenu: filterSubMenu.length ? filterSubMenu : undefined
+                        }
+                    }
+                return item;
+                }
+                return null
+            })
+            .filter(item => item !== null);
 
-    const filteredMenu = menuListLink.filter(item => 
-        rolePermissions[role]?.includes(item.content)
-    );
-    console.log("Filtered menu : ",filteredMenu)
+    }
+    const filteredMenu = filterMenu(menuListLink, role)
+
 
   return (
-    <div className='min-w-[280px] w-[280px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6] '>
-        <div className="head flex items-center gap-3 p-6">
-            <img src={logo} className='!w-[47px] ' alt="MCINET.GOV.MA" />
-            <p className='font-poppins font-semibold leading-[140%] text-[20px] '>MCINET</p>
-        </div>
-          <div className="menu px-6 flex flex-col gap-2">
-              {
-               filteredMenu.map((menuContent, i) => (
-                    <MenuBtn 
-                        key={i} 
-                        icon={menuContent.icon} 
-                        content={menuContent.content} 
-                        subMenu={menuContent.subMenu}
-                    />
-                ))}
+      <div className='min-w-[280px] w-[280px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6] '>
+          <div className="head flex items-center gap-3 p-6">
+              <img src={logo} className='!w-[47px] ' alt="MCINET.GOV.MA" />
+              <p className='font-poppins font-semibold leading-[140%] text-[20px] '>MCINET</p>
           </div>
-    </div>
+
+          <div className="menu px-6 flex flex-col gap-2">
+                {
+                    filteredMenu.map((link, i) => {
+                        return (
+                            <div>
+                                <Link to={link.path}>
+                                    <div className='flex flex-col items-start justify-start gap-3'>
+                                        <div onClick={() => toggleSubMenu(link)} className='flex items-center justify-between w-full gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer'>
+                                            <div className='flex items-center justify-start gap-2'>
+                                                <span className="icon hover:svg>stroke-blue">{link.icon}</span>
+                                                <p className='font-poppins font-medium text-[14px] leading-5 '> {link.content} </p>
+                                            </div>
+
+                                            {link.subMenu && (
+                                                <div className={` transition-transform ${submenuState[link.content] ? 'rotate-90' : 'rotate-0'}`}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:text-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 6l6 6l-6 6" /></svg>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Link>
+
+                                {submenuState[link.content] && link.subMenu &&  (
+                                    <div className="px-2">{
+                                        link.subMenu.map((sub, i) => (
+                                            <Link key={i} to={sub.path} >
+                                                <div className='flex items-center justify-start gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer'>
+                                                    <span className="icon hover:stroke-blue">{sub.icon}</span>
+                                                    <p className='font-poppins font-medium text-[14px] leading-5 '> {sub.content} </p>
+                                                </div>
+                                            </Link>)
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        )
+                    })
+                }
+          </div>
+      </div>
   )
 }
 

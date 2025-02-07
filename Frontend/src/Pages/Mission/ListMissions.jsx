@@ -1,22 +1,20 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { useNavigate } from 'react-router-dom';
 import Instance from '../../Api/axios'
 import PrintableMission from '../../Components/Utilities/PrintableMission'
+import { useSelector } from 'react-redux';
 
-function ListMissions() {
+function ListMissions({role, user}) {
   const navigate = useNavigate();
-  const [missionsList, setMissionsList] = useState([])
   const [mission, setMission] = useState({})
+  const [missionsList, setMissionsList] = useState([])
   const [filter, setFilter] = useState(null)
   const [isFilterMenuOpen, setFilterMenuOpen] = useState(false)
   const [openMissionMenu, setOpenMissionMenu] = useState(null)
   const [modalPopUpPrint, setModalPopUpPrint] = useState(false)
-  
-
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
-
   const totalPage = [(Math.ceil(missionsList.length / itemsPerPage))];
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage
@@ -27,6 +25,15 @@ function ListMissions() {
     { id: 2, label: "En Cours" },
     { id: 3, label: "Validé" }
   ];
+  let menuReference = useRef()
+  useEffect(()=> {
+    let Handler = (e) => {
+      if(!menuReference.current.contains(e.target)){
+        
+      }
+    }
+  })
+
   const toggleMissionMenu = (id)=> {
     setOpenMissionMenu(openMissionMenu === id ? null : id)
   }
@@ -86,8 +93,16 @@ function ListMissions() {
       try {
         const response = await Instance.get('/missions/getOrderMission')
         console.log(response.data)
-        setMissionsList(response.data.missions)
-        
+        if(role === "CADRE") {
+          const filterMissionListFOrCadre = response.data.missions.filter(mission => (
+            mission.status === "En Cours" && mission.cadre_nom === user.nom
+          ))
+          console.log("Filtered mission list: ",filterMissionListFOrCadre)
+          setMissionsList(filterMissionListFOrCadre)
+        }else {
+          setMissionsList(response.data.missions)
+          console.log("user is: ", role)
+        }
       } catch (error) {
         console.log('Error fetching missions list: ',error.response?.data)
       }
@@ -113,14 +128,16 @@ function ListMissions() {
     <div className='flex flex-col gap-8 mb-4'>
       <div className="header flex items-center justify-between">
         <h1 className='font-poppins font-bold text-3xl'>List des Order Missions</h1>
-        <div className="filter flex items-center justify-between gap-4">
+        {/* filter menu */}
+        {role !== "CADRE" &&
+        (<div className="filter flex items-center justify-between gap-4">
           <p className='font-medium text-base'>Trier par: </p>
 
           <div className='flex items-center justify-between gap-2 relative'>
             <span value="cadre" className='bg-[#E4E4E4] font-semibold rounded-[10px] py-2 px-3 hover:bg-bg-blue hover:text-blue cursor-pointer transition-colors'>Cadres</span>
             <span value="status" onClick={toggleMenu} className={`relative bg-[#E4E4E4] font-semibold rounded-[10px] py-2 px-3 hover:bg-bg-blue hover:text-blue cursor-pointer transition-colors ${isFilterMenuOpen ? 'bg-bg-blue' : ''}`}>
                 <div className={`flex items-center justify-center ${isFilterMenuOpen ? 'text-blue' : ''}`}>
-                  <span>Status</span>
+                  <span>{'Status'}</span>
                   <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`hover:text-blue ${isFilterMenuOpen ? 'rotate-90' : ''} cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-chevron-right`}><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 6l6 6l-6 6" /></svg>
                   </span>
@@ -143,7 +160,7 @@ function ListMissions() {
               </div>)
               }
           </div>
-        </div>
+        </div>)}
       </div>
       <div className="form flex items-start justify-center h-full">
         <div className="table">
@@ -157,8 +174,8 @@ function ListMissions() {
           </div>
 
 
-          {handleFilterChange.slice(start, end).map((mission, i) => (
-            <div key={i} className="table-rows flex items-center justify-evenly my-2 border border-[#E4E4E4] rounded-[10px]">
+          {handleFilterChange.length > 0 ? handleFilterChange.slice(start, end).map((mission, i) => (
+            <div onClick={() => handleDetails(mission.mission_id)} key={i} className="table-rows flex items-center justify-evenly my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-blue">
               <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${mission.cadre_nom} ${mission.cadre_prenom}` || 'Mission name'}</p></div>
               <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{mission.grade_name || 'Wireframing and Prototyping'}</p></div>
               <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
@@ -172,44 +189,52 @@ function ListMissions() {
               <div className="relative table-base-row px-3 w-full border-[#E4E4E4] rounded-[4px] ">
                 <span className="text-[#727272] rounded bg-transparent border-none">
                 {
-                  (<svg onClick={() => toggleMissionMenu(mission.mission_id)}  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>)
+                  (<svg onMouseOver={() => toggleMissionMenu(mission.mission_id)}  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>)
                   
                 }</span>
                 {
                   openMissionMenu === mission.mission_id && (
                   <div  className='absolute top-6 left-12 z-50 shadow-lg bg-[#E4E4E4] rounded-[12px] overflow-hidden'>
-                    <p onClick={()=> handleDetails(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Details</p>
+                    {
+                      role !== "CADRE" && (
+                        <p className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Details</p>
+                      )
+                    }
                     <p onClick={()=> hendleEdit(mission)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Modifier</p>
                     <p onClick={()=> handleDelete(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626] cursor-pointer'>Supprimer</p>
                   </div>
                 )}
                 </div>
             </div>
-          ))}
+          )) : (
+            <div className='px-3 w-full text-center font-medium my-3'>Vous n'avez aucune mission</div>
+          )}
         </div>
       </div>
 
-      <div className="navigation flex items-center justify-between ">
-        <button 
-          className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
-          onClick={prevPage}
-        >Précédente</button>
-
-        <div className='flex gap-2'>
-
-          {
-            Array.from({length: totalPage}).map((_, i) => (
-              <span key={i} onClick={()=> setCurrentPage(i + 1)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === (i+1) ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{i + 1}</span>
-            ))
-          }
-
-          </div>
-
-        <button 
-          className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
-          onClick={nextPage}
-        >Suivante</button>
-      </div>
+      {(handleFilterChange.length > 0) &&
+        (<div className="navigation flex items-center justify-between ">
+          <button 
+            className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
+            onClick={prevPage}
+          >Précédente</button>
+  
+          <div className='flex gap-2'>
+  
+            {
+              Array.from({length: totalPage}).map((_, i) => (
+                <span key={i} onClick={()=> setCurrentPage(i + 1)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === (i+1) ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{i + 1}</span>
+              ))
+            }
+  
+            </div>
+  
+          <button 
+            className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
+            onClick={nextPage}
+          >Suivante</button>
+        </div>)
+      }
 
       {modalPopUpPrint &&
             (
