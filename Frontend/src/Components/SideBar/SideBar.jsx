@@ -5,6 +5,8 @@ import logo from '../../assets/small-logo.png';
 
 function SideBar({ role }) {
     const [submenuState, setSubmenuState] = useState({});
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+
     const toggleSubMenu = (item) => {
     setSubmenuState((prevState) => ({
         ...prevState,
@@ -97,13 +99,23 @@ function SideBar({ role }) {
 
 
   return (
-      <div className='min-w-[280px] w-[280px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6] '>
+    <div className={`min-w-[280px] w-[280px] sm:w-[200px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6] ${sidebarOpen ? 'block' : 'hidden'}`}>
+          
+          {/* Bouton menu hamburger visible uniquement sur les petits écrans */}
+          <div className="sm:hidden flex justify-between items-center p-4">
+                <button onClick={() => setSidebarOpen(!sidebarOpen)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+                        <path d="M3 6h18M3 12h18M3 18h18"></path>
+                    </svg>
+                </button>
+            </div>
+          
           <div className="head flex items-center gap-3 p-6">
-              <img src={logo} className='!w-[47px] ' alt="MCINET.GOV.MA" />
+              <img src={logo} className='!w-[47px] sm:w-[35px]' alt="MCINET.GOV.MA" />
               <p className='font-poppins font-semibold leading-[140%] text-[20px] '>MCINET</p>
           </div>
 
-          <div className="menu px-6 flex flex-col gap-2">
+          <div className="menu px-6 sm:px-3 flex flex-col gap-2">
                 {
                     filteredMenu.map((link, i) => {
                         return (
@@ -113,12 +125,12 @@ function SideBar({ role }) {
                                         <div onClick={() => toggleSubMenu(link)} className='flex items-center justify-between w-full gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer'>
                                             <div className='flex items-center justify-start gap-2'>
                                                 <span className="icon hover:svg>stroke-blue">{link.icon}</span>
-                                                <p className='font-poppins font-medium text-[14px] leading-5 '> {link.content} </p>
-                                            </div>
+                                                <p className='font-poppins font-medium sm:text-sm text-[14px] leading-5'>{link.content}</p>
+                                                </div>
 
                                             {link.subMenu && (
-                                                <div className={` transition-transform ${submenuState[link.content] ? 'rotate-90' : 'rotate-0'}`}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:text-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 6l6 6l-6 6" /></svg>
+                                                <div className={`transition-transform ${submenuState[link.content] ? 'rotate-90' : 'rotate-0'} sm:rotate-0`}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:text-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 6l6 6l-6 6" /></svg>
                                                 </div>
                                             )}
                                         </div>

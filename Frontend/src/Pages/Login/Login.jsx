@@ -45,11 +45,11 @@ function Login() {
 
 
   return (
-    <div className='login relative flex justify-center items-center bg-building bg-no-repeat bg-cover w-screen h-screen min-h-screen'>
-        <div className="blur-xl absolute top-0 left-0  bg-blue opacity-25 w-full h-full -z-0"></div>
+<div className="login relative flex justify-center items-center bg-building bg-no-repeat bg-cover w-screen h-screen min-h-screen px-4">
+<div className="blur-xl absolute top-0 left-0  bg-blue opacity-25 w-full h-full -z-0"></div>
         <img src={logo} alt=""  className='absolute top-10 left-10 w-12 h-12'/>
-        <form onSubmit={handleLogin} className="login-box font-poppins p-11 bg-white flex flex-col gap-[24px] rounded-[10px] z-50">
-            {/* <h1 className='text-black font-semibold text-[96px]'>Bonjour</h1> */}
+        <form onSubmit={handleLogin} className="login-box font-poppins p-8 bg-white flex flex-col gap-6 rounded-lg z-50 w-full max-w-sm sm:w-[533px] shadow-lg">
+        {/* <h1 className='text-black font-semibold text-[96px]'>Bonjour</h1> */}
             <div className='flex flex-col'>
                 <label htmlFor="" className={`${error ? '!text-[#DC2626]' : ''}`}>Nom d&apos;utilisateur</label>
                 <input 
@@ -57,7 +57,7 @@ function Login() {
                     name="username"
                     value={isLogin.username}
                     onChange={handleChange}
-                    className={`w-[533px] h-[46px] border-1 border-border rounded-[10px] px-2 outline-none focus:border-blue ${error ? '!border-[#DC2626]' : ''}`} 
+                    className={`w-full h-12 border border-gray-300 rounded-lg px-3 outline-none focus:border-blue-500 ${error ? 'border-red-600' : ''}`} 
                     type="text" 
                     placeholder='Entre votre nom d&#39;utilisateur...' />
             </div>
@@ -69,7 +69,7 @@ function Login() {
                     value={isLogin.password}
                     onChange={handleChange}
                     type="password"
-                    className={`w-[533px] h-[46px] border-1 border-border rounded-[10px] px-2 outline-none focus:border-blue ${error ? '!border-[#DC2626]' : ''}`} 
+                    className={`w-full h-12 border border-gray-300 rounded-lg px-3 outline-none focus:border-blue-500 ${error ? 'border-red-600' : ''}`} 
                     placeholder='Entrer votre mot de passe...' />
             </div>
                 {error && <p className='px-2 text-[#DC2626]'>{error}</p>}
