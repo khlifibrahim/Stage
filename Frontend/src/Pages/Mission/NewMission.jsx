@@ -301,26 +301,27 @@ function NewMission() {
     <div className="p-6">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">{editMode ? "Modifier l'Ordre de Mission" : "Créer Ordre Mission"}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 text-center md:text-left">
+          {editMode ? "Modifier l'Ordre de Mission" : "Créer Ordre Mission"}</h1>
       </div>
 
       {/* Form */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg my-4"
+        className="bg-white rounded-lg my-4 p-4 md:p-6"
       >
         {/* Groupe: Nom et Titre */}
-        <div className="flex gap-6 mb-4">
+        <div className="flex flex-wrap md:flex-nowrap gap-6 mb-4">
           <div className=" flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Nom*</label>
-            <div className="relative flex flex-col flex-1 ">
+            <div className="relative  ">
               <input
                 type="text"
                 name="nom"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Nom..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
                 required
               />
               <div className={`absolute top-11 left-0 w-full cadre-list ${cadreList.length > 0 ? 'border' : ''} rounded-lg  bg-white`}>
@@ -338,7 +339,7 @@ function NewMission() {
             </div>
           </div>
           <div className="flex flex-col flex-1 ">
-            <label className="">Titre*</label>
+            <label className="font-medium text-sm mb-1">Titre*</label>
             <input
               type="text"
               name="grade"
@@ -352,7 +353,7 @@ function NewMission() {
         </div>
 
         {/* Groupe: Délégation et Destination */}
-        <div className="flex gap-6 mb-4">
+        <div className="flex flex-wrap md:flex-nowrap gap-6 mb-4">
           <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Délégation*</label>
             <input
@@ -361,7 +362,7 @@ function NewMission() {
               value={cadre.delegation}
               onChange={handleCadreChange}
               placeholder="Délégation..."
-              className="border rounded-lg px-4 py-2 focus:outline-blue"
+              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
               required
             />
           </div>
@@ -373,7 +374,7 @@ function NewMission() {
               name="destinationId"
               value={mission.destinationId}
               onChange={handleMissionChange}
-              className="border rounded-lg px-4 py-2 focus:outline-blue"
+              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
               required
             >
               <option value="" disabled>Sélectionnez une destination</option>
@@ -409,45 +410,45 @@ function NewMission() {
 
 
         {/* Groupe: Date et Heure */}
-        <div className="flex gap-6 mb-4">
-          <div className="flex flex-col flex-1">
+        <div className="flex flex-wrap gap-6 mb-4">
+          <div className="flex flex-col flex-1 w-full md:w-1/2">
             <label className="font-medium text-sm mb-1">Date départ*</label>
             <input
               type="date"
               name="depDate"
               value={mission.depDate}
               onChange={handleMissionChange}
-              className="border rounded-lg px-4 py-2 focus:outline-blue"
+              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
 
             />
           </div>
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col flex-1 w-full md:w-1/2">
             <label className="font-medium text-sm mb-1">Heure départ*</label>
             <input
               type="time"
               name="depHour"
               value={mission.depHour}
               onChange={handleMissionChange}
-              className="border rounded-lg px-4 py-2 focus:outline-blue"
+              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
 
             />
           </div>
         </div>
 
         {/* Groupe: Heure arrivée et Durée */}
-        <div className="flex gap-6 mb-4">
-          <div className="flex flex-col flex-1">
+        <div className="flex flex-wrap gap-6 mb-4">
+          <div className="flex flex-col flex-1 w-full md:w-1/2">
             <label className="font-medium text-sm mb-1">Heure d'arrivée*</label>
             <input
               type="time"
               name="arrHour"
               value={mission.arrHour}
               onChange={handleMissionChange}
-              className="border rounded-lg px-4 py-2 focus:outline-blue"
+              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
 
             />
           </div>
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col flex-1 w-full md:w-1/2">
             <label className="font-medium text-sm mb-1">Durée de la mission*</label>
             <input
               type="text"

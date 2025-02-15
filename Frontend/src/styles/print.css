@@ -1,0 +1,27 @@
+@media print {
+  /* Ajuster la taille de l'élément imprimé */
+  #print-area {
+    width: 100mm !important; /* Largeur adaptée à un téléphone */
+    max-width: 100% !important;
+    height: auto !important;
+    margin: auto !important;
+    padding: 10px !important;
+  }
+
+  /* Redimensionner les images pour éviter qu'elles prennent tout l'écran */
+  #print-area img {
+    max-width: 90mm !important; /* Largeur max pour un format A4 ou mobile */
+    height: auto !important;
+    display: block !important;
+    margin: auto !important; /* Centrer l'image */
+  }
+
+  /* Empêcher tout dépassement */
+  .print-modal {
+    width: 100mm !important;
+    max-width: 100% !important;
+    height: auto !important;
+    overflow: hidden !important;
+    padding: 10px !important;
+  }
+}

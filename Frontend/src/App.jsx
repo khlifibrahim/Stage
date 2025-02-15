@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from 'react-redux';
 import store from './Redux/Store';
 import AppRoutes from './Routes/App.routes';
-
+import './styles/print.css'
 
 function App() {
   

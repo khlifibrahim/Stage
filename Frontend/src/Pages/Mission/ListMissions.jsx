@@ -125,17 +125,17 @@ function ListMissions({role, user}) {
 
 
   return (
-    <div className='flex flex-col gap-8 mb-4'>
-      <div className="header flex items-center justify-between">
-        <h1 className='font-poppins font-bold text-3xl'>List des Order Missions</h1>
+    <div className='flex flex-col gap-8 mb-4 px-4 md:px-8 lg:px-12'>
+      <div className="header flex flex-wrap items-center justify-between">
+        <h1 className='font-poppins font-bold text-2xl md:text-3xl'>List des Order Missions</h1>
         {/* filter menu */}
         {role !== "CADRE" &&
-        (<div className="filter flex items-center justify-between gap-4">
-          <p className='font-medium text-base'>Trier par: </p>
+        (<div className="filter flex flex-wrap items-center gap-4">
+          <p className='font-medium text-sm md:text-base'>Trier par: </p>
 
-          <div className='flex items-center justify-between gap-2 relative'>
-            <span value="cadre" className='bg-[#E4E4E4] font-semibold rounded-[10px] py-2 px-3 hover:bg-bg-blue hover:text-blue cursor-pointer transition-colors'>Cadres</span>
-            <span value="status" onClick={toggleMenu} className={`relative bg-[#E4E4E4] font-semibold rounded-[10px] py-2 px-3 hover:bg-bg-blue hover:text-blue cursor-pointer transition-colors ${isFilterMenuOpen ? 'bg-bg-blue' : ''}`}>
+          <div className='flex items-center gap-2 relative'>
+            <span value="cadre" className='bg-[#E4E4E4] text-sm md:text-base font-semibold rounded-[10px] py-2 px-3 hover:bg-bg-blue hover:text-blue cursor-pointer transition-colors'>Cadres</span>
+            <span value="status" onClick={toggleMenu} className={`relative bg-[#E4E4E4] font-semibold rounded-[10px] py-2 px-3 text-sm md:text-base hover:bg-bg-blue hover:text-blue cursor-pointer transition-colors ${isFilterMenuOpen ? 'bg-bg-blue' : ''}`}>
                 <div className={`flex items-center justify-center ${isFilterMenuOpen ? 'text-blue' : ''}`}>
                   <span>{'Status'}</span>
                   <span>
@@ -152,7 +152,7 @@ function ListMissions({role, user}) {
                                       setFilterMenuOpen(false)
                                       console.log(filter)
                                       }} 
-                              className='py-2 px-4 hover:bg-bg-blue hover:text-blue cursor-pointer'>
+                              className='py-2 px-4 text-sm hover:bg-bg-blue hover:text-blue cursor-pointer'>
                             {status.label}
                         </div>
                   ))
@@ -162,16 +162,15 @@ function ListMissions({role, user}) {
           </div>
         </div>)}
       </div>
-      <div className="form flex items-start justify-center h-full">
-        <div className="table">
-          <div className="table-head flex items-center justify-evenly w-full border-[#E4E4E4] rounded-[10px] overflow-hidden">
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Cadre</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Grade</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Destination</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Date de depart</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Statue</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Voir plus</p></div>
-          </div>
+      <div className="form flex flex-col md:flex-row items-start justify-center h-full overflow-x-auto">
+        <div className="table w-full md:w-auto">
+          <div className="table-head flex items-center justify-between md:justify-evenly w-full border-[#E4E4E4] rounded-[10px] overflow-hidden">
+      {['Cadre', 'Grade', 'Destination', 'Date de depart', 'Statue', 'Voir plus'].map((header, index) => (
+        <div key={index} className="table-base-header p-3 w-full bg-[#F9F9F9]">
+          <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>{header}</p>
+        </div>
+      ))}
+    </div>
 
 
           {handleFilterChange.length > 0 ? handleFilterChange.slice(start, end).map((mission, i) => (
@@ -239,8 +238,8 @@ function ListMissions({role, user}) {
       {modalPopUpPrint &&
             (
             <div className="fixed top-0 left-0 z-50 flex flex-col items-center justify-center  h-screen w-screen overflow-hidden bg-gray-600/55">
-              <div className="relative w-fit bg-white m-12 p-8 rounded-[12px] shadow-md overflow-y-auto no-scrollbar">
-                <span onClick={handleDetails} className='absolute left-4 top-4 z-50 p-2 rounded-[10px] bg-bg-blue'>
+            <div className="relative w-fit bg-white m-12 p-8 rounded-[12px] shadow-md overflow-y-auto no-scrollbar print-modal">
+                <span onClick={handleDetails} className='absolute left-4 top-4 z-50 p-2 rounded-[10px] bg-bg-blue hide-on-print'>
                   <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="stroke-white hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
                 </span>
                 <PrintableMission id="print-area"  cadre={mission} mission={mission} close={modalPopUpPrint}/>
