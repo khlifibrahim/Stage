@@ -321,7 +321,7 @@ function NewMission() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Nom..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
+                className="border rounded-lg px-4 py-2 focus:outline-blue "
                 required
               />
               <div className={`absolute top-11 left-0 w-full cadre-list ${cadreList.length > 0 ? 'border' : ''} rounded-lg  bg-white`}>
@@ -346,7 +346,7 @@ function NewMission() {
               value={cadre.grade}
               onChange={handleCadreChange}
               placeholder="Titre..."
-              className="border rounded-lg px-4 py-2 focus:outline-blue"
+              className="border rounded-lg px-4 py-2 focus:outline-blue "
               required
             />
           </div>
@@ -362,19 +362,19 @@ function NewMission() {
               value={cadre.delegation}
               onChange={handleCadreChange}
               placeholder="Délégation..."
-              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
+              className="border rounded-lg px-4 py-2 focus:outline-blue "
               required
             />
           </div>
 
           {/*  Destination */}
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col  flex-1">
             <label className="font-medium text-sm mb-1">Destination*</label>
             <select
               name="destinationId"
               value={mission.destinationId}
               onChange={handleMissionChange}
-              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
+              className="border rounded-lg px-4 py-2 focus:outline-blue w-full "
               required
             >
               <option value="" disabled>Sélectionnez une destination</option>
@@ -411,25 +411,25 @@ function NewMission() {
 
         {/* Groupe: Date et Heure */}
         <div className="flex flex-wrap gap-6 mb-4">
-          <div className="flex flex-col flex-1 w-full md:w-1/2">
+          <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Date départ*</label>
             <input
               type="date"
               name="depDate"
               value={mission.depDate}
               onChange={handleMissionChange}
-              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
+              className="border rounded-lg px-4 py-2 focus:outline-blue"
 
             />
           </div>
-          <div className="flex flex-col flex-1 w-full md:w-1/2">
+          <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Heure départ*</label>
             <input
               type="time"
               name="depHour"
               value={mission.depHour}
               onChange={handleMissionChange}
-              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
+              className="border rounded-lg px-4 py-2 focus:outline-blue"
 
             />
           </div>
@@ -437,18 +437,18 @@ function NewMission() {
 
         {/* Groupe: Heure arrivée et Durée */}
         <div className="flex flex-wrap gap-6 mb-4">
-          <div className="flex flex-col flex-1 w-full md:w-1/2">
+          <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Heure d'arrivée*</label>
             <input
               type="time"
               name="arrHour"
               value={mission.arrHour}
               onChange={handleMissionChange}
-              className="border rounded-lg px-4 py-2 focus:outline-blue w-full"
+              className="border rounded-lg px-4 py-2 focus:outline-blue"
 
             />
           </div>
-          <div className="flex flex-col flex-1 w-full md:w-1/2">
+          <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Durée de la mission*</label>
             <input
               type="text"
@@ -466,7 +466,7 @@ function NewMission() {
         <div className="flex flex-col gap-6 mb-4">
 
           <div className="flex gap-4 items-center">
-            <p className="font-medium text-sm mb-1 mr-4">Voiture: </p>
+            <p className="font-medium text-sm mb-1">Voiture: </p>
             <div className="flex items-center gap-3">
               <div>
                 <label className="flex gap-2" htmlFor="personal">

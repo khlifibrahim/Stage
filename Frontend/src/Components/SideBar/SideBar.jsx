@@ -99,16 +99,9 @@ function SideBar({ role }) {
 
 
   return (
-    <div className={`min-w-[280px] w-[280px] sm:w-[200px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6] ${sidebarOpen ? 'block' : 'hidden'}`}>
+    <div className={`min-w-[280px] w-[280px] sm:w-[200px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6] `}>
           
-          {/* Bouton menu hamburger visible uniquement sur les petits écrans */}
-          <div className="sm:hidden flex justify-between items-center p-4">
-                <button onClick={() => setSidebarOpen(!sidebarOpen)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
-                        <path d="M3 6h18M3 12h18M3 18h18"></path>
-                    </svg>
-                </button>
-            </div>
+          
           
           <div className="head flex items-center gap-3 p-6">
               <img src={logo} className='!w-[47px] sm:w-[35px]' alt="MCINET.GOV.MA" />
