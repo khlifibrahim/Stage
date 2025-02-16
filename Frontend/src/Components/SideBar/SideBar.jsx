@@ -103,7 +103,7 @@ function SideBar({ role }) {
           
           
           
-          <div className="head flex items-center gap-3 p-6">
+          <div className="head flex items-center gap-3 p-10 ">
               <img src={logo} className='!w-[47px] sm:w-[35px]' alt="MCINET.GOV.MA" />
               <p className='font-poppins font-semibold leading-[140%] text-[20px] '>MCINET</p>
           </div>
@@ -114,7 +114,7 @@ function SideBar({ role }) {
                         return (
                             <div>
                                 <Link to={link.path}>
-                                    <div className='flex flex-col items-start justify-start gap-3'>
+                                    <div className='flex flex-col items-start justify-start gap-3 px-3'>
                                         <div onClick={() => toggleSubMenu(link)} className='flex items-center justify-between w-full gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer'>
                                             <div className='flex items-center justify-start gap-2'>
                                                 <span className="icon hover:svg>stroke-blue">{link.icon}</span>
