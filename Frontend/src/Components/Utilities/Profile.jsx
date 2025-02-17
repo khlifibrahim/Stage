@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useOnClickOutside } from '../../Hooks/useOnClickOutside'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '../../Redux/Actions/auth.actions';
@@ -15,6 +16,8 @@ function Profile() {
   const handleProfileMenu = () => {
     setprofileMenuActive(!isprofileMenuActive)
   }
+  const profileRef = useRef()
+  useOnClickOutside(profileRef, () => setprofileMenuActive(false))
 
   const handleLogout = async () => {
       await dispatch(logOut())
@@ -23,21 +26,22 @@ function Profile() {
 
   return (
     <div onClick={handleProfileMenu} className='relative flex items-center justify-center gap-3 cursor-pointer'>
-      <div className='avatar w-10 h-10 rounded-full bg-blue'>
+      <div className='avatar flex items-center justify-center w-10 h-10 rounded-full bg-blue'>
         {/* <img src="" alt="" /> */}
+        <h3 className='font-bold text-lg text-white'>{userInfo.nom.charAt(0).toUpperCase()}</h3>
       </div>
-      <div className=''>
+      <div className='max-md:hidden'>
         <p className='font-poppins font-medium leading-5 text-[12px]'>{ userRole || 'Ch. de service'}</p>
-        <p>{userInfo ? `${userInfo.nom} ${userInfo.prenom}` : 'Brahim Khlifi'}</p>
+        <p>{userInfo ? `${userInfo.nom || ''} ${userInfo.prenom || ''}` : 'Brahim Khlifi'}</p>
         {/* <p>{'Brahim Khlifi'}</p> */}
       </div>
-      <div className={`rotate-90 ${isprofileMenuActive ? '' : 'rotate-0'}`} >
+      <div className={`max-md:hidden rotate-90 ${isprofileMenuActive ? '' : 'rotate-0'}`} >
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className={`hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-chevron-right`}><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
       </div>
 
       {
         isprofileMenuActive && (
-          <div className='absolute top-16 right-0 bg-white p-4 rounded-md shadow flex flex-col gap-2'>
+          <div className='profile absolute top-16 -left-3 max-md:-left-20  bg-white p-2 rounded-[14px] drop-shadow-2xl flex flex-col gap-2 w-full' ref={profileRef}>
             <Link to="/dashboard/profile">
               <div className='flex items-center justify-start gap-2 px-2 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer'>
                 <span className="icon hover:svg>stroke-blue">

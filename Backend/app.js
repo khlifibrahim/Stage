@@ -8,6 +8,7 @@ import { connectSQL } from './database/connectDB.js'
 import authRoutes from './routes/auth.route.js'
 import userRoutes from './routes/user.route.js'
 import mission from './routes/orderMission.route.js';
+import enterprise from './routes/enterprise.route.js'
 
 
 const port = process.env.PORT || 3000
@@ -27,6 +28,7 @@ app.use(express.json())
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes)
 app.use('/api/missions', mission)
+app.use('/api/enterprise', enterprise)
 
 
 app.get("/", (req, res) => {

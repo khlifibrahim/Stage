@@ -2,9 +2,11 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import {thunk} from 'redux-thunk';
 // import { composeWithDevTools } from 'redux-devtools-extension';
 import authReducer from './Reducers/auth.reducer.jsx'
+import enterpriseReducer from './Reducers/enterprise.reducer.jsx'
 
 const rootReducer = combineReducers({
     auth: authReducer,
+    enterprise: enterpriseReducer
 });
 
 const initialState = {};

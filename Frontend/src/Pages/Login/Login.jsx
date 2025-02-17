@@ -38,8 +38,8 @@ function Login() {
             navigate('/dashboard')
         }
         catch (e) {
-            console.log('Login failed: ', e)
-            // setError('Invalid Credentials!')
+            console.log('Login failed: ')
+            setError('Invalid Credentials!')
         }
     }
 

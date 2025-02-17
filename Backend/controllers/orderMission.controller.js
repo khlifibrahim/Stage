@@ -297,6 +297,38 @@ export const updateOrderMission = async (req, res) => {
     }
 }
 
+export const updateOrderMissionStatus = async (req, res) => {
+    const id = req.params;
+    const {status} = req.body
+    try {
+        console.log("Data comming from Update status Endpoint: ", id , status)
+    // const connect = await connectSQL();
+    // const status = 'En Cours';
+    
+    // const query = `UPDATE mission SET status = ? WHERE mission_id = ? AND status = 'En Attente'`;
+    // const result = await connect.query(query, [status, id]);
+    // if(result.affectedRows > 0) {
+    //     connect.commit()
+    // }
+
+    // const query = `SELECT mission_id, status FROM mission WHERE mission_id = ?`;
+    // const result = await connect.query(query, [id])
+
+    // if()
+
+    // console.log('Status updates successfully!', id, status)
+    return res.status(200).json({
+        success: true,
+        message: "Status updates successfully!",
+        // mission: result[0]
+    })
+
+   } catch (error) {
+    console.log('Error while updating status', error)
+   }
+
+}
+
 export const deleteOrderMission = async (req, res) => {
     const { id } = req.params;
 

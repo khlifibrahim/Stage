@@ -23,7 +23,7 @@ function ProfilePage() {
     <div>
       <div className="header">
         <div className="bg-gradientBlue w-full h-40 rounded-[14px]"></div>
-        <div className='profile flex items-center justify-between my-12'>
+        <div className='profile-container flex items-center justify-between my-12'>
           <div className='flex items-center gap-8'>
             <div className="avatar bg-blue w-32 h-32 rounded-full flex items-center justify-center">
               <h1 className='font-bold text-[52px] text-white'>{user.nom.charAt(0).toUpperCase() || 'A'}</h1>
@@ -47,7 +47,7 @@ function ProfilePage() {
       </div>
 
       <div className="content">
-      <div className="flex gap-6 mb-4">
+        <div className="flex gap-6 mb-4">
           <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Nom <span className='text-[#DC2626]'>{editMode ? '*' : ''}</span></label>
             <input
@@ -92,7 +92,7 @@ function ProfilePage() {
         </div>
 
         <div className="flex gap-6 mb-4">
-        <div className="flex flex-col flex-1">
+          <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Email <span className='text-[#DC2626]'>{editMode ? '*' : ''}</span></label>
             <input
               type="text"
@@ -114,6 +114,36 @@ function ProfilePage() {
               value={user.Numero_tel}
               onChange={handleUpdateUserProfile}
               placeholder="Nom d'utilisateur..."
+              className="border rounded-lg px-4 py-2 focus:outline-blue"
+              required
+              disabled={editMode ? false : true}
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-6 mb-4">
+          <div className="flex flex-col flex-1">
+            <label className="font-medium text-sm mb-1">Model <span className='text-[#DC2626]'>{editMode ? '*' : ''}</span></label>
+            <input
+              type="text"
+              name="email"
+              value={user.email}
+              onChange={handleUpdateUserProfile}
+              placeholder="Model de voiture..."
+              className="border rounded-lg px-4 py-2 focus:outline-blue"
+              required
+              disabled={editMode ? false : true}
+            />
+          </div>
+          
+          <div className="flex flex-col flex-1">
+            <label className="font-medium text-sm mb-1">Numero de Matricule <span className='text-[#DC2626]'>{editMode ? '*' : ''}</span></label>
+            <input
+              type="text"
+              name="phone"
+              value={user.Numero_tel}
+              onChange={handleUpdateUserProfile}
+              placeholder="Numero de Matricule ..."
               className="border rounded-lg px-4 py-2 focus:outline-blue"
               required
               disabled={editMode ? false : true}

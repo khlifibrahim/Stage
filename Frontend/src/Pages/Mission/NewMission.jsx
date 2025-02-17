@@ -271,8 +271,6 @@ function NewMission() {
     setAccompaniedSearch("")
     setDestinationList([])
     setObjectOptions([])
-    setEditMode(false)
-    navigate('/dashboard/orderMissions/listMissionOrders')
     setHidePrint(false)
   }
 
