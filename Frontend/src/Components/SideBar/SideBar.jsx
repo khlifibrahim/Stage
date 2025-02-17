@@ -48,6 +48,16 @@ function SideBar({ role, open, toggleSidbare }) {
                     content: 'Nouv. Mission',
                     path: '/dashboard/orderMissions/addMissionOrders'
                 },
+                {
+                    icon: (<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-adjustments"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M6 4v4" /><path d="M6 12v8" /><path d="M10 16a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M12 4v10" /><path d="M12 18v2" /><path d="M16 7a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M18 4v1" /><path d="M18 9v11" /></svg>),
+                    content: 'Control',
+                    path: '/dashboard/control/list'
+                },
+                {
+                    icon: (<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-adjustments"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M6 4v4" /><path d="M6 12v8" /><path d="M10 16a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M12 4v10" /><path d="M12 18v2" /><path d="M16 7a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M18 4v1" /><path d="M18 9v11" /></svg>),
+                    content: 'Control',
+                    path: '/dashboard/control/list'
+                },
 
             ],
         },
@@ -110,14 +120,14 @@ function SideBar({ role, open, toggleSidbare }) {
 
 
     return (
-        <div className={`${open ? 'max-md:block absolute left-0 top-0 z-50 bg-white w-[70%] shadow-lg transition-all' : 'max-md:hidden'} min-w-[280px] w-[280px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6]`}>
+        <div className={`${open ? 'max-md:block absolute left-0 top-0 z-50 bg-white w-[70%] shadow-lg transition-all' : 'max-md:hidden'} min-w-[280px] w-[280px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6]  max-lg:min-w-[128px] lg:w-auto  lg:flex lg:flex-col lg:items-center`}>
                 
             <div className="head flex items-center justify-between">
-                <div className="head flex items-center gap-3 p-6 cursor-pointer">
+                <div className="head flex items-center gap-3 p-6 cursor-pointer lg:gap-0">
                     <img src={logo} className='!w-[47px] ' alt="MCINET.GOV.MA" />
-                    <p className='font-poppins font-semibold leading-[140%] text-[20px] '>MCINET</p>    
+                    <p className='font-poppins font-semibold leading-[140%] text-[20px] md:hidden  lg:block'>MCINET</p>    
                 </div>
-                <div onClick={toggleSidbare} className='m-3 cursor-pointer lg:hidden'>
+                <div onClick={toggleSidbare} className='m-3 cursor-pointer md:hidden'>
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="28"  height="28"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue  icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
                 </div>
             </div>
@@ -130,10 +140,10 @@ function SideBar({ role, open, toggleSidbare }) {
                             <div key={i} className='w-full'>
                                 <Link key={i} to={link.path} className='w-full'>
                                     <div className='flex flex-col items-stretch justify-start gap-3'>
-                                        <div onClick={() => toggleSubMenu(link)} className={`flex items-center justify-between w-full gap-5 px-4 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer ${active ? 'bg-bg-blue text-blue' : ''}`}>
-                                            <div className='flex items-center justify-start gap-2 mr-auto'>
+                                        <div onClick={() => toggleSubMenu(link)} className={`flex items-center justify-between w-full gap-5 px-4 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer ${active ? 'bg-bg-blue text-blue' : ''}  lg:gap-0 lg:px-2`}>
+                                            <div className='flex items-center justify-start gap-2'>
                                                 <span className="icon hover:svg>stroke-blue">{link.icon}</span>
-                                                <p className='font-poppins font-medium text-[14px] leading-5 '> {link.content} </p>
+                                                <p className='font-poppins font-medium text-[14px] leading-5 max-lg:hidden'> {link.content} </p>
                                             </div>
 
                                             {link.subMenu && (
@@ -152,10 +162,10 @@ function SideBar({ role, open, toggleSidbare }) {
                                                 <Link key={i} to={sub.path} >
                                                     <div className={`flex items-center justify-start gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer `}>
                                                         <span className="icon hover:stroke-blue">{sub.icon}</span>
-                                                        <p className='font-poppins font-medium text-[14px] leading-5 '> {sub.content} </p>
+                                                        <p className='font-poppins font-medium text-[14px] leading-5 max-lg:hidden'> {sub.content} </p>
                                                     </div>
                                                 </Link>)
-                                        }
+                                            }
                                         )}
                                     </div>
                                 )}

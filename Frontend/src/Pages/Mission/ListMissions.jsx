@@ -181,8 +181,8 @@ function ListMissions({role, user}) {
         <div className="table">
           <div className="table-head flex items-center justify-evenly w-full border-[#E4E4E4] rounded-[10px] overflow-hidden">
             <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Cadre</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Grade</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Destination</p></div>
+            <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-lg:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Grade</p></div>
+            <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-lg:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Destination</p></div>
             <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Date de depart</p></div>
             <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Statue</p></div>
             <div className="table-base-header p-3 w-1/4 bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none text-end'>plus</p></div>
@@ -192,8 +192,8 @@ function ListMissions({role, user}) {
           {missionsList.length > 0 ? handleFilterChange.slice(start, end).map((mission, i) => (
             <div key={i} className="table-rows flex items-center justify-evenly py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${mission.cadre_nom} ${mission.cadre_prenom}` || 'Mission name'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{mission.grade_name || 'Wireframing and Prototyping'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{mission.grade_name || 'Wireframing and Prototyping'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{dateFormat(mission.departure_date) || 'August 1, 2024'}</p></div>
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full">
                 <div className={`flex items-center just gap-2 px-3 py-1 w-fit border-none rounded-full ${mission.status === "En Attente" ? "!bg-[rgba(255,156,156,0.44)]" : mission.status === "En Cours" ? "!bg-[rgba(156,195,255,0.44)]" : "!bg-[rgba(183,255,159,0.44)]"}`}>

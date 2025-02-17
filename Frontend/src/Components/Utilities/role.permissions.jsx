@@ -87,7 +87,7 @@ export const ROLE_PERMISSIONS = {
 export const SIDEBAR_MENU = {
     "DIRECTEUR": [
         { "Dashboard": [] },
-        { "Missions": ["List Mission", "Nouv. Mission"] },
+        { "Missions": ["List Mission", "Nouv. Mission", "Control"] },
         { "Cadre": ["List Cadres"] },
         { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
         { "Voitures": ["List Voitures", "Nouv. Voitures"] },
