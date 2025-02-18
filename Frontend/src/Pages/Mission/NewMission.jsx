@@ -305,10 +305,10 @@ function NewMission() {
       {/* Form */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg my-4"
+        className="bg-white rounded-lg my-4 max-md:flex max-md:flex-col"
       >
         {/* Groupe: Nom et Titre */}
-        <div className="flex gap-6 mb-4">
+        <div className="flex gap-6 mb-4 max-md:flex-col ">
           <div className=" flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Nom*</label>
             <div className="relative flex flex-col flex-1 ">
@@ -350,7 +350,7 @@ function NewMission() {
         </div>
 
         {/* Groupe: Délégation et Destination */}
-        <div className="flex gap-6 mb-4">
+        <div className="flex gap-6 mb-4 max-md:flex-col">
           <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Délégation*</label>
             <input
@@ -407,7 +407,7 @@ function NewMission() {
 
 
         {/* Groupe: Date et Heure */}
-        <div className="flex gap-6 mb-4">
+        <div className="flex gap-6 mb-4 max-md:flex-col">
           <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Date départ*</label>
             <input
@@ -433,7 +433,7 @@ function NewMission() {
         </div>
 
         {/* Groupe: Heure arrivée et Durée */}
-        <div className="flex gap-6 mb-4">
+        <div className="flex gap-6 mb-4 max-md:flex-col">
           <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Heure d'arrivée*</label>
             <input
