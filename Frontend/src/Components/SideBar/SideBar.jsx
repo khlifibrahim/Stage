@@ -40,7 +40,7 @@ function SideBar({ role, open, toggleSidbare }) {
             subMenu: [
                 {
                     icon: (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 12h6" /><path d="M9 16h6" /></svg>),
-                    content: 'List Mission',
+                    content: 'Liste Mission',
                     path: "/dashboard/orderMissions/listMissionOrders"
                 },
                 {
@@ -50,13 +50,13 @@ function SideBar({ role, open, toggleSidbare }) {
                 },
                 {
                     icon: (<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-adjustments"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M6 4v4" /><path d="M6 12v8" /><path d="M10 16a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M12 4v10" /><path d="M12 18v2" /><path d="M16 7a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M18 4v1" /><path d="M18 9v11" /></svg>),
-                    content: 'Control',
-                    path: '/dashboard/control/list'
+                    content: 'Liste Control',
+                    path: '/dashboard/orderMissions/control/list'
                 },
                 {
                     icon: (<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-adjustments"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M6 4v4" /><path d="M6 12v8" /><path d="M10 16a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M12 4v10" /><path d="M12 18v2" /><path d="M16 7a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M18 4v1" /><path d="M18 9v11" /></svg>),
-                    content: 'Control',
-                    path: '/dashboard/control/list'
+                    content: 'Nouv. Control',
+                    path: '/dashboard/orderMissions/control/add'
                 },
 
             ],
@@ -156,7 +156,7 @@ function SideBar({ role, open, toggleSidbare }) {
                                 </Link>
 
                                 {submenuState[link.content] && link.subMenu && (
-                                    <div className="px-2">{
+                                    <div className="px-2 mt-1">{
                                         link.subMenu.map((sub, i) => {
                                             return (
                                                 <Link key={i} to={sub.path} >

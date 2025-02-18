@@ -1,33 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react'
 // import { useOnClickOutside } from '../../Hooks/useOnClickOutside'
 import { useNavigate } from 'react-router-dom';
-import {connect} from 'react-redux'
-import { setEnterpriseDetails } from '../../Redux/Actions/enterprise.actions';
-import Instance from '../../Api/axios';
+import {useDispatch, useSelector} from 'react-redux'
+import { fetchEnterprise } from '../../Redux/Actions/enterprise.actions';
+// import Instance from '../../Api/axios';
 
-function ListEnterprise( {setEnterpriseDetails, role} ) {
-    const [enterpriseList, setEnterpriseList] = useState([])
-    const [Enterprise, setEnterprise] = useState({})
+function ListEnterprise( {role} ) {
+    const theNavigate = useNavigate()
+    const dispatch = useDispatch()
+    const {enterprises, loading, error} = useSelector(state => state.enterprise)
+
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 4
-    const totalPage = [(Math.ceil(enterpriseList.length / itemsPerPage))];
+    const totalPage = [(Math.ceil(enterprises.length / itemsPerPage))];
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage
-    const navigate = useNavigate()
 
     useEffect( ()=> {
-        const fetchEnterpriseList = async () => {
-            try {
-                const response = await Instance.get('/enterprise/list')
-                console.log("Enterprise list: ",response.data.entreprises)
-                setEnterpriseList(response.data.entreprises)
-            } catch (error) {
-                console.log("error fetching enterprise", error.response)
-            }
-        };
-        fetchEnterpriseList()
-    }, [])
-
+        dispatch(fetchEnterprise())
+    }, [dispatch])
+    
     const nextPage = ()=> {
         if(currentPage < totalPage) {
             setCurrentPage(currentPage + 1)
@@ -40,12 +32,13 @@ function ListEnterprise( {setEnterpriseDetails, role} ) {
     }
 
     const handleDetails = (enterpriseICE) => {
-        const getEnterprise = enterpriseList.find(item => item.ICE === enterpriseICE)
-        // setEnterprise(getEnterprise)
-        setEnterpriseDetails(getEnterprise)
-        navigate('/dashboard/entreprise/add')
+        theNavigate('/dashboard/entreprise/add', {
+            state: {
+                data: enterprises.find(ent => ent.ICE === enterpriseICE),
+                isEdit: true
+            }
+        })
     }
-    console.log("Enterprise state :", Enterprise)
 
     return (
         <div className='flex flex-col gap-8 mb-4'>
@@ -64,7 +57,11 @@ function ListEnterprise( {setEnterpriseDetails, role} ) {
                     </div>
 
 
-                    {enterpriseList.length > 0 ? enterpriseList.slice(start, end).map((item, i) => (
+                    {loading ? (
+                        <div className="text-center py-4">Chargement...</div>
+                    ) : error ? (
+                        <div className="text-center py-4 text-red-500">{error}</div>
+                    ) : enterprises.length > 0 ? enterprises.slice(start, end).map((item, i) => (
                         <div key={i} onClick={() => handleDetails(item.ICE)} className="table-rows flex items-center justify-evenly py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
                             <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${item.nom_entreprise}` || 'item name'}</p></div>
                             <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{`${item.numero_ATP}` || 'ATP'}</p></div>
@@ -84,7 +81,7 @@ function ListEnterprise( {setEnterpriseDetails, role} ) {
                 </div>
             </div>
 
-            {(enterpriseList.length > 0 && totalPage[0] > 1 ) &&
+            {(enterprises.length > 0 && totalPage[0] > 1 ) &&
                 (<div className="navigation flex items-center justify-between ">
                     <button
                         className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
@@ -111,4 +108,4 @@ function ListEnterprise( {setEnterpriseDetails, role} ) {
     )
 }
 
-export default connect(null, {setEnterpriseDetails})(ListEnterprise)
+export default (ListEnterprise)

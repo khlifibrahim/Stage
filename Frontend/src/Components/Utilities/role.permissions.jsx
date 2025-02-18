@@ -87,7 +87,7 @@ export const ROLE_PERMISSIONS = {
 export const SIDEBAR_MENU = {
     "DIRECTEUR": [
         { "Dashboard": [] },
-        { "Missions": ["List Mission", "Nouv. Mission", "Control"] },
+        { "Missions": ["List Mission", "Nouv. Mission", "Liste Control", "Nouv. Control"] },
         { "Cadre": ["List Cadres"] },
         { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
         { "Voitures": ["List Voitures", "Nouv. Voitures"] },
@@ -101,10 +101,10 @@ export const SIDEBAR_MENU = {
     ],
     "CADRE": [
         { "Dashboard": [] },
-        { "Missions": ["List Mission"] },
+        { "Missions": ["List Mission", "Liste Control", "Nouv. Control"] },
         { "Cadre": ["List Cadres"] },
         { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
-        { "Voitures": ["List Voitures", "Nouv. Voitures"] }, // Added to match other roles
+        { "Voitures": ["List Voitures", "Nouv. Voitures"] },
     ],
     "SECRÉTAIRE": [
         { "Dashboard": [] },

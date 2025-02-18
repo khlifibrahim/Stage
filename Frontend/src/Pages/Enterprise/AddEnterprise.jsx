@@ -1,41 +1,31 @@
 import React, { useEffect, useState } from 'react'
-import Instance from '../../Api/axios'
-import { useNavigate } from 'react-router-dom'
-import { connect, useDispatch, useSelector } from 'react-redux'
-// import { setEnterpriseDetails } from '../../Redux/Actions/enterprise.actions'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { addEnterprise, updateEntreprise } from '../../Redux/Actions/enterprise.actions'
 
-function AddEnterprise( {enterpriseDetails} ) {
-  const navigate = useNavigate()
-  const displatch = useDispatch()
-  const {setEnterpriseDetails, loading, error} = useSelector(state => state.enterprise)
-  const [editMode, setEditMode] = useState(false)
+function AddEnterprise() {
+  const theLocation = useLocation();
+  const theNavigate = useNavigate()
+  const dispatch = useDispatch();
+  const [editMode, setEditMode] = useState(false);
   const [Entreprise, setEntreprise] = useState({
-    nom: "",
+    nom_entreprise: "",
     telephone: "",
     adresse: "",
-    RS: "",
+    raison_sociale: "",
     email: "",
-    Activite: "",
-    atp:"",
-    ice: ""
+    activite: "",
+    numero_ATP:"",
+    ICE: ""
   })
   
-  useEffect(()=> {
-    if(enterpriseDetails) {
-      setEntreprise({
-        nom: enterpriseDetails.nom_entreprise || '',
-        telephone: enterpriseDetails.telephone || '',
-        adresse: enterpriseDetails.adresse || '',
-        RS: enterpriseDetails.raison_sociale || '',
-        email: enterpriseDetails.email || '',
-        Activite: enterpriseDetails.activite || '',
-        atp: enterpriseDetails.numero_ATP || '',
-        ice: enterpriseDetails.ICE || '',
-      })
-      setEditMode(true)
+  useEffect(() => {
+    if (theLocation.state?.data) {
+      setEditMode(true);
+      setEntreprise(theLocation.state.data)
+      console.log("the location: ",theLocation.state.data)
     }
-  }, [enterpriseDetails])
-  // console.log("enterpriseDetails: ",enterpriseDetails)
+  }, [theLocation.data])
 
   const handleEntrepriseChange = (e) => {
     const {name, value} = e.target
@@ -49,20 +39,20 @@ function AddEnterprise( {enterpriseDetails} ) {
 
     setEntreprise({})
     setEditMode(false);
-    navigate('/dashboard/entreprise/list')
+    theNavigate('/dashboard/entreprise/list')
   }
   const handleSubmit = async (e) => {
     e.preventDefault()
-
-    if(!editMode) {
-      console.log("Enterprise state: ", Entreprise)
-    }else {
-      console.log("Edit mode on")
+    
+    if(editMode) {
+      const success = await dispatch(updateEntreprise(Entreprise.ICE, Entreprise))
+      if(success) theNavigate('/dashboard/entreprise/list')
+      
+    } else {
+      const success = await dispatch(addEnterprise(Entreprise));
+      if(success) theNavigate('/dashboard/entreprise/list')
     }
   }
-
-  // console.log("editing mode : " ,editMode)
-  // console.log("Loading : " ,loading)
 
   return (
     <div className="p-6">
@@ -83,8 +73,8 @@ function AddEnterprise( {enterpriseDetails} ) {
               <label className="font-medium text-sm mb-1">Nom d'Entreprise *</label>
               <input
                 type="text"
-                name="nom"
-                value={Entreprise.nom}
+                name="nom_entreprise"
+                value={Entreprise.nom_entreprise}
                 onChange={handleEntrepriseChange}
                 placeholder="Nom..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
@@ -119,8 +109,8 @@ function AddEnterprise( {enterpriseDetails} ) {
               <label className="font-medium text-sm mb-1">Raison Social*</label>
               <input
                 type="text"
-                name="RS"
-                value={Entreprise.RS}
+                name="raison_sociale"
+                value={Entreprise.raison_sociale}
                 onChange={handleEntrepriseChange}
                 placeholder="RS..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
@@ -144,8 +134,8 @@ function AddEnterprise( {enterpriseDetails} ) {
               <label className="font-medium text-sm mb-1">Activité*</label>
               <input
                 type="text"
-                name="Activite"
-                value={Entreprise.Activite}
+                name="activite"
+                value={Entreprise.activite}
                 onChange={handleEntrepriseChange}
                 placeholder="Activité..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
@@ -156,8 +146,8 @@ function AddEnterprise( {enterpriseDetails} ) {
               <label className="font-medium text-sm mb-1">Num ATP *</label>
               <input
                 type="text"
-                name="atp"
-                value={Entreprise.atp}
+                name="numero_ATP"
+                value={Entreprise.numero_ATP}
                 onChange={handleEntrepriseChange}
                 placeholder="ATP..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
@@ -168,8 +158,8 @@ function AddEnterprise( {enterpriseDetails} ) {
               <label className="font-medium text-sm mb-1">ICE *</label>
               <input
                 type="text"
-                name="ice"
-                value={Entreprise.ice}
+                name="ICE"
+                value={Entreprise.ICE}
                 onChange={handleEntrepriseChange}
                 placeholder="ICE..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
@@ -214,8 +204,5 @@ function AddEnterprise( {enterpriseDetails} ) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  enterpriseDetails: state.enterprise.enterpriseDetails,
-})
 
-export default connect(mapStateToProps)(AddEnterprise)
+export default AddEnterprise;

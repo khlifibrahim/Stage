@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-export const listControl = (props) => {
+export const ListControl = (props) => {
   return (
-    <div>listControl</div>
+    <div>ListControl</div>
   )
 }
 
@@ -11,4 +11,4 @@ const mapStateToProps = (state) => ({})
 
 const mapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(listControl)
+export default connect(mapStateToProps, mapDispatchToProps)(ListControl)

@@ -12,7 +12,7 @@ export const getEnterpriseList = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'All enterprises fetchd successfully!!',
-            entreprises: result
+            enterprises: result
         })
         
     } catch (error) {

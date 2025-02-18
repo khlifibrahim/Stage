@@ -15,7 +15,7 @@ function Dashboard() {
   }
 
   return (
-    <div className='flex gap-6 h-screen overflow-auto min-w-[580px]'>
+    <div className='flex gap-6 h-screen overflow-auto min-w-[320px]'>
         {console.log("Rendering App Component")}
           <SideBar role={role} open={isOpen} toggleSidbare={toggleSidbare}/>
           <div className="content relative flex flex-col gap-3 px-[32px] w-full ">

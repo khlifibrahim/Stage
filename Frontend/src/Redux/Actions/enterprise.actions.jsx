@@ -1,31 +1,68 @@
 import Instance from '../../Api/axios';
 import { 
-    SET_ENTERPRISE_DETAILS,
-    SUBMIT_ENTERPRISE_REQUEST, 
-    SUBMIT_ENTERPRISE_SUCCESS, 
-    SUBMIT_ENTERPRISE_FAILURE
+    FETCH_ENTERPRISES_REQUEST,
+    FETCH_ENTERPRISES_SUCCESS,
+    FETCH_ENTERPRISES_FAILURE,
+    ADD_ENTERPRISE_REQUEST,
+    ADD_ENTERPRISE_SUCCESS,
+    ADD_ENTERPRISE_FAILURE,
+    UPDATE_ENTERPRISE_REQUEST,
+    UPDATE_ENTERPRISE_SUCCESS,
+    UPDATE_ENTERPRISE_FAILURE
     } from './Types.actions';
 
-export const setEnterpriseDetails = (enterpriseData) => ({
-    type: SET_ENTERPRISE_DETAILS,
-    payload: enterpriseData
-})
-
-export const  submiteEnterprise = (enterpriseData) => async (dispatch) => {
+export const fetchEnterprise = () => async (dispatch) => {
     try {
-        dispatch({
-            type: SUBMIT_ENTERPRISE_REQUEST,
-        })
+        dispatch({type: FETCH_ENTERPRISES_REQUEST})
 
-        const response = await Instance.post('/enterprise/add', enterpriseData)
+        const response = await Instance.get('/enterprise/list');
         dispatch({
-            type: SUBMIT_ENTERPRISE_SUCCESS,
-            payload: response.data.entreprises
+            type: FETCH_ENTERPRISES_SUCCESS,
+            payload: response.data.enterprises
         })
     } catch (error) {
         dispatch({
-            type: SUBMIT_ENTERPRISE_FAILURE,
-            payload: error.response ? error.response.data : "Error occurred"
+            type: FETCH_ENTERPRISES_FAILURE,
+            payload: error.response.data.message || 'Error fetching enterprise list'
         })
+    }
+}
+
+export const addEnterprise = (data) => async (dispatch) => {
+    try {
+        dispatch({type: ADD_ENTERPRISE_REQUEST})
+
+        const response = await Instance.post('/enterprise/add', data)
+        dispatch({
+            type: ADD_ENTERPRISE_SUCCESS,
+            payload: response.data.enterprise
+        });
+        return true
+
+    } catch (error) {
+        dispatch({
+            type: ADD_ENTERPRISE_FAILURE,
+            payload: error.response.message || 'Error while add enterprise'
+        });
+
+        return false
+    }
+}
+export const updateEntreprise = (ice, data) => async (dispatch) => {
+    try {
+        dispatch({type: UPDATE_ENTERPRISE_REQUEST})
+
+        const response = await Instance.put(`/enterprise/update/${ice}`, data)
+        dispatch({
+            type: UPDATE_ENTERPRISE_SUCCESS,
+            payload: response.data.enterprise
+        })
+        return true;
+    } catch (error) {
+        dispatch({
+            type: UPDATE_ENTERPRISE_FAILURE,
+            payload: error.response.data.message || 'Update enterprise error'
+        });
+        return false
     }
 }
