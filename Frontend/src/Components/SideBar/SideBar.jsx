@@ -67,7 +67,7 @@ function SideBar({ role, open, toggleSidbare }) {
             subMenu: [
                 {
                     icon: (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-users-group"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M8 21v-1a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v1" /><path d="M15 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M17 10h2a2 2 0 0 1 2 2v1" /><path d="M5 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M3 13v-1a2 2 0 0 1 2 -2h2" /></svg>),
-                    content: 'List Cadres',
+                    content: 'Liste Cadres',
                     path: '/dashboard/ListCadre'
                 }
             ],
@@ -78,7 +78,7 @@ function SideBar({ role, open, toggleSidbare }) {
             subMenu: [
                 {
                     icon: (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-users-group"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 21v-15c0 -1 1 -2 2 -2h5c1 0 2 1 2 2v15" /><path d="M16 8h2c1 0 2 1 2 2v11" /><path d="M3 21h18" /><path d="M10 12v0" /><path d="M10 16v0" /><path d="M10 8v0" /><path d="M7 12v0" /><path d="M7 16v0" /><path d="M7 8v0" /><path d="M17 12v0" /><path d="M17 16v0" /></svg>),
-                    content: 'List Entreprises',
+                    content: 'Liste Entreprises',
                     path: '/dashboard/entreprise/list'
                 },
                 {
@@ -143,7 +143,7 @@ function SideBar({ role, open, toggleSidbare }) {
                                         <div onClick={() => toggleSubMenu(link)} className={`flex items-center justify-between w-full gap-5 px-4 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer ${active ? 'bg-bg-blue text-blue' : ''}  lg:gap-0 lg:px-2`}>
                                             <div className='flex items-center justify-start gap-2'>
                                                 <span className="icon hover:svg>stroke-blue">{link.icon}</span>
-                                                <p className='font-poppins font-medium text-[14px] leading-5 max-lg:hidden'> {link.content} </p>
+                                                <p className='font-poppins font-medium text-[14px] leading-5 '> {link.content} </p>
                                             </div>
 
                                             {link.subMenu && (
@@ -162,7 +162,7 @@ function SideBar({ role, open, toggleSidbare }) {
                                                 <Link key={i} to={sub.path} >
                                                     <div className={`flex items-center justify-start gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer `}>
                                                         <span className="icon hover:stroke-blue">{sub.icon}</span>
-                                                        <p className='font-poppins font-medium text-[14px] leading-5 max-lg:hidden'> {sub.content} </p>
+                                                        <p className='font-poppins font-medium text-[14px] leading-5 '> {sub.content} </p>
                                                     </div>
                                                 </Link>)
                                             }

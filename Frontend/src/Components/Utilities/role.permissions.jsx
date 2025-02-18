@@ -88,27 +88,27 @@ export const SIDEBAR_MENU = {
     "DIRECTEUR": [
         { "Dashboard": [] },
         { "Missions": ["Liste Mission", "Nouv. Mission", "Liste Control", "Nouv. Control"] },
-        { "Cadre": ["List Cadres"] },
-        { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
-        { "Voitures": ["List Voitures", "Nouv. Voitures"] },
+        { "Cadre": ["Liste Cadres"] },
+        { "Entreprise": ["Liste Entreprises", "Nouv. Entreprise"] },
+        { "Voitures": ["Liste Voitures", "Nouv. Voitures"] },
     ],
     "CHEFSERVICE": [
         { "Dashboard": [] },
         { "Missions": ["Liste Mission", "Nouv. Mission"] },
-        { "Cadre": ["List Cadres"] },
-        { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
-        { "Voitures": ["List Voitures", "Nouv. Voitures"] },
+        { "Cadre": ["Liste Cadres"] },
+        { "Entreprise": ["Liste Entreprises", "Nouv. Entreprise"] },
+        { "Voitures": ["Liste Voitures", "Nouv. Voitures"] },
     ],
     "CADRE": [
         { "Dashboard": [] },
         { "Missions": ["Liste Mission", "Liste Control", "Nouv. Control"] },
-        { "Cadre": ["List Cadres"] },
-        { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
-        { "Voitures": ["List Voitures", "Nouv. Voitures"] },
+        { "Cadre": ["Liste Cadres"] },
+        { "Entreprise": ["Liste Entreprises", "Nouv. Entreprise"] },
+        { "Voitures": ["Liste Voitures", "Nouv. Voitures"] },
     ],
     "SECRÉTAIRE": [
         { "Dashboard": [] },
-        { "Missions": ["List Mission", "Nouv. Mission"] },
+        { "Missions": ["Liste Mission", "Nouv. Mission"] },
     ]
 };
 
