@@ -87,21 +87,21 @@ export const ROLE_PERMISSIONS = {
 export const SIDEBAR_MENU = {
     "DIRECTEUR": [
         { "Dashboard": [] },
-        { "Missions": ["List Mission", "Nouv. Mission", "Liste Control", "Nouv. Control"] },
+        { "Missions": ["Liste Mission", "Nouv. Mission", "Liste Control", "Nouv. Control"] },
         { "Cadre": ["List Cadres"] },
         { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
         { "Voitures": ["List Voitures", "Nouv. Voitures"] },
     ],
     "CHEFSERVICE": [
         { "Dashboard": [] },
-        { "Missions": ["List Mission", "Nouv. Mission"] },
+        { "Missions": ["Liste Mission", "Nouv. Mission"] },
         { "Cadre": ["List Cadres"] },
         { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
         { "Voitures": ["List Voitures", "Nouv. Voitures"] },
     ],
     "CADRE": [
         { "Dashboard": [] },
-        { "Missions": ["List Mission", "Liste Control", "Nouv. Control"] },
+        { "Missions": ["Liste Mission", "Liste Control", "Nouv. Control"] },
         { "Cadre": ["List Cadres"] },
         { "Entreprise": ["List Entreprises", "Nouv. Entreprise"] },
         { "Voitures": ["List Voitures", "Nouv. Voitures"] },
