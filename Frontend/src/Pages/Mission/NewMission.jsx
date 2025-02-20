@@ -296,7 +296,7 @@ function NewMission() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 max-md:p-0 max-md:px-3">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-800">{editMode ? "Modifier l'Ordre de Mission" : "Créer Ordre Mission"}</h1>

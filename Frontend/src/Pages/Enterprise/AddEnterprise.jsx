@@ -66,7 +66,7 @@ function AddEnterprise() {
         onSubmit={handleSubmit}
         className="bg-white rounded-lg my-4"
       >
-        {/* Groupe: Nom et Titre */}
+        
         <div className="lg:flex lg:gap-2">
           <div className=" flex flex-wrap basis-[60%] gap-6 mb-4">
             <div className=" flex flex-col grow basis-auto">

@@ -29,7 +29,7 @@ export const loginUser = (credentials) => async (dispatch) => {
         console.log("Error from Login page: ", error.response.data)
         dispatch({
             type: LOGINFAILED,
-            payload: error.message
+            payload: error.response.data.message || 'Incorrect Cridentiels'
         });
         throw error
     }

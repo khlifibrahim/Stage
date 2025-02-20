@@ -28,7 +28,7 @@ function Profile() {
     <div onClick={handleProfileMenu} className='relative flex items-center justify-center gap-3 cursor-pointer'>
       <div className='avatar flex items-center justify-center w-10 h-10 rounded-full bg-blue'>
         {/* <img src="" alt="" /> */}
-        <h3 className='font-bold text-lg text-white'>{userInfo.nom.charAt(0).toUpperCase()}</h3>
+        <h3 className='font-bold text-lg text-white'>{userInfo?.nom.charAt(0).toUpperCase()}</h3>
       </div>
       <div className='max-md:hidden'>
         <p className='font-poppins font-medium leading-5 text-[12px]'>{ userRole || 'Ch. de service'}</p>
