@@ -1,6 +1,7 @@
 # Node modules
 node_modules/
 Frontend/node_modules/
+Frontend/src/Api/
 
 # Logs
 npm-debug.log*

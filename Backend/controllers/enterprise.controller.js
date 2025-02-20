@@ -8,6 +8,7 @@ export const getEnterpriseList = async (req, res) => {
             FROM entreprise;
         `;
         const [result] = await connect.query(query)
+        console.log(result)
 
         res.status(200).json({
             success: true,

@@ -1,10 +1,10 @@
 {
-  "name": "project",
+  "name": "mcinet",
   "version": "1.0.0",
   "description": "",
-  "main": "Backend/app.js",
+  "main": "app.js",
   "scripts": {
-    "dev": "nodemon Backend/app.js"
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +24,8 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.12.0",
     "react-bootstrap": "^2.10.7",
-    "react-router-dom": "^7.1.1"
+    "react-router-dom": "^7.1.1",
+    "react-select": "^5.10.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",

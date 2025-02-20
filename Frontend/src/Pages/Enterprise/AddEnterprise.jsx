@@ -174,8 +174,6 @@ function AddEnterprise() {
           </div>
         </div>
 
-
-
         {/* Groupe: Boutons */}
         <div className="flex justify-between mt-6">
           <button
@@ -186,7 +184,6 @@ function AddEnterprise() {
             Annuler
           </button>
           <div className="flex justify-end gap-4">
-
 
             <button
               type="submit"

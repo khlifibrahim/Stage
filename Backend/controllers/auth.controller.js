@@ -21,7 +21,7 @@ export const login = async (req, res) => {
         if(rows.length === 0) {
             return res.status(400).json({
                 success: false, 
-                message: "invalid credentials"
+                message: "Identifiants non valides"
             })}
 
         const userData = rows[0]
@@ -29,7 +29,7 @@ export const login = async (req, res) => {
 
         const isPasswordValid = await bcryptjs.compare(password, userData.mot_de_passe)
         if(!isPasswordValid) {
-            return res.status(400).json({success: false, message: "Invalid credentials"})
+            return res.status(400).json({success: false, message: "Identifiants non valides"})
         }
 
         const token = generateTokenAndSetCookie(res, userData.id_utilisateur, userData.id_profile);
