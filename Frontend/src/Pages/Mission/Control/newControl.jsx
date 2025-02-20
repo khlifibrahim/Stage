@@ -3,31 +3,34 @@ import Select from 'react-select'
 import { useNavigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise } from '../../../Redux/Actions/enterprise.actions';
+import { createControl, updateControl } from '../../../Redux/Actions/control.actions';
 
 
-export const NewControl = () => {
+export const Newcontrol = () => {
   const dispatch = useDispatch()
   const theNavigate = useNavigate()
   const {enterprises} = useSelector(state => state.enterprise)
+  const { control } = useSelector( state => state)
   
-  const [control, setControl] = useState({
-   entID: "",
-   pratics: [
-      {name: "Affichage des prix", status: "conform", observation: ''},
-      {name: "Etiquetage", status: "conform", observation: ''},
-      {name: "Publicite", status: "conform", observation: ''},
-      {name: "Garantie", status: "conform", observation: ''},
-      {name: "Solde", status: "conform", observation: ''},
-      {name: "Facture", status: "conform", observation: ''}
-   ],
-   executed_at: {executed: true, at: getCurrentDate()},
-   edited: ""
+  const [controlState, setcontrolState] = useState(control)
+  // const [controlState, setcontrolState] = useState({
+  //  entID: "",
+  //  pratics: [
+  //     {name: "Affichage des prix", status: "conform", observation: ''},
+  //     {name: "Etiquetage", status: "conform", observation: ''},
+  //     {name: "Publicite", status: "conform", observation: ''},
+  //     {name: "Garantie", status: "conform", observation: ''},
+  //     {name: "Solde", status: "conform", observation: ''},
+  //     {name: "Facture", status: "conform", observation: ''}
+  //  ],
+  //  executedAt: {executed: false, at: getCurrentDate()},
+  //  edited: ""
 
-  })
+  // })
   const [error, setError] = useState('')
 
   const handleRadioChange = (index, status) => {
-    setControl((prev) => ({
+    setcontrolState((prev) => ({
       ...prev,
       pratics: prev.pratics.map((p, i) => 
         i === index 
@@ -38,7 +41,7 @@ export const NewControl = () => {
   };
   
   const handleObservationChange = (index, observation) => {
-    setControl((prev) => ({
+    setcontrolState((prev) => ({
         ...prev,
         pratics: prev.pratics.map((p, i) => i === index ? {...p, observation } : p
       )
@@ -55,7 +58,7 @@ export const NewControl = () => {
   function isValide () {
     switch (step) {
       case 1:
-        if(!control.entID) {
+        if(!controlState.entID) {
           setError('Choisi un Entreprise!')
           return false
         }
@@ -76,7 +79,7 @@ export const NewControl = () => {
         step + 1
       )
     }else {
-      console.log('Control Created!!')
+      console.log('controlState Created!!')
     }
 
   }
@@ -91,7 +94,7 @@ export const NewControl = () => {
   }
   const handleEnterpriseSelect = (selectedEnt) => {
     console.log("Ent ID: ",selectedEnt.value)
-    setControl(prev => ({
+    setcontrolState(prev => ({
       ...prev, 
       entID: selectedEnt.value
     }))
@@ -101,7 +104,7 @@ export const NewControl = () => {
     theNavigate('/dashboard/entreprise/add')
   }
 
-  console.log('Control State: ', control)
+  console.log('controlState State: ', controlState)
 
   function getCurrentDate () {
     const d = new Date()
@@ -119,7 +122,7 @@ export const NewControl = () => {
     <div className="px-6 fleex flex-col">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">{"Créer Control"}</h1>
+        <h1 className="text-3xl font-bold text-gray-800">{"Créer controlState"}</h1>
       </div>
 
       <form onSubmit={next} action="" className='h-full flex flex-col justify-between'>
@@ -131,7 +134,7 @@ export const NewControl = () => {
                 <div className="flex gap-2 grow basis-auto max-md:w-full">
                   <Select 
                     classNames={{
-                      control: (state) =>
+                      controlState: (state) =>
                         `border !rounded-[10px] px-2 !min-w-[320px] !w-full focus:outline-blue ${state.isFocused ? 'ring-2 ring-blue-500 border-blue-500' : 'order-gray-300'}`,
                       menu: () => 'border !rounded-[10px]  !mt-1 !p-0 overflow-hidden',
                       option: () => 'hover:bg-bg-blue hover:text-blue px-4 py-0',
@@ -158,7 +161,7 @@ export const NewControl = () => {
               <div className='flex items-center justify-between gap-2'>
                 <div className=''>
                   <p>Executer à:</p>
-                  <input type="text" placeholder='2025-03-41' value={control.executed} disabled/> 
+                  <input type="text" placeholder='2025-03-41' value={controlState.executed} disabled/> 
                 </div>
                 {/* <div className=''>
                   <p>Commencer à:</p>
@@ -172,7 +175,7 @@ export const NewControl = () => {
 
               <div className="pratics">
                 <div className='my-2 flex flex-col items-start justify-start flex-wrap'>
-                    {control.pratics && control.pratics.map((p, i) => {
+                    {controlState.pratics && controlState.pratics.map((p, i) => {
                       return (
                         <div key={p.name || i} className='flex items-center flex-wrap gap-6 px-2 py-3 my-1 '>
                           <p className='font-medium text-base flex-initial'>{p.name}</p>
@@ -244,4 +247,4 @@ export const NewControl = () => {
 }
 
 
-export default NewControl
+export default Newcontrol

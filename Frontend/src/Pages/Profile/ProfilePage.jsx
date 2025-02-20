@@ -22,17 +22,19 @@ function ProfilePage() {
   return (
     <div>
       <div className="header">
-        <div className="bg-gradientBlue w-full h-40 rounded-[14px]"></div>
-        <div className='profile-container flex items-center justify-between my-12'>
-          <div className='flex items-center gap-8'>
+        <div className="bg-gradientBlue w-full h-40 rounded-[14px]  max-md:hidden"></div>
+        <div className='profile-container flex items-center justify-between my-12 max-md:flex-col  max-md:my-4'>
+          <div className='flex items-center gap-8  max-md:flex-col'>
             <div className="avatar bg-blue w-32 h-32 rounded-full flex items-center justify-center">
               <h1 className='font-bold text-[52px] text-white'>{user.nom.charAt(0).toUpperCase() || 'A'}</h1>
             </div>
-            <div>
-              <div className="name text-[24px] font-bold">{user.nom || "Alex Rawlers"} {user.prenom}</div>
+
+            <div className=' max-md:text-center'>
+              <div className="name text-[24px] font-bold">{user.nom.toUpperCase() || "Alex Rawlers"} {user.prenom.toUpperCase()}</div>
               <div className="role font-medium">{user.profile || 'Director'}</div>
               <div className="email font-light tracking-wide">{user.email || 'alex@example.com'}</div>
             </div>
+
           </div>
           <div className='edit'>
             <button
@@ -46,9 +48,9 @@ function ProfilePage() {
         </div>
       </div>
 
-      <div className="content">
-        <div className="flex gap-6 mb-4">
-          <div className="flex flex-col flex-1">
+      <div className="content max-md:flex max-md:flex-wrap">
+        <div className="flex gap-6 mb-4 max-md:flex-wrap">
+          <div className="flex flex-col flex-1 max-md:flex-wrap">
             <label className="font-medium text-sm mb-1">Nom <span className='text-[#DC2626]'>{editMode ? '*' : ''}</span></label>
             <input
               type="text"
@@ -91,8 +93,8 @@ function ProfilePage() {
           </div>
         </div>
 
-        <div className="flex gap-6 mb-4">
-          <div className="flex flex-col flex-1">
+        <div className="flex gap-6 mb-4 max-md:flex-wrap">
+          <div className="flex flex-col flex-1 ">
             <label className="font-medium text-sm mb-1">Email <span className='text-[#DC2626]'>{editMode ? '*' : ''}</span></label>
             <input
               type="text"
@@ -121,7 +123,7 @@ function ProfilePage() {
           </div>
         </div>
 
-        <div className="flex gap-6 mb-4">
+        <div className="flex gap-6 mb-4 max-md:flex-wrap">
           <div className="flex flex-col flex-1">
             <label className="font-medium text-sm mb-1">Model <span className='text-[#DC2626]'>{editMode ? '*' : ''}</span></label>
             <input

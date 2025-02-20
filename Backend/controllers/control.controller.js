@@ -20,6 +20,10 @@ export const getControls = async (req, res) =>{
     }
 }
 
+export const updateControls = async (req, res) => {
+    
+}
+
 export const addControl = async (req, res) => {
     
 }

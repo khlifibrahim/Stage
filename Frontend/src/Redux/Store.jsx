@@ -3,10 +3,12 @@ import {thunk} from 'redux-thunk';
 // import { composeWithDevTools } from 'redux-devtools-extension';
 import authReducer from './Reducers/auth.reducer.jsx'
 import enterpriseReducer from './Reducers/enterprise.reducer.jsx'
+import controlReducer from "./Reducers/control.reducer.jsx";
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    enterprise: enterpriseReducer
+    enterprise: enterpriseReducer,
+    control: controlReducer
 });
 
 const initialState = {};

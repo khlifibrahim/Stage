@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut } from '../../Redux/Actions/auth.actions';
 import { SIDEBAR_MENU } from '../Utilities/role.permissions'
 import logo from '../../assets/small-logo.png';
 
 function SideBar({ role, open, toggleSidbare }) {
 
-    console.log("is open: ", open )
-
     const location = useLocation()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [submenuState, setSubmenuState] = useState({});
     const toggleSubMenu = (item) => {
         setSubmenuState((prevState) => ({
@@ -118,7 +120,11 @@ function SideBar({ role, open, toggleSidbare }) {
     }
     const filteredMenu = filterMenu(menuListLink, role)
 
-
+    const handleLogout = async () => {
+        await dispatch(logOut())
+        navigate('/login')
+    }
+    
     return (
         <div className={`${open ? 'max-md:block absolute left-0 top-0 z-50 bg-white w-[70%] shadow-lg transition-all' : 'max-md:hidden'} min-w-[280px] w-[280px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6]  max-lg:min-w-[128px] lg:w-auto  lg:flex lg:flex-col lg:items-center`}>
                 
@@ -132,7 +138,7 @@ function SideBar({ role, open, toggleSidbare }) {
                 </div>
             </div>
 
-            <div className="menu px-6 flex flex-col items-start gap-2">
+            <div className="menu !h-3/4 px-6 flex flex-col items-start gap-2">
                 {
                     filteredMenu.map((link, i) => {
                         const active = isActive(link)
@@ -173,6 +179,13 @@ function SideBar({ role, open, toggleSidbare }) {
                         )
                     })
                 }
+            </div>
+
+            <div className='logout hidden mx-6 max-md:flex items-center justify-center gap-3 h-11 rounded-[10px] transition-colors bg-bg-blue text-blue cursor-pointer  lg:gap-0 lg:px-2 bottom-0' onClick={handleLogout}>
+                <span className="icon hover:svg>stroke-blue">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue  icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
+                </span>
+                <p className='font-poppins font-medium text-[14px] leading-5 '>Deconnexion</p>
             </div>
         </div>
     )

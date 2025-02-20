@@ -64,7 +64,7 @@ export const login = async (req, res) => {
 
     }catch (e) {
         console.log("Error in login: ", e);
-        return res.status(400).json({success: false, message: e.message})
+        return res.status(400).json({success: false, message: e})
     }
 }
 
@@ -82,7 +82,7 @@ export const signup = async (req, res) => {
         const  connection = await connectSQL();
 
         const [existingUser] = await connection.query(
-            'SELECT * from stage.utilisateur WHERE username = ? OR email = ?',
+            'SELECT * from Utilisateur WHERE username = ? OR email = ?',
             [username, email]
         );
 
@@ -116,7 +116,7 @@ export const signup = async (req, res) => {
         }
 
         await connection.execute(
-            'INSERT INTO stage.utilisateur (nom, prenom, username, email, Numero_tel, mot_de_passe, statut, verification_token, verification_token_expires_at, id_profile, date_creation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO Utilisateur (nom, prenom, username, email, Numero_tel, mot_de_passe, statut, verification_code, verification_code_expires_at, id_profile, date_creation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [first_name, last_name, username, email, phone, hashPassword, status, verificationToken, verificationTokenExpiredAt, checkProfile(), new Date()]
         )
         // generateVerificationCode(res, )
