@@ -9,23 +9,14 @@ function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { loading, error } = useSelector(state => state.auth)
-    // console.log(
-    //     "Login - User: ", user,
-    //     '\n',
-    //     "Login - Token: ", token,
-    //     '\n',
-    //     "Login - Role: ", role
-    // )
     const [isLogin, setLogin] = useState({
         username: '',
         password: ''
     })
     console.log(error)
-    // const [error, setError] = useState('')
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // console.log(`Field Updated: ${name}, Value: ${value}`);
         setLogin((prev) => ({
             ...prev,
             [name]: value,
@@ -38,8 +29,7 @@ function Login() {
             navigate('/dashboard')
         }
         catch (e) {
-            console.log('Login failed: ')
-            setError('Invalid Credentials!')
+            console.log('Login failed: ', e)
         }
     }
 

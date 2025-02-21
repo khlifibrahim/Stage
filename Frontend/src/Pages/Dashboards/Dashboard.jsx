@@ -8,6 +8,10 @@ function Dashboard() {
   console.log("Dashboard Component Rendered");
   const [isOpen, setOpen] = useState(false)
   const { role, user } = useSelector(state => state.auth)
+  console.log("Role Debug:");
+    console.log(" - User:", user)
+    console.log(" - Role:", role);
+
   const toggleSidbare = () => {
       console.log("menu is open")
       setOpen(!isOpen)
@@ -15,7 +19,7 @@ function Dashboard() {
   }
 
   return (
-    <div className='flex gap-6 h-screen overflow-auto min-w-[320px]'>
+    <div className='flex gap-6 h-screen overflow-auto min-w-[320px] max-w-7xl m-auto'>
         {console.log("Rendering App Component")}
           <SideBar role={role} open={isOpen} toggleSidbare={toggleSidbare}/>
           <div className="content relative flex flex-col gap-3 px-[32px] w-full max-md:px-4">

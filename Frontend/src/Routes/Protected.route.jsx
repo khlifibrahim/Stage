@@ -11,9 +11,9 @@ export const ProtectedRoute = ({ feature, reqPermission}) => {
     console.log(" - isAuthenticated:", isAuthenticated);
     console.log(" - User:", user)
     console.log(" - Role:", role);
-    console.log(" - Permissions:", permissions);
+    // console.log(" - Permissions:", permissions);
     console.log("\n")
-    console.log(" - LocalStorage:", user, userRole);
+    // console.log(" - LocalStorage:", user, userRole);
     
     if(!isAuthenticated ) {
         console.log("❌ User not authenticated! Redirecting to login...");

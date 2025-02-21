@@ -10,67 +10,75 @@ export const Newcontrol = () => {
   const dispatch = useDispatch()
   const theNavigate = useNavigate()
   const {enterprises} = useSelector(state => state.enterprise)
-  const { control } = useSelector( state => state)
-  
-  const [controlState, setcontrolState] = useState(control)
-  // const [controlState, setcontrolState] = useState({
-  //  entID: "",
-  //  pratics: [
-  //     {name: "Affichage des prix", status: "conform", observation: ''},
-  //     {name: "Etiquetage", status: "conform", observation: ''},
-  //     {name: "Publicite", status: "conform", observation: ''},
-  //     {name: "Garantie", status: "conform", observation: ''},
-  //     {name: "Solde", status: "conform", observation: ''},
-  //     {name: "Facture", status: "conform", observation: ''}
-  //  ],
-  //  executedAt: {executed: false, at: getCurrentDate()},
-  //  edited: ""
-
-  // })
-  const [error, setError] = useState('')
-
-  const handleRadioChange = (index, status) => {
-    setcontrolState((prev) => ({
-      ...prev,
-      pratics: prev.pratics.map((p, i) => 
-        i === index 
-        ? { ...p, status, observation: status === "conform" ? "" : p.observation} 
-        : p
-      )
-    }));
-  };
-  
-  const handleObservationChange = (index, observation) => {
-    setcontrolState((prev) => ({
-        ...prev,
-        pratics: prev.pratics.map((p, i) => i === index ? {...p, observation } : p
-      )
-    }))
-  };
+  const [control, setcontrol] = useState({
+    entID: "",
+    executedAt: {executed: false, at: ''},
+    pratics: [
+        {name: "Affichage des prix", status: "", observation: ''},
+        {name: "Etiquetage", status: "", observation: ''},
+        {name: "Publicite", status: "", observation: ''},
+        {name: "Garantie", status: "", observation: ''},
+        {name: "Solde", status: "", observation: ''},
+        {name: "Facture", status: "", observation: ''}
+    ],
+    finallObservation: '',
+    edited: ""
+})
+  const [DispalyError, setDispalyError] = useState(null)
 
   const [step, setStep] = useState(1)
   const steps = Array.from(document.getElementsByClassName('step'))
-
+  useEffect(() => {
+    if(!control.executedAt.executed) {
+      const currentDate = new Date();
+      const at = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
+      console.log(at)
+      setcontrol(prev => ({
+        ...prev,
+        executedAt: {executed: true, at: at}
+      }))
+  }
+  }, [dispatch])
   useEffect( ()=> {
-          dispatch(fetchEnterprise())
-    }, [dispatch])
+    dispatch(fetchEnterprise())
+  }, [dispatch])
 
   function isValide () {
     switch (step) {
       case 1:
-        if(!controlState.entID) {
-          setError('Choisi un Entreprise!')
+        if(!control.entID) {
+          setDispalyError((
+              <div className='absolute top-10 left-1/4 z-50 transition-all'>
+              <p className='text-red-500 font-medium text-lg bg-red-200 px-4 py-3 rounded-[10px] '>Choisi un Entreprise!</p>
+            </div>))
+            setTimeout(() => {
+              setDispalyError(null)
+            }, 2000);
+          return false
+        }
+        break;
+      case 2:
+        if(!control.pratics.every(p => p.status !== '')) {
+          setDispalyError(
+            (<div className='absolute top-10 left-1/4 z-50 transition-all'>
+              <p className='text-red-500 font-medium text-lg bg-red-200 px-4 py-3 rounded-[10px] '>Valider les pratique!</p>
+            </div>)
+          )
+          setTimeout(() => {
+            setDispalyError(null)
+          }, 2000)
           return false
         }
         break;
 
       default:
-        setError("")
+        setDispalyError(null)
         return true
     }
-    setError("")
+    setDispalyError(null)
     return true
   }
+  
   const next = (e)=> {
     e.preventDefault()
     if(!isValide()) return
@@ -79,7 +87,10 @@ export const Newcontrol = () => {
         step + 1
       )
     }else {
-      console.log('controlState Created!!')
+      console.log('control Created!!')
+      dispatch(createControl(control));
+      console.log("After dispatch control: ", control)
+      theNavigate('/dashboard/orderMissions/control/list', {state: {message: "Controle Créé avec succée!"}})
     }
 
   }
@@ -93,36 +104,47 @@ export const Newcontrol = () => {
     }
   }
   const handleEnterpriseSelect = (selectedEnt) => {
-    console.log("Ent ID: ",selectedEnt.value)
-    setcontrolState(prev => ({
+    setcontrol(prev => ({
       ...prev, 
       entID: selectedEnt.value
     }))
-    setError('')
+    setDispalyError(null)
   }
   const handleAddEntreprise = () => {
     theNavigate('/dashboard/entreprise/add')
   }
-
-  console.log('controlState State: ', controlState)
-
-  function getCurrentDate () {
-    const d = new Date()
-    const year = d.getFullYear()
-    const month = d.getMonth() + 1
-    const day = d.getDate()
-    const hour = d.getHours()
-    const min = d.getMinutes()
-    const sec = d.getSeconds()
-    
-  }
   
+  const handleRadioChange = (index, status) => {
+    setcontrol((prev) => ({
+      ...prev,
+      pratics: prev.pratics.map((p, i) => 
+        i === index 
+        ? { ...p, status : status, observation: status === "conforme" ? "" : p.observation} 
+        : p
+      )
+    }));
+  };
+  
+  const handleObservationChange = (index, observation) => {
+    setcontrol((prev) => ({
+        ...prev,
+        pratics: prev.pratics.map((p, i) => i === index ? {...p, observation } : p
+      )
+    }))
+  };
+  const handleFinallObservation = (observation) => {
+    setcontrol(prev => ({
+      ...prev,
+      finallObservation: observation
+    }))
+  }
 
   return (
-    <div className="px-6 fleex flex-col">
+    <div className="px-6 fleex flex-col ">
+      
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">{"Créer controlState"}</h1>
+        <h1 className="text-3xl font-bold text-gray-800">{"Créer Control"}</h1>
       </div>
 
       <form onSubmit={next} action="" className='h-full flex flex-col justify-between'>
@@ -134,7 +156,7 @@ export const Newcontrol = () => {
                 <div className="flex gap-2 grow basis-auto max-md:w-full">
                   <Select 
                     classNames={{
-                      controlState: (state) =>
+                      control: (state) =>
                         `border !rounded-[10px] px-2 !min-w-[320px] !w-full focus:outline-blue ${state.isFocused ? 'ring-2 ring-blue-500 border-blue-500' : 'order-gray-300'}`,
                       menu: () => 'border !rounded-[10px]  !mt-1 !p-0 overflow-hidden',
                       option: () => 'hover:bg-bg-blue hover:text-blue px-4 py-0',
@@ -147,10 +169,13 @@ export const Newcontrol = () => {
                     onChange={handleEnterpriseSelect}
                     placeholder="Recherche par ICE ou Nom..."
                     noOptionsMessage={()=> "Aucune entreprise trouvé"}
-                    isSearchable/>
-                  <button type='button' onClick={handleAddEntreprise} className="px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors">Ajouter</button>
+                    isSearchable
+                    />
+                {  control.entID === '' &&
+                  (<button type='button' onClick={handleAddEntreprise} className={`px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors `}>Ajouter</button>)
+                }
                 </div>
-                { error && <p className={`basis-full text-red-500 text-sm`}>{error} </p>}
+                { DispalyError && <p className={`basis-full text-red-500 text-sm`}>{DispalyError} </p>}
 
                 
             </div>
@@ -160,57 +185,57 @@ export const Newcontrol = () => {
             <div>
               <div className='flex items-center justify-between gap-2'>
                 <div className=''>
-                  <p>Executer à:</p>
-                  <input type="text" placeholder='2025-03-41' value={controlState.executed} disabled/> 
+                  <p>Executer à: </p>
+                  <p> {
+                      control.executedAt.executed 
+                      ? control.executedAt.at 
+                      : 'Pas encore' 
+                    }</p>
                 </div>
-                {/* <div className=''>
-                  <p>Commencer à:</p>
-                  <input type="date" /> 
-                </div> */}
                 <div className=''>
                   <p>Modifier le:</p>
-                  <input type="text" placeholder='2025-03-41' disabled/>
+                  <input type="text" placeholder='2025-03-01' disabled/>
                 </div>
               </div>
 
               <div className="pratics">
                 <div className='my-2 flex flex-col items-start justify-start flex-wrap'>
-                    {controlState.pratics && controlState.pratics.map((p, i) => {
+                    {control.pratics && control.pratics.map((p, i) => {
                       return (
                         <div key={p.name || i} className='flex items-center flex-wrap gap-6 px-2 py-3 my-1 '>
-                          <p className='font-medium text-base flex-initial'>{p.name}</p>
+                          <p className={`${p.status ? 'text-blue' : DispalyError ? 'text-red-500' : ''} font-medium text-base flex-initial`}>{p.name}</p>
 
                           <div className="flex items-center gap-3">
 
                             <div className={`flex items-center cursor-pointer hover:text-blue`}>
                               <div className='grid place-items-center place-content-center mt-1'>
-                                <input onChange={() => handleRadioChange(i, 'conform')} className='peer col-start-1 row-start-1 mr-2 appearance-none shrink-0 mt-1 w-4 h-4 border-2 border-blue rounded-full' type="radio" value="conform"
-                                  name={`conform`}
-                                  id={`${p.name}-conform`}
-                                  checked={p.status === "conform"}/>
-                                <div className={`col-start-1 row-start-1 w-2 h-2 rounded-full ${p.status === 'conform' ? 'bg-blue' : 'bg-transparent'} mt-1 mr-2`}/>
+                                <input onChange={() => handleRadioChange(i, 'conforme')} className={`peer col-start-1 row-start-1 mr-2 appearance-none shrink-0 mt-1 w-4 h-4 border-2 border-blue rounded-full `} type="radio" value="conforme"
+                                  name={`conforme`}
+                                  id={`${p.name}-conforme`}
+                                  checked={p.status === "conforme"}/>
+                                <div className={`col-start-1 row-start-1 w-2 h-2 rounded-full ${p.status === 'conforme' ? 'bg-blue': 'bg-transparent'} mt-1 mr-2`}/>
                               </div>
-                              <label htmlFor={`${p.name}-conform`} className='cursor-pointer'>Conform</label>
+                              <label htmlFor={`${p.name}-conforme`} className='cursor-pointer mt-2'>conforme</label>
                             </div>
 
                             <div className={`flex items-center cursor-pointer hover:text-blue`} >
                               <div className='grid place-items-center place-content-center mt-1'>
-                                <input onChange={() => handleRadioChange(i, 'nonconform')} className='peer col-start-1 row-start-1 mr-2 appearance-none shrink-0 mt-1 w-4 h-4 border-2 border-blue rounded-full' type="radio"
-                                  value="nonconform"
-                                  name={`nonconform`}
-                                  id={`${p.name}-nonconform`}
-                                  checked={p.status === "nonconform"}/>
-                                <div className={`col-start-1 row-start-1 w-2 h-2 rounded-full ${p.status === 'nonconform' ? 'bg-blue' : 'bg-transparent'} mt-1 mr-2`}/>
+                                <input onChange={() => handleRadioChange(i, 'non-conforme')} className={`peer col-start-1 row-start-1 mr-2 appearance-none shrink-0 mt-1 w-4 h-4 border-2 border-blue rounded-full `} type="radio"
+                                  value="non-conforme"
+                                  name={`non-conforme`}
+                                  id={`${p.name}-non-conforme`}
+                                  checked={p.status === "non-conforme"}/>
+                                <div className={`col-start-1 row-start-1 w-2 h-2 rounded-full ${p.status === 'non-conforme' ? 'bg-blue' : 'bg-transparent'} mt-1 mr-2`}/>
                               </div>
-                              <label htmlFor={`${p.name}-nonconform`} className='cursor-pointer'>Non Conform</label>
+                              <label htmlFor={`${p.name}-non-conforme`} className='cursor-pointer mt-2'>Non conforme</label>
                             </div>
                           </div>
 
-                          {p.status === 'nonconform' && (
-                            <div className='flex flex-col'>
+                          {p.status === 'non-conforme' && (
+                            <div className='flex flex-col basis-full '>
                               <label htmlFor="">Observation: </label>
                               <textarea 
-                                className='basis-full min-w-[314px] p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue placeholder-gray-400 max-md:w-full'
+                                className='min-w-[314px] p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue placeholder-gray-400 max-md:w-full'
                                 placeholder='Observation'
                                 rows={3}
                                 value={p.observation}
@@ -222,8 +247,7 @@ export const Newcontrol = () => {
                       ) 
                       
                     })}
-
-
+                    {DispalyError && (<p className={`basis-full text-red-500 text-medium`}>{DispalyError}</p>)}
                 </div>
               </div>
             </div>
@@ -232,12 +256,38 @@ export const Newcontrol = () => {
           <div className={`step ${step === 3 ? '' : 'hidden'} w-full mb-4`}>
             <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Validation</p>
 
-            <div>
+            <div className='m-4'>
+              {
+                control.pratics.every(p => p.status === 'conforme') 
+                ? (
+                  <div>
+                    <h2 className="text-2xl font-bold text-green-500">Toutes les pratiques sont conformees!</h2>
+                    <p className="text-lg text-gray-600 mt-2">L'entreprise répond à toutes les exigences. Vous pouvez maintenant finaliser le contrôle.</p>
+                  </div>
+                ) : (
+                  <div>
+                    <h2 className="text-2xl font-bold text-red-500">Certaines pratiques ne sont pas conformees!</h2>
+                    <p className="text-lg text-gray-600 mt-2">L'entreprise ne répond pas à toutes les exigences.</p>
+                    
+                    <div key={control.pratics} className="my-4 ">
+                      <label htmlFor={`observation-${control.pratics.name}`} className="font-medium">Observation pour {control.pratics.name} :</label>
+                      <textarea
+                        id={`observation-${control.pratics.name}`}
+                        className="w-full p-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                        rows="3"
+                        placeholder="Veuillez fournir des détails"
+                        value={control.finallObservation}
+                        onChange={(e) => handleFinallObservation(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                )
+              }
             </div>
           </div>
         </div>
 
-        <div className={`flex items-center ${step === 1 ? 'justify-end' : 'justify-between'}`}>
+        <div className={`flex items-center ${step === 1 ? 'justify-end' : 'justify-between'} mb-2`}>
           <button onClick={prev} className={`${step === 1 ? 'hidden' : ''} px-3 py-2  bg-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`} disabled={step === 1 ? true : false}>Avant</button>
           <button type='submit' onClick={next} className={`px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`} >{step === steps.length ? 'Validé': 'Suivant' } </button>
         </div>

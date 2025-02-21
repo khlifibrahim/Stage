@@ -92,7 +92,7 @@ export const SIDEBAR_MENU = {
         { "Entreprise": ["Liste Entreprises", "Nouv. Entreprise"] },
         { "Voitures": ["Liste Voitures", "Nouv. Voitures"] },
     ],
-    "CHEFSERVICE": [
+    "CHEF DE SERVICE": [
         { "Dashboard": [] },
         { "Missions": ["Liste Mission", "Nouv. Mission"] },
         { "Cadre": ["Liste Cadres"] },

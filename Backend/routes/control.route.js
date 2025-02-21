@@ -1,11 +1,11 @@
 import expres from 'express'
-import {getControls, addControl, updateControls} from '../controllers/control.controller.js'
+import {fetchControls, createControl, updateControls, deleteControl} from '../controllers/control.controller.js'
 
 const router = expres.Router()
 
-router.get('/list', getControls)
+router.get('/list', fetchControls)
 router.put('/update/:id', updateControls)
-router.post('/add', addControl)
-router.delete('/delete/:id', addControl)
+router.post('/add', createControl)
+router.delete('/delete/:id', deleteControl)
 
 export default router
