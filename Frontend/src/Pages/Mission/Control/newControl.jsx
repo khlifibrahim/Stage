@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Select from 'react-select'
+import Select from 'react-select';
 import { useNavigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise } from '../../../Redux/Actions/enterprise.actions';
