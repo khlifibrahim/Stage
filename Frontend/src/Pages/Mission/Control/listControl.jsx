@@ -10,6 +10,8 @@ export const ListControl = () => {
   const { controls, loading, error} = useSelector(state => state.control)
   const initialMessage = theLocation.state?.message || ""
   const [message, setMessage] = useState(initialMessage)
+
+  const [collapse, setCollapse] = useState(true)
   useEffect(() => {
     const timer = setTimeout(() => {
       setMessage(null)
@@ -28,54 +30,60 @@ export const ListControl = () => {
   const end = start + itemsPerPage
   
   console.log("Control list: ",controls)
+  const handleMissionControlsCollaps = () => {
+    setCollapse(!collapse)
+  }
   return (
     <div>
       <h1>{message} </h1>
       {
         loading ? 'Loading' : 
         (
-          <div className="form flex items-start justify-center h-full">
-        <div className="table">
-          <div className="table-head flex items-center justify-evenly w-full border-[#E4E4E4] rounded-[10px] overflow-hidden">
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Date de visite</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-lg:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Periode</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-lg:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Observation</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Date de depart</p></div>
-            <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Statue</p></div>
-            <div className="table-base-header p-3 w-1/4 bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none text-end'>plus</p></div>
-          </div>
-
-
-          {controls.length > 0 ? controls.slice(start, end).map((control, i) => (
-            <div key={i} className="table-rows flex items-center justify-evenly py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
-              <div  className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${control.date_visite}` || 'control name'}</p></div>
-              <div  className="table-base-row px-3 w-full max-lg:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{control.periode || 'Aucune periode'}</p></div>
-              <div  className="table-base-row px-3 w-full max-lg:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{control.f_observation || 'Oujda angade'}</p></div>
-              <div  className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{control.departure_date || 'August 1, 2024'}</p></div>
-              <div  className="table-base-row px-3 w-full">
-                
+          <div >
+            <div className='table-head flex items-stretch justify-between w-full border-[#E4E4E4] rounded-[10px] overflow-hidden cursor-pointer'>
+              <div onClick={handleMissionControlsCollaps} className='table-base-header p-3 w-full bg-[#F9F9F9]'>
+                <span className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Icon</span>
               </div>
-              <div className="relative table-base-row flex justify-end  px-3 w-1/4 border-[#E4E4E4] rounded-[4px] ">
-                <span className="text-[#727272] rounded bg-transparent border-none">
-                {
-                  (<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>)
-                  
-                }</span>
-                
-                </div>
+              <div className='table-base-header p-3 w-full bg-[#F9F9F9]'>
+                <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Driouech</p>
+              </div>
+              <div className='table-base-header p-3 w-full bg-[#F9F9F9]'>
+                <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>3 Jours</p>
+              </div>
+              <div className='table-base-header p-3 w-full bg-[#F9F9F9]'>
+                <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>En Cours</p>
+              </div>
             </div>
-          )) : (
-            <div className='flex flex-col items-center justify-center px-3 w-full text-center font-medium my-10'>
-              <div>
-                <svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="stroke-[#969696] w-24 h-24 border-none icon icon-tabler icons-tabler-outline icon-tabler-report-off"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.576 5.595a2 2 0 0 0 -.576 1.405v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2m0 -4v-8a2 2 0 0 0 -2 -2h-2" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 1 1 0 4h-2" /><path d="M3 3l18 18" /></svg>
-              </div>
-              <p className='text-[#969696]'>Vous n'avez aucune control</p>
-              </div>
-          )}
-        </div>
-      </div>
-        )
-      }
+            
+            {
+              collapse && (
+                <div className="form flex items-stretch justify-center h-full">
+                  <div  className="w-20 min-h-full bg-transparent border-none flex items-stretch justify-end basis-10"><div className='w-[2px] h-[90%] flex justify-center items-center bg-[#E4E4E4] '></div></div>
+                  <div className="table">
+                    {controls.slice(start, end).map((control, i) => (
+                      <div className='flex justify-between items-center'>
+                        <span className='w-8 h-[2px] bg-[#E4E4E4]'></span>
+                        <div key={i} className="table-rows flex items-center justify-evenly basis-full py-2 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
+                          <div  className="table-base-row px-3 w-full bg-transparent border-none"><p className="text-[#727272] rounded bg-transparent border-none">{`` || 'Entreprise name'}</p></div>
+                          <div  className="table-base-row px-3 w-full bg-transparent border-none"><p className="text-[#727272] rounded bg-transparent border-none">{`${control.date_visite}` || 'control name'}</p></div>
+                          <div  className="table-base-row px-3 w-full max-lg:hidden bg-transparent border-none"><p className="text-[#727272] rounded bg-transparent border-none">{control.f_observation || 'Oujda angade'}</p></div>
+                          <div  className="table-base-row px-3 w-full bg-transparent border-none">
+                            <div className={`flex items-center just gap-2 px-2 py-1 w-fit border-none rounded-full ${controls.validation !== "Non Validé" ? "!bg-[rgba(255,156,156,0.44)]" : "!bg-[rgba(183,255,159,0.44)]"}`}>
+                              <span className={`w-3 h-3 rounded-full ${controls.validation !== "Non Validé" ? "!bg-[#DC2626]" : "bg-[#259800] "}`}></span>
+                              <p className={`rounded bg-transparent border-none ${controls.validation !== "Non Validé" ? " text-[#DC2626]" : " text-[#259800]"}`}>{controls.validation || 'Non Validé'}</p>
+                            </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    )) }
+                  </div>
+                </div>
+              )
+            }
+          </div>
+            )
+          }
     </div>
   )
 }

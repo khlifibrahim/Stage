@@ -3,10 +3,14 @@ import { useOnClickOutside } from '../../Hooks/useOnClickOutside'
 import { useNavigate } from 'react-router-dom';
 import Instance from '../../Api/axios'
 import PrintableMission from '../../Components/Utilities/PrintableMission'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrderMissions } from '../../Redux/Actions/orderMission.actions';
 
 function ListMissions({role, user}) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { orderMissions, loading, error} = useSelector(state => state.orderMission)
+  console.log("Missions List redux: ",orderMissions)
   const [mission, setMission] = useState({})
   const [missionsList, setMissionsList] = useState([])
   const [filter, setFilter] = useState(null)
@@ -20,13 +24,17 @@ function ListMissions({role, user}) {
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage
   
+  useEffect(() => {
+    dispatch(fetchOrderMissions())
+  }, [dispatch])
+  
+
   const statusList = [
     { id: 0, label: "Tous" },
     { id: 1, label: "En Attente" },
     { id: 2, label: "En Cours" },
     { id: 3, label: "Validé" }
   ];
-
 
   const toggleMissionMenu = (id)=> {
     setOpenMissionMenu(openMissionMenu === id ? null : id)
@@ -50,8 +58,6 @@ function ListMissions({role, user}) {
       setCurrentPage(currentPage + 1)
     }
   }
-  
-  console.log("Missions List: ",missionsList)
   const prevPage = () => {
     if(currentPage > 1) {
       setCurrentPage(currentPage - 1)
@@ -59,13 +65,11 @@ function ListMissions({role, user}) {
   }
 
   const handleDetails = (missionId) => {
-    console.log("Mision id: ", missionId)
     const selectedMission = missionsList.find(item => {
       return missionsList.mission_id === item.missionId
     })
     setMission(selectedMission)
-    console.log("Mission state after selecting: ",selectedMission)
-      setModalPopUpPrint(!modalPopUpPrint)
+    setModalPopUpPrint(!modalPopUpPrint)
   };
 
   const handleMissionStatus = async (missionId)=> {

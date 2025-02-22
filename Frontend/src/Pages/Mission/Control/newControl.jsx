@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise } from '../../../Redux/Actions/enterprise.actions';
 import { createControl, updateControl } from '../../../Redux/Actions/control.actions';
@@ -9,6 +9,7 @@ import { createControl, updateControl } from '../../../Redux/Actions/control.act
 export const Newcontrol = () => {
   const dispatch = useDispatch()
   const theNavigate = useNavigate()
+  const theLocation = useLocation();
   const {enterprises} = useSelector(state => state.enterprise)
   const [control, setcontrol] = useState({
     entID: "",
@@ -23,7 +24,11 @@ export const Newcontrol = () => {
     ],
     finallObservation: '',
     edited: ""
-})
+  })
+  setcontrol(prev => ({
+    ...prev,
+    entID: theLocation.state?.id
+  }))
   const [DispalyError, setDispalyError] = useState(null)
 
   const [step, setStep] = useState(1)
