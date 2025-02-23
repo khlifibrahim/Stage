@@ -40,7 +40,7 @@ function AppRoutes() {
             <Route path="addMissionOrders" element={<NewMission />} />
 
             <Route path="control">
-              <Route path="list" element={<ListControl />} />
+              <Route path="list" element={<ListControl role={role} user={user} />} />
               <Route path="add" element={<NewControl />} />
             </Route>
           </Route>

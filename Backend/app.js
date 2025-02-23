@@ -12,14 +12,14 @@ import enterprise from './routes/enterprise.route.js';
 import control from './routes/control.route.js';
 
 
-const port = process.env.PORT || 3000
 dotenv.config();
 const app = express();
+const port = process.env.PORT
 
 
 // Middlewares
 app.use(cors({ 
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:8000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
     credentials: true,
 }));

@@ -11,14 +11,17 @@ import {
     DELETE_ORDERMISSION_FAILURE,
     FETCH_ORDERMISSIONS_REQUEST,
     FETCH_ORDERMISSIONS_SUCCESS,
-    FETCH_ORDERMISSIONS_FAILURE
+    FETCH_ORDERMISSIONS_FAILURE,
+    UPDATESTATUS_ORDERMISSION_REQUEST,
+    UPDATESTATUS_ORDERMISSION_SUCCESS,
+    UPDATESTATUS_ORDERMISSION_FAILURE
 } from '../Actions/Types.actions'
 
-export const fetchOrderMissions = () => async (dispatch) => {
+export const fetchOrderMissions = (role, userid) => async (dispatch) => {
     try {
         dispatch({ type: FETCH_ORDERMISSIONS_REQUEST})
 
-        const response = await Instance.get('/missions/getOrderMission')
+        const response = await Instance.post(`/missions/getOrderMission`, {role, userid})
         dispatch({
             type: FETCH_ORDERMISSIONS_SUCCESS,
             payload: response.data.missions
@@ -29,6 +32,24 @@ export const fetchOrderMissions = () => async (dispatch) => {
             payload: error.response.data.message || `Erreur lors de l'obtention de la liste des ordres missions`
         })
         throw error
+    }
+}
+
+export const attributeOrderMission = (id, status) => async (dispatch) => {
+    try {
+        dispatch({ type: UPDATESTATUS_ORDERMISSION_REQUEST})
+        const response = await Instance.put(`/missions/updateOrderMissionStatus/${id}`, {status})
+        dispatch({
+            type: UPDATESTATUS_ORDERMISSION_SUCCESS,
+            payload: response.data.mission
+        })
+        return true
+    } catch (error) {
+        dispatch({
+            type: UPDATESTATUS_ORDERMISSION_FAILURE,
+            payload: error.response.data.message || 'On peu pas executer cette mission'
+        })
+        return false
     }
 }
 

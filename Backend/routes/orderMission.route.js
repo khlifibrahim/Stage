@@ -13,7 +13,7 @@ import {
 
 const router = express.Router();
 
-router.get('/getOrderMission', getOrderMission)
+router.post('/getOrderMission', getOrderMission)
 router.get('/getServiceCars', getServiceCars)
 router.get('/getObjectOptions', getObjectOptions)
 router.get('/getDestinations', getDestinations)

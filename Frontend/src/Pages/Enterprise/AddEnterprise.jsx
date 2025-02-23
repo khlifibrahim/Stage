@@ -21,7 +21,7 @@ function AddEnterprise() {
   
   useEffect(() => {
     if (theLocation.state?.data) {
-      setEditMode(true);
+      setEditMode(theLocation.state.isEdit);
       setEntreprise(theLocation.state.data)
       console.log("the location: ",theLocation.state.data)
     }

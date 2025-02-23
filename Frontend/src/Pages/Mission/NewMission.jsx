@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom'
 import PrintableMission from '../../Components/Utilities/PrintableMission'
 import Instance from "../../Api/axios";
+import { createOrderMission } from '../../Redux/Actions/orderMission.actions';
 
 
 
@@ -360,7 +361,7 @@ function NewMission() {
               onChange={handleCadreChange}
               placeholder="Délégation..."
               className="border rounded-lg px-4 py-2 focus:outline-blue"
-              required
+              
             />
           </div>
 

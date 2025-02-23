@@ -1,10 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { useOnClickOutside } from '../../Hooks/useOnClickOutside'
 import { useNavigate } from 'react-router-dom';
-import Instance from '../../Api/axios'
 import PrintableMission from '../../Components/Utilities/PrintableMission'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrderMissions } from '../../Redux/Actions/orderMission.actions';
+import { fetchOrderMissions,updateOrderMission, attributeOrderMission, deleteOrderMission } from '../../Redux/Actions/orderMission.actions';
 
 function ListMissions({role, user}) {
   const navigate = useNavigate();
@@ -20,12 +19,12 @@ function ListMissions({role, user}) {
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
-  const totalPage = [(Math.ceil(missionsList.length / itemsPerPage))];
+  const totalPage = [(Math.ceil(orderMissions.length / itemsPerPage))];
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage
   
   useEffect(() => {
-    dispatch(fetchOrderMissions())
+    dispatch(fetchOrderMissions(role, user.id_utilisateur))
   }, [dispatch])
   
 
@@ -44,9 +43,8 @@ function ListMissions({role, user}) {
   useOnClickOutside(missionMenuRef, () => setOpenMissionMenu(null))
   useOnClickOutside(modalRef, () => setModalPopUpPrint(false))
 
-  const handleFilterChange = missionsList.filter((mission) => {
+  const handleFilterChange = orderMissions.filter((mission) => {
     if (!filter || filter === 'Tous') return true;
-
     return mission.status === filter
   })
   let filterMenuRef = useRef()
@@ -64,70 +62,39 @@ function ListMissions({role, user}) {
     }
   }
 
+  
   const handleDetails = (missionId) => {
     const selectedMission = missionsList.find(item => {
       return missionsList.mission_id === item.missionId
     })
-    setMission(selectedMission)
+    // setMission(selectedMission)
+    dispatch(updateOrderMission(missionId, selectedMission))
     setModalPopUpPrint(!modalPopUpPrint)
   };
 
-  const handleMissionStatus = async (missionId)=> {
-    console.log("Update mission status: ",missionId)
-    const roleOfStatus = {
-      DIRECTEUR: "En Cours",
-      CADRE: "Validé",
+  const handleMissionStatus = (id)=> {
+    const roleOfStatus = role === 'CADRE' ? "Validé" : "En Cours"
+    
+    if(roleOfStatus) {
+      navigate('/dashboard/orderMissions/control/add', { state: {id : id}})
+    }else {
+      dispatch(attributeOrderMission(id, roleOfStatus))
     }
-    console.log("Check status role: ", roleOfStatus.CADRE)
-    try {
-      const response = await Instance.put(`/missions/updateOrderMissionStatus/${missionId}`, roleOfStatus)
-      console.log("Checking response of status update: ", response)
-    } catch (error) {
-      
-    }
-
+    // dispatch(attributeOrderMission(id, roleOfStatus))
   }
   const hendleEdit = (mission) => {
-    navigate('/dashboard/orderMissions/addMissionOrders', { state : { missionData: mission}})
+    navigate('/dashboard/orderMissions/addMissionOrders', 
+      { state : { 
+        missionData: mission,
+        isEdit: true
+      }})
   }
 
-  const handleDelete = async (id)=> {
-    
-    try {
-      const response = await Instance.delete(`/missions/deleteOrderMission/${id}`);
-      if(response.status === 200 ) {
-        const updateMissionList = missionsList.filter(mission => mission.mission_id !== id);
-        setMissionsList(updateMissionList)
-      }else {
-        console.error('Failed to delete the mission');
-      }
-    } catch (error) {
-      console.error('Error deleting mission:', error);
-    }
+  const handleDelete = (id)=> {
+    dispatch(deleteOrderMission(id))
+    dispatch(fetchOrderMissions(role, user.id_utilisateur))
   }
 
-
-  useEffect(() => {
-    const fetchMissionListData = async ()=> {
-      try {
-        const response = await Instance.get('/missions/getOrderMission')
-        console.log(response.data)
-        if(role === "CADRE") {
-          const filterMissionListFOrCadre = response.data.missions.filter(mission => (
-            mission.status === "En Cours" && mission.cadre_nom === user.nom 
-          ))
-          console.log("Filtered mission list: ",filterMissionListFOrCadre)
-          setMissionsList(filterMissionListFOrCadre)
-        }else {
-          setMissionsList(response.data.missions)
-          console.log("user is: ", role)
-        }
-      } catch (error) {
-        console.log('Error fetching missions list: ',error.response?.data)
-      }
-    }
-    fetchMissionListData();
-  }, [])
   
   function dateFormat(dateValue) {
     if(!dateValue) return 'N/A';
@@ -139,17 +106,31 @@ function ListMissions({role, user}) {
     })
   };
 
-
-
-
-
   return (
-    <div className='flex flex-col gap-8 mb-4'>
-      <div className="header flex items-center justify-between">
-        <h1 className='font-poppins font-bold text-3xl'>List des Order Missions</h1>
+    <div className='flex flex-col mb-4'>
+      <div className="header flex items-center justify-between flex-wrap">
+        <h1 className={`font-poppins font-bold text-3xl mb-8 ${role === 'CADRE' ? 'basis-full' : ''}`}>List des Order Missions</h1>
+        {role !== 'CADRE' && 
+        (<div className="flex items-center justify-end gap-4">
+          <button
+            onClick={() => navigate('/dashboard/orderMissions/addMissionOrders')}
+            className=" flex gap-2 px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors"
+          >
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /><path d="M15 12h-6" /><path d="M12 9v6" /></svg>
+            Order Mission
+          </button>
+        </div>)}
+        <div className='basis-1/2'>
+          <div className='searchBox flex justify-center items-center w-[334px] h-[38px] px-3 rounded-[10px] border-border border focus-within:border-blue overflow-hidden max-md:basis-full max-md:justify-center max-md:w-full'>
+              <span className=''>
+                  <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="#B6B6B6"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+              </span>
+              <input type="text" placeholder='Chercher par cadre ....' className='w-full h-full bg-transparent outline-none ml-2'/>
+          </div>
+        </div>
         {/* filter menu */}
         {role !== "CADRE" &&
-        (<div className="filter flex items-center justify-between gap-4" >
+        (<div className="filter flex items-center justify-end basis-1/2 gap-4 my-2" >
           <p className='font-medium text-base'>Trier par: </p>
 
           <div className='flex items-center justify-between gap-2 relative' ref={filterMenuRef}>
@@ -181,7 +162,7 @@ function ListMissions({role, user}) {
           </div>
         </div>)}
       </div>
-      <div className="form flex items-start justify-center h-full">
+      <div className="form flex items-start justify-center h-full mt-2">
         <div className="table">
           <div className="table-head flex items-center justify-evenly w-full border-[#E4E4E4] rounded-[10px] overflow-hidden">
             <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Cadre</p></div>
@@ -193,7 +174,7 @@ function ListMissions({role, user}) {
           </div>
 
 
-          {missionsList.length > 0 ? handleFilterChange.slice(start, end).map((mission, i) => (
+          {orderMissions.length > 0 ? handleFilterChange.slice(start, end).map((mission, i) => (
             <div key={i} className="table-rows flex items-center justify-evenly py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${mission.cadre_nom} ${mission.cadre_prenom}` || 'Mission name'}</p></div>
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{mission.grade_name || 'Wireframing and Prototyping'}</p></div>
@@ -241,7 +222,7 @@ function ListMissions({role, user}) {
         </div>
       </div>
 
-      {(missionsList.length > 0) &&
+      {(orderMissions.length > 0) &&
         (<div className="navigation flex items-center justify-between ">
           <button 
             className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'

@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise } from '../../Redux/Actions/enterprise.actions';
-// import Instance from '../../Api/axios';
+import HeadeContent from '../../Components/Utilities/HeadeContent';
 
 function ListEnterprise( {role} ) {
     const theNavigate = useNavigate()
@@ -42,9 +42,10 @@ function ListEnterprise( {role} ) {
 
     return (
         <div className='flex flex-col gap-8 mb-4'>
-            <div className="header flex items-center justify-between">
+            {/* <div className="header flex items-center justify-between">
                 <h1 className='font-poppins font-bold text-3xl'>List des Entreprise</h1>
-            </div>
+            </div> */}
+            <HeadeContent role={role} dateObject={enterprises} currentPage={'Entreprise'} to={'/dashboard/entreprise/add'} filter={false} />
             <div className="form flex items-start justify-center h-full">
                 <div className="table">
                     <div className="table-head flex items-center justify-evenly w-full border-[#E4E4E4] rounded-[10px] overflow-hidden">

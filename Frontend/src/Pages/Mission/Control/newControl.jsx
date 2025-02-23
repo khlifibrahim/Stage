@@ -3,7 +3,7 @@ import Select from 'react-select';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise } from '../../../Redux/Actions/enterprise.actions';
-import { createControl, updateControl } from '../../../Redux/Actions/control.actions';
+import { createControl } from '../../../Redux/Actions/control.actions';
 
 
 export const Newcontrol = () => {
@@ -23,12 +23,17 @@ export const Newcontrol = () => {
         {name: "Facture", status: "", observation: ''}
     ],
     finallObservation: '',
-    edited: ""
+    validation: "",
+    missionID: ""
   })
-  setcontrol(prev => ({
-    ...prev,
-    entID: theLocation.state?.id
-  }))
+  const missionID = theLocation.state?.id
+  console.log("Mission id: ", missionID)
+  useEffect( ()=> {
+    setcontrol(prev => ({
+      ...prev,
+      missionID: missionID
+    }))
+  }, [theLocation.state])
   const [DispalyError, setDispalyError] = useState(null)
 
   const [step, setStep] = useState(1)
@@ -43,7 +48,7 @@ export const Newcontrol = () => {
         executedAt: {executed: true, at: at}
       }))
   }
-  }, [dispatch])
+  }, [])
   useEffect( ()=> {
     dispatch(fetchEnterprise())
   }, [dispatch])
@@ -75,7 +80,7 @@ export const Newcontrol = () => {
           return false
         }
         break;
-
+      
       default:
         setDispalyError(null)
         return true
@@ -121,9 +126,9 @@ export const Newcontrol = () => {
   
   const handleRadioChange = (index, status) => {
     setcontrol((prev) => ({
-      ...prev,
-      pratics: prev.pratics.map((p, i) => 
-        i === index 
+        ...prev,
+        pratics: prev.pratics.map((p, i) => 
+          i === index 
         ? { ...p, status : status, observation: status === "conforme" ? "" : p.observation} 
         : p
       )
@@ -137,6 +142,18 @@ export const Newcontrol = () => {
       )
     }))
   };
+  const handleValidation = () => {
+    const isValid = control.pratics.every(p => p.status === 'conforme')
+    setcontrol(prev => ({
+      ...prev,
+      validation: isValid ? 'Validé' : 'Non Validé'
+    }))
+    console.log("check pratics: ", isValid)
+  }
+  console.log("Check isvalid function: ", control.validation)
+  useEffect(() => {
+    handleValidation()
+  }, [control.pratics])
   const handleFinallObservation = (observation) => {
     setcontrol(prev => ({
       ...prev,
@@ -172,7 +189,7 @@ export const Newcontrol = () => {
                       label: `${ent.nom_entreprise} - ${ent.ICE}`
                     }))} 
                     onChange={handleEnterpriseSelect}
-                    placeholder="Recherche par ICE ou Nom..."
+                    placeholder="Nom d'Entreprise ..."
                     noOptionsMessage={()=> "Aucune entreprise trouvé"}
                     isSearchable
                     />
@@ -263,22 +280,32 @@ export const Newcontrol = () => {
 
             <div className='m-4'>
               {
-                control.pratics.every(p => p.status === 'conforme') 
-                ? (
+                control.validation === 'Validé'
+                ?  (
                   <div>
-                    <h2 className="text-2xl font-bold text-green-500">Toutes les pratiques sont conformees!</h2>
+                    <h2 className="text-2xl font-bold text-green-500">Toutes les pratiques sont conformées!</h2>
                     <p className="text-lg text-gray-600 mt-2">L'entreprise répond à toutes les exigences. Vous pouvez maintenant finaliser le contrôle.</p>
+
+                    
+                    <div>
+                      <p className="text-black">Statut: <span className="text-xl text-green-500 font-semibold mt-2">Validé</span></p>
+                    </div>
                   </div>
                 ) : (
                   <div>
-                    <h2 className="text-2xl font-bold text-red-500">Certaines pratiques ne sont pas conformees!</h2>
+                    <h2 className="text-2xl font-bold text-red-500">Certaines pratiques ne sont pas conformées!</h2>
                     <p className="text-lg text-gray-600 mt-2">L'entreprise ne répond pas à toutes les exigences.</p>
+
                     
-                    <div key={control.pratics} className="my-4 ">
-                      <label htmlFor={`observation-${control.pratics.name}`} className="font-medium">Observation pour {control.pratics.name} :</label>
+                    <div>
+                      <p className="text-black">Statut: <span className="text-xl text-red-500 font-semibold mt-2">Non Validé</span></p>
+                    </div>
+
+                    <div className="my-4 ">
+                      <label htmlFor="final-observation" className="font-medium">Observation :</label>
                       <textarea
-                        id={`observation-${control.pratics.name}`}
-                        className="w-full p-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                        id="final-observation"
+                        className="w-full p-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue placeholder-gray-400"
                         rows="3"
                         placeholder="Veuillez fournir des détails"
                         value={control.finallObservation}

@@ -10,7 +10,10 @@ import {
     DELETE_ORDERMISSION_FAILURE,
     FETCH_ORDERMISSIONS_REQUEST,
     FETCH_ORDERMISSIONS_SUCCESS,
-    FETCH_ORDERMISSIONS_FAILURE
+    FETCH_ORDERMISSIONS_FAILURE,
+    UPDATESTATUS_ORDERMISSION_REQUEST,
+    UPDATESTATUS_ORDERMISSION_SUCCESS,
+    UPDATESTATUS_ORDERMISSION_FAILURE
 } from '../Actions/Types.actions'
 
 const initialState = {
@@ -21,6 +24,7 @@ const initialState = {
 
 function orderMissionReducer(state = initialState, action) {
     switch (action.type) {
+        case UPDATESTATUS_ORDERMISSION_REQUEST:
         case FETCH_ORDERMISSIONS_REQUEST:
         case CREATE_ORDERMISSION_REQUEST:
         case UPDATE_ORDERMISSION_REQUEST:
@@ -31,6 +35,16 @@ function orderMissionReducer(state = initialState, action) {
                 error: null
             }
         
+        case UPDATESTATUS_ORDERMISSION_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                orderMissions: state.orderMissions.map(om => (
+                    om.missionId === action.payload.missionId 
+                    ? { ...om, status: action.payload.status} 
+                    : om 
+                ))
+            }
         case FETCH_ORDERMISSIONS_SUCCESS:
             return {
                 ...state,
@@ -60,6 +74,7 @@ function orderMissionReducer(state = initialState, action) {
                 })
             }
 
+        case UPDATESTATUS_ORDERMISSION_FAILURE:
         case CREATE_ORDERMISSION_FAILURE:
         case UPDATE_ORDERMISSION_FAILURE:
         case DELETE_ORDERMISSION_FAILURE:

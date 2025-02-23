@@ -87,28 +87,28 @@ export const ROLE_PERMISSIONS = {
 export const SIDEBAR_MENU = {
     "DIRECTEUR": [
         { "Dashboard": [] },
-        { "Missions": ["Liste Mission", "Nouv. Mission", "Liste Control", "Nouv. Control"] },
+        { "Missions": ["Order Mission", "Nouv. Mission", "Liste Control", "Nouv. Control"] },
         { "Cadre": ["Liste Cadres"] },
         { "Entreprise": ["Liste Entreprises", "Nouv. Entreprise"] },
         { "Voitures": ["Liste Voitures", "Nouv. Voitures"] },
     ],
     "CHEF DE SERVICE": [
         { "Dashboard": [] },
-        { "Missions": ["Liste Mission", "Nouv. Mission"] },
+        { "Missions": ["Order Mission", "Nouv. Mission"] },
         { "Cadre": ["Liste Cadres"] },
         { "Entreprise": ["Liste Entreprises", "Nouv. Entreprise"] },
         { "Voitures": ["Liste Voitures", "Nouv. Voitures"] },
     ],
     "CADRE": [
         { "Dashboard": [] },
-        { "Missions": ["Liste Mission", "Liste Control", "Nouv. Control"] },
+        { "Missions": ["Order Mission", "Liste Control", "Nouv. Control"] },
         { "Cadre": ["Liste Cadres"] },
         { "Entreprise": ["Liste Entreprises", "Nouv. Entreprise"] },
         { "Voitures": ["Liste Voitures", "Nouv. Voitures"] },
     ],
     "SECRÉTAIRE": [
         { "Dashboard": [] },
-        { "Missions": ["Liste Mission", "Nouv. Mission"] },
+        { "Missions": ["Order Mission", "Nouv. Mission"] },
     ]
 };
 

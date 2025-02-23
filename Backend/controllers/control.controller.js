@@ -3,7 +3,11 @@ import { connectSQL } from "../database/connectDB.js"
 export const fetchControls = async (req, res) =>{
     try {
         const connect = await connectSQL();
-        const query = `SELECT * FROM controle`;
+        // const query = `SELECT * FROM controle`;
+        const query = `SELECT c.*, e.*
+                        FROM controle c
+                        INNER JOIN entreprise_controle ec ON c.idc = ec.idc
+                        INNER JOIN entreprise e ON ec.ICE = e.ICE;`;
 
         const [result] = await connect.query(query);
 
@@ -44,7 +48,7 @@ export const createControl = async (req, res) => {
                                 p_comment,
                                 v_comment,
                                 f_observation,
-                                mission_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 41)`
+                                mission_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         const values = [
             control.executedAt.at,
             control.pratics[0].status,
@@ -58,13 +62,27 @@ export const createControl = async (req, res) => {
             control.pratics[3].observation,
             control.pratics[4].observation,
             control.finallObservation,
+            control.missionID
         ]
         const [response] = await connect.execute(query, values)
         if(response.affectedRows === 1) {
-            res.status(201).json({
-                success: true,
-                message: 'Control created successfully!'
-            })
+            
+            const insertToEC = `INSERT INTO entreprise_controle (ICE, idc) VALUES (?, ?)`
+            
+            const result = await connect.execute(insertToEC, [control.entID, response.insertId])
+            if(result.affectedRows === 1 ) {
+                res.status(201).json({
+                    success: true,
+                    message: 'Control created successfully!'
+                })
+            }else {
+                if(result.affectedRows === 1 ) {
+                    res.status(400).json({
+                        success: false,
+                        message: 'Error while linking control with entreprise!'
+                    })
+                }
+            }
         }else {
             res.status(400).json({
                 success: flase,

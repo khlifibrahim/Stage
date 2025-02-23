@@ -4,10 +4,12 @@ import { connectSQL } from "../database/connectDB.js"
 
 
 export  const getOrderMission = async (req, res) => {
+    const { role, userid } = req.body
+    console.log("Role Send to backend: ", role)
     try {
         const connect = await connectSQL();
 
-        const query = `
+        const queryForAll = `
             SELECT 
                 m.*,
                 c.cadre_id,
@@ -28,14 +30,43 @@ export  const getOrderMission = async (req, res) => {
             ;
         `;
 
-        const [missions] = await connect.query(query)
-        console.log('Missions List (line 12) ',missions)
+        const queryForCadre = `
+                        SELECT 
+                            m.*,
+                            c.cadre_id,
+                            c.delegation,
+                            c.p_matricule AS carPlate,
+                            u.nom AS cadre_nom,
+                            u.prenom AS cadre_prenom,
+                            g.grade_name,
+                            d.Destination,
+                            o.Object_type
+                        FROM mission m
+                        JOIN mission_cadre mc ON m.mission_id = mc.mission_id
+                        JOIN cadre c ON mc.cadre_id = c.cadre_id
+                        JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
+                        JOIN grade g ON c.grade_id = g.grade_id
+                        JOIN Destination d ON m.Id_des = d.id_des
+                        JOIN Object o ON m.Id_object = o.Id_object
+                        WHERE m.status = 'En Cours' AND u.id_utilisateur = ?;`
 
-        res.status(200).json({
-            success: true,
-            message: 'Missions fetched successfully',
-            missions: missions
-        })
+        if( role === 'CADRE') {
+            const [missions] = await connect.query(queryForCadre, [userid])
+
+            res.status(200).json({
+                success: true,
+                message: 'Missions fetched successfully',
+                missions: missions
+            })
+        }else {
+            const [missions] = await connect.query(queryForAll)
+
+            res.status(200).json({
+                success: true,
+                message: 'Missions fetched successfully',
+                missions: missions
+            })
+        }
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -298,33 +329,43 @@ export const updateOrderMission = async (req, res) => {
 }
 
 export const updateOrderMissionStatus = async (req, res) => {
-    const id = req.params;
+    const {id} = req.params;
     const {status} = req.body
+
+    if (!id || !status ) {
+        return res.status(400).json({
+            success: false,
+            message: "id and status r required!"
+        })
+    }
+
     try {
         console.log("Data comming from Update status Endpoint: ", id , status)
-    // const connect = await connectSQL();
-    // const status = 'En Cours';
-    
-    // const query = `UPDATE mission SET status = ? WHERE mission_id = ? AND status = 'En Attente'`;
-    // const result = await connect.query(query, [status, id]);
-    // if(result.affectedRows > 0) {
-    //     connect.commit()
-    // }
-
-    // const query = `SELECT mission_id, status FROM mission WHERE mission_id = ?`;
-    // const result = await connect.query(query, [id])
-
-    // if()
-
-    // console.log('Status updates successfully!', id, status)
-    return res.status(200).json({
-        success: true,
-        message: "Status updates successfully!",
-        // mission: result[0]
-    })
-
-   } catch (error) {
-    console.log('Error while updating status', error)
+        const connect = await connectSQL();
+        
+        const query = `UPDATE mission 
+                        SET status = ? 
+                        WHERE mission_id = ? `;
+        const [result] = await connect.query(query, [status, id]);
+        if(result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Mission not found!"
+            })
+        }
+        await connect.commit()
+        console.log("Status updates successfully!")
+        return res.status(200).json({
+            success: true,
+            message: "Status updates successfully!",
+        })
+        
+    } catch (error) {
+        console.log('Error while updating status', error)
+        return res.status(500).json({
+            success: false,
+            message: "Status updates error!",
+        })
    }
 
 }
