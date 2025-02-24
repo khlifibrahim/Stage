@@ -3,8 +3,8 @@
     "orgId":"team_nCtwfeCNE5ugNj0ABIZoCs7Z",
     "rewrites": [
         {
-        "source": "/Frontend/(.*)",
-        "destination": "/Frontend/index.html"
+        "source": "/(.*)",
+        "destination": "/index.html"
         }
     ]
 }
