@@ -131,7 +131,7 @@ function SideBar({ role, open, toggleSidbare }) {
             <div className="head flex items-center justify-between">
                 <div className="head flex items-center gap-3 p-6 cursor-pointer lg:gap-0">
                     <img src={logo} className='!w-[47px] max-lg:!w-10' alt="MCINET.GOV.MA" />
-                    <p className='font-poppins font-semibold leading-[140%] text-[20px] lg:hidden'>MCINET</p>    
+                    <p className='font-poppins font-semibold leading-[140%] text-[20px] max-lg:hidden'>MCINET</p>    
                 </div>
                 <div onClick={toggleSidbare} className='m-3 cursor-pointer lg:hidden'>
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="28"  height="28"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue  icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
@@ -149,7 +149,7 @@ function SideBar({ role, open, toggleSidbare }) {
                                         <div onClick={() => toggleSubMenu(link)} className={`flex items-center justify-between w-full gap-5 px-4 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer ${active ? 'bg-bg-blue text-blue' : ''}  max-lg:px-2 max-lg:gap-0 lg:px-2`}>
                                             <div className='flex items-center justify-start gap-2'>
                                                 <span className="icon hover:svg>stroke-blue">{link.icon}</span>
-                                                <p className='font-poppins font-medium text-[14px] leading-5 lg:hidden'> {link.content} </p>
+                                                <p className='font-poppins font-medium text-[14px] leading-5 max-lg:hidden'> {link.content} </p>
                                             </div>
 
                                             {link.subMenu && (
@@ -168,7 +168,7 @@ function SideBar({ role, open, toggleSidbare }) {
                                                 <Link key={i} to={sub.path}  onClick={() => window.innerWidth < 768 && toggleSidbare()}>
                                                     <div className={`flex items-center justify-start gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer `}>
                                                         <span className="icon hover:stroke-blue">{sub.icon}</span>
-                                                        <p className='font-poppins font-medium text-[14px] leading-5 lg:hidden'> {sub.content} </p>
+                                                        <p className='font-poppins font-medium text-[14px] leading-5 max-lg:hidden'> {sub.content} </p>
                                                     </div>
                                                 </Link>)
                                             }
