@@ -126,14 +126,14 @@ function SideBar({ role, open, toggleSidbare }) {
     }
     
     return (
-        <div className={` ${open ? 'max-md:block absolute left-0 top-0 z-50 bg-white shadow-lg transition-all' : 'max-md:hidden'} min-w-[280px] w-[280px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6]  max-lg:min-w-20 lg:w-20  lg:flex lg:flex-col lg:items-center `}>
+        <div className={` ${open ? 'max-lg:block absolute left-0 top-0 z-50 bg-white shadow-lg transition-all' : 'max-lg:hidden'} min-w-[280px] w-[280px] h-screen overflow-y-hidden flex flex-col gap-6 border-r border-r-[#B6B6B6]  max-lg:min-w-20 lg:w-20  lg:flex lg:flex-col lg:items-center `}>
                 
             <div className="head flex items-center justify-between">
-                <div className="head flex items-center gap-3 p-6 cursor-pointer lg:gap-0 max-lg:py-1">
-                    <img src={logo} className='!w-[47px] max-md:!w-[36px]' alt="MCINET.GOV.MA" />
-                    <p className='font-poppins font-semibold leading-[140%] text-[20px] md:hidden lg:block'>MCINET</p>    
+                <div className="head flex items-center gap-3 p-6 cursor-pointer lg:gap-0">
+                    <img src={logo} className='!w-[47px] max-lg:!w-10' alt="MCINET.GOV.MA" />
+                    <p className='font-poppins font-semibold leading-[140%] text-[20px] lg:hidden'>MCINET</p>    
                 </div>
-                <div onClick={toggleSidbare} className='m-3 cursor-pointer md:hidden'>
+                <div onClick={toggleSidbare} className='m-3 cursor-pointer lg:hidden'>
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="28"  height="28"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue  icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
                 </div>
             </div>
@@ -143,13 +143,13 @@ function SideBar({ role, open, toggleSidbare }) {
                     filteredMenu.map((link, i) => {
                         const active = isActive(link)
                         return (
-                            <div key={i} className='w-full max-lg:w-[unset]'>
+                            <div key={i} className='w-full '>
                                 <Link key={i} to={link.path} onClick={()=> !link.subMenu && window.innerWidth < 768 ? toggleSidbare() : null} className='w-full'>
                                     <div className='flex flex-col items-stretch justify-start gap-3'>
                                         <div onClick={() => toggleSubMenu(link)} className={`flex items-center justify-between w-full gap-5 px-4 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer ${active ? 'bg-bg-blue text-blue' : ''}  max-lg:px-2 max-lg:gap-0 lg:px-2`}>
                                             <div className='flex items-center justify-start gap-2'>
                                                 <span className="icon hover:svg>stroke-blue">{link.icon}</span>
-                                                <p className='font-poppins font-medium text-[14px] leading-5 md:hidden lg:block'> {link.content} </p>
+                                                <p className='font-poppins font-medium text-[14px] leading-5 lg:hidden'> {link.content} </p>
                                             </div>
 
                                             {link.subMenu && (
@@ -168,7 +168,7 @@ function SideBar({ role, open, toggleSidbare }) {
                                                 <Link key={i} to={sub.path}  onClick={() => window.innerWidth < 768 && toggleSidbare()}>
                                                     <div className={`flex items-center justify-start gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer `}>
                                                         <span className="icon hover:stroke-blue">{sub.icon}</span>
-                                                        <p className='font-poppins font-medium text-[14px] leading-5 md:hidden lg:block'> {sub.content} </p>
+                                                        <p className='font-poppins font-medium text-[14px] leading-5 lg:hidden'> {sub.content} </p>
                                                     </div>
                                                 </Link>)
                                             }
@@ -181,7 +181,7 @@ function SideBar({ role, open, toggleSidbare }) {
                 }
             </div>
 
-            <div className='logout hidden mx-6 max-md:flex items-center justify-center gap-3 h-11 rounded-[10px] transition-colors bg-bg-blue text-blue cursor-pointer  lg:gap-0 lg:px-2 bottom-0' onClick={handleLogout}>
+            <div className='logout hidden mx-6 max-lg:flex items-center justify-center gap-3 h-11 rounded-[10px] transition-colors bg-bg-blue text-blue cursor-pointer  lg:gap-0 lg:px-2 bottom-0' onClick={handleLogout}>
                 <span className="icon hover:svg>stroke-blue">
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue  icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
                 </span>
