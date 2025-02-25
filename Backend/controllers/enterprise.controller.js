@@ -5,7 +5,7 @@ export const getEnterpriseList = async (req, res) => {
         const connect = await connectSQL();
         const query = `
             SELECT * 
-            FROM entreprise;
+            FROM defaultdb.entreprise;
         `;
         const [result] = await connect.query(query)
         console.log(result)
@@ -19,7 +19,8 @@ export const getEnterpriseList = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'internal server error !!'
+            message: 'internal server error !!',
+            Error: error
         })
     }
 }
