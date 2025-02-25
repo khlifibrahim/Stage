@@ -18,10 +18,16 @@ const port = process.env.PORT
 
 
 // Middlewares
-// const allowedOrigins = ['*' ,'http://localhost:3000', 'https://mcinet.vercel.app', 'https://khlifibrahim.me'];
+const allowedOrigins = ['*' ,'http://localhost:3000', 'https://mcinet.vercel.app', 'https://khlifibrahim.me'];
 
 app.use(cors({
-    origin: '*',
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
