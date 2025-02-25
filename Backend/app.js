@@ -21,7 +21,7 @@ const port = process.env.PORT
 // const allowedOrigins = ['*' ,'http://localhost:3000', 'https://mcinet.vercel.app'];
 
 app.use(cors({
-    origin: '*',
+    origin: 'https://mcinet.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
