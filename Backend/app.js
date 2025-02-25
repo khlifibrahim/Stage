@@ -16,15 +16,13 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT
 
+// app.use(cors({
+//     origin: '*',
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     credentials: true,
+// }));
+app.use(cors());
 
-// Middlewares
-// const allowedOrigins = ['*' ,'http://localhost:3000', 'https://mcinet.vercel.app'];
-
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-}));
 app.use(express.json())
 
 // Routes

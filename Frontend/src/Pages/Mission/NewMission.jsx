@@ -535,7 +535,7 @@ function NewMission() {
         <div className="flex flex-col">
           <label className="font-medium text-sm mb-1">Sera accompagné de</label>
           <div className="relative flex flex-col">
-            <input
+            {/* <input
               type="text"
               value={accompaniedSearch}
               onChange={(e) => setAccompaniedSearch(e.target.value)}
@@ -552,7 +552,24 @@ function NewMission() {
                   {cadre.prenom} {cadre.nom}
                 </div>
               ))}
-            </div>
+            </div> */}
+            <Select 
+              classNames={{
+                control: (state) =>
+                  `border !rounded-[10px] px-2 !min-w-[320px] !w-full basis-full focus:outline-blue ${state.isFocused ? 'ring-2 ring-blue-500 border-blue-500' : 'order-gray-300'}`,
+                menu: () => 'border !rounded-[10px]  !mt-1 !p-0 overflow-hidden',
+                option: () => 'hover:bg-bg-blue hover:text-blue px-4 py-0',
+                placeholder: () => 'text-gray-300',
+              }}
+              options={enterprises.map(ent => ({
+                value: ent.ICE,
+                label: `${ent.raison_sociale} - ${ent.ICE}`
+              }))} 
+              onChange={handleEnterpriseSelect}
+              placeholder="Nom d'Entreprise ..."
+              noOptionsMessage={()=> "Aucune entreprise trouvé"}
+              isSearchable
+              />
           </div>
         </div>
 

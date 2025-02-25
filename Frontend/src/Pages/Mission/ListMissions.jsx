@@ -256,7 +256,7 @@ function ListMissions({role, user}) {
                 <span onClick={handleDetails} className='absolute left-4 top-4 z-50 p-2 rounded-[10px] bg-bg-blue'>
                   <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="stroke-white hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
                 </span>
-                <PrintableMission id="print-area"  cadre={mission} mission={mission} close={modalPopUpPrint}/>
+                <PrintableMission id="print-area"  mission={orderMissions.missionId} close={modalPopUpPrint}/>
               </div>
             </div>
             )

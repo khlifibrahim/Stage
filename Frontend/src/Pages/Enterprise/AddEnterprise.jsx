@@ -9,14 +9,21 @@ function AddEnterprise() {
   const dispatch = useDispatch();
   const [editMode, setEditMode] = useState(false);
   const [Entreprise, setEntreprise] = useState({
-    nom_entreprise: "",
-    telephone: "",
-    adresse: "",
-    raison_sociale: "",
-    email: "",
-    activite: "",
-    numero_ATP:"",
-    ICE: ""
+      ICE: "",
+      raison_sociale: "",
+      adresse_siege: "",
+      region: "",
+      province_prefecture: "",
+      taille_entreprise: "",
+      forme_juridique: "",
+      numero_rc: "",
+      identifiant_fiscal: "",
+      numero_cnss: "",
+      point_contact_nom: "",
+      email: "",
+      telephone: "",
+      secteur_entreprise: "",
+      zone_industrielle: "",
   })
   
   useEffect(() => {
@@ -70,88 +77,15 @@ function AddEnterprise() {
         <div className="lg:flex lg:gap-2">
           <div className=" flex flex-wrap basis-[60%] gap-6 mb-4">
             <div className=" flex flex-col grow basis-auto">
-              <label className="font-medium text-sm mb-1">Nom d'Entreprise *</label>
-              <input
-                type="text"
-                name="nom_entreprise"
-                value={Entreprise.nom_entreprise}
-                onChange={handleEntrepriseChange}
-                placeholder="Nom..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue"
-                required
-              />
-            </div>
-            <div className=" flex flex-col grow basis-auto">
-              <label className="font-medium text-sm mb-1">Telephone *</label>
-              <input
-                type="text"
-                name="telephone"
-                value={Entreprise.telephone}
-                onChange={handleEntrepriseChange}
-                placeholder="Telephone..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue"
-                required
-              />
-            </div>
-            <div className=" flex flex-col grow basis-auto">
-              <label className="font-medium text-sm mb-1">Adresse*</label>
-              <input
-                type="text"
-                name="adresse"
-                value={Entreprise.adresse}
-                onChange={handleEntrepriseChange}
-                placeholder="Adresse..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue"
-                required
-              />
-            </div>
-            <div className=" flex flex-col grow basis-auto">
-              <label className="font-medium text-sm mb-1">Raison Social*</label>
+              <label className="font-medium text-sm mb-1">Raison Sociale *</label>
               <input
                 type="text"
                 name="raison_sociale"
                 value={Entreprise.raison_sociale}
                 onChange={handleEntrepriseChange}
-                placeholder="RS..."
+                placeholder="Raison Sociale..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                required
-              />
-            </div>
-            
-            <div className=" flex flex-col grow basis-auto">
-              <label className="font-medium text-sm mb-1">Email *</label>
-              <input
-                type="text"
-                name="email"
-                value={Entreprise.email}
-                onChange={handleEntrepriseChange}
-                placeholder="Email..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue"
-                required
-              />
-            </div>
-            <div className=" flex flex-col grow basis-auto">
-              <label className="font-medium text-sm mb-1">Activité*</label>
-              <input
-                type="text"
-                name="activite"
-                value={Entreprise.activite}
-                onChange={handleEntrepriseChange}
-                placeholder="Activité..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue"
-                required
-              />
-            </div>
-            <div className=" flex flex-col grow basis-auto">
-              <label className="font-medium text-sm mb-1">Num ATP *</label>
-              <input
-                type="text"
-                name="numero_ATP"
-                value={Entreprise.numero_ATP}
-                onChange={handleEntrepriseChange}
-                placeholder="ATP..."
-                className="border rounded-lg px-4 py-2 focus:outline-blue"
-                required
+                
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -163,10 +97,165 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="ICE..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                required
+                
               />
             </div>
-            
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Region *</label>
+              <input
+                type="text"
+                name="region"
+                value={Entreprise.region}
+                onChange={handleEntrepriseChange}
+                placeholder="Region..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Province/Prefecture *</label>
+              <input
+                type="text"
+                name="province_prefecture"
+                value={Entreprise.province_prefecture}
+                onChange={handleEntrepriseChange}
+                placeholder="Province/Prefecture..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Zone Industrielle *</label>
+              <input
+                type="text"
+                name="zone_industrielle"
+                value={Entreprise.zone_industrielle}
+                onChange={handleEntrepriseChange}
+                placeholder="Zone Industrielle..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Adresse Siege *</label>
+              <input
+                type="text"
+                name="adresse_siege"
+                value={Entreprise.adresse_siege}
+                onChange={handleEntrepriseChange}
+                placeholder="Adresse Siege..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Taille Entreprise*</label>
+              <input
+                type="text"
+                name="taille_entreprise"
+                value={Entreprise.taille_entreprise}
+                onChange={handleEntrepriseChange}
+                placeholder="Taille Entreprise..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Forme Juridique*</label>
+              <input
+                type="text"
+                name="forme_juridique"
+                value={Entreprise.forme_juridique}
+                onChange={handleEntrepriseChange}
+                placeholder="Forme Juridique..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Numero RC *</label>
+              <input
+                type="text"
+                name="numero_rc"
+                value={Entreprise.numero_rc}
+                onChange={handleEntrepriseChange}
+                placeholder="Numero RC..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Identifiant Fiscal *</label>
+              <input
+                type="text"
+                name="identifiant_fiscal"
+                value={Entreprise.identifiant_fiscal}
+                onChange={handleEntrepriseChange}
+                placeholder="Identifiant Fiscal..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Numero CNSS *</label>
+              <input
+                type="text"
+                name="numero_cnss"
+                value={Entreprise.numero_cnss}
+                onChange={handleEntrepriseChange}
+                placeholder="Numero CNSS..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Telephone *</label>
+              <input
+                type="text"
+                name="telephone"
+                value={Entreprise.telephone}
+                onChange={handleEntrepriseChange}
+                placeholder="Telephone..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Email *</label>
+              <input
+                type="text"
+                name="email"
+                value={Entreprise.email}
+                onChange={handleEntrepriseChange}
+                placeholder="Email..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Secteur Entreprise *</label>
+              <input
+                type="text"
+                name="secteur_entreprise"
+                value={Entreprise.secteur_entreprise}
+                onChange={handleEntrepriseChange}
+                placeholder="Secteur Entreprise..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
+            <div className=" flex flex-col grow basis-auto">
+              <label className="font-medium text-sm mb-1">Point Contact Nom *</label>
+              <input
+                type="text"
+                name="point_contact_nom"
+                value={Entreprise.point_contact_nom}
+                onChange={handleEntrepriseChange}
+                placeholder="Point Contact Nom..."
+                className="border rounded-lg px-4 py-2 focus:outline-blue"
+                
+              />
+            </div>
           </div>
 
           <div className="flex items-center justify-center basis-[40%] shrink-1 grow w-full h-vh bg-bg-blue rounded-[10px]">

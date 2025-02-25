@@ -12,8 +12,6 @@ export const ListControl = ({ role, user}) => {
   const theLocation = useLocation()
   const { controls, loading, error} = useSelector(state => state.control)
   const { orderMissions } = useSelector(state => state.orderMission)
-  console.log("ListMission redux: ", orderMissions)
-  console.log("ListControl redux: ", controls)
 
   const initialMessage = theLocation.state?.message || ""
   const [message, setMessage] = useState(initialMessage)
@@ -35,9 +33,26 @@ export const ListControl = ({ role, user}) => {
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
-  const totalPage = [(Math.ceil(orderMissions.length / itemsPerPage))];
+  const totalPage = (Math.ceil(orderMissions.length / itemsPerPage));
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage
+  const showMaxBtn = totalPage >= 4 ? 3 : 2
+  const handlenavigation = ()=> {
+      if(totalPage <= showMaxBtn) {
+          return Array.from({ length: totalPage }).map(i => i)
+      }else {
+          const pages = []
+          if(currentPage - 1 >= 1) {
+              pages.push(currentPage - 1)
+          }
+          pages.push(currentPage)
+          if(currentPage + 1 <= totalPage) {
+              pages.push(currentPage + 1)
+          }
+          console.log('Display: ', pages)
+          return pages
+      }
+  }
 
   const statusList = [
     { id: 0, label: "Tous" },
@@ -90,9 +105,15 @@ export const ListControl = ({ role, user}) => {
       })
     ))
 
-    console.log("filter by ordermission: ", byControl)
-  // }
-  // filterControlByMissions()
+    function dateFormat(dateValue) {
+      if(!dateValue) return 'N/A';
+      const date = new Date(dateValue);
+      return date.toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      })
+    };
   return (
     <div>
       <h1> 
@@ -202,8 +223,8 @@ export const ListControl = ({ role, user}) => {
                             <div key={i} className='flex justify-between items-center max-md:flex-wrap'>
                             <span className='w-8 h-[2px] bg-[#E4E4E4]'></span>
                             <div key={i} className="table-rows flex items-center justify-evenly basis-full py-2 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
-                              <div  className="table-base-row px-3 w-full bg-transparent border-none"><p className="text-[#727272] rounded bg-transparent border-none">{`${control.nom_entreprise}` || 'Entreprise name'}</p></div>
-                              <div  className="table-base-row px-3 w-full bg-transparent border-none"><p className="text-[#727272] rounded bg-transparent border-none">{`${control.date_visite}` || 'control name'}</p></div>
+                              <div  className="table-base-row px-3 w-full bg-transparent border-none"><p className="text-[#727272] rounded bg-transparent border-none">{`${control.raison_sociale}` || 'Entreprise name'}</p></div>
+                              <div  className="table-base-row px-3 w-full bg-transparent border-none"><p className="text-[#727272] rounded bg-transparent border-none">{`${dateFormat(control.date_visite)}` || 'control name'}</p></div>
                               <div  className="table-base-row px-3 w-full max-lg:hidden bg-transparent border-none"><p className="text-[#727272] rounded bg-transparent border-none">{control.f_observation || 'Oujda angade'}</p></div>
                               <div  className="table-base-row px-3 w-full bg-transparent border-none">
                                 <div className={`flex items-center just gap-2 px-2 py-1 w-fit border-none rounded-full ${control.validation === "Non Validé" ? "!bg-[rgba(255,156,156,0.44)]" : "!bg-[rgba(183,255,159,0.44)]"}`}>
@@ -225,26 +246,32 @@ export const ListControl = ({ role, user}) => {
           }
 
       {(orderMissions.length > 0) &&
-        (<div className="navigation flex items-center justify-between ">
+        (<div className="navigation flex items-center justify-between my-2">
           <button 
-            className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
+            className='px-3 py-2 flex  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
             onClick={prevPage}
-          >Précédente</button>
+          >
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
+            <p className='max-md:hidden'>Précédente</p>
+          </button>
   
           <div className='flex gap-2'>
   
             {
-              Array.from({length: totalPage}).map((_, i) => (
-                <span key={i} onClick={()=> setCurrentPage(i + 1)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === (i+1) ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{i + 1}</span>
+              handlenavigation().map(page => (
+                <span key={page} onClick={()=> setCurrentPage(page)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === page ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{ page }</span>
               ))
             }
   
             </div>
   
           <button 
-            className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
+            className='px-3 py-2 flex bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
             onClick={nextPage}
-          >Suivante</button>
+          >
+            <p className="max-md:hidden">Suivante</p>
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+          </button>
         </div>)
       }
     </div>

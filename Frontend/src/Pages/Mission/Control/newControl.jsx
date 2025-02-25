@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise } from '../../../Redux/Actions/enterprise.actions';
 import { createControl } from '../../../Redux/Actions/control.actions';
@@ -22,10 +22,16 @@ export const Newcontrol = () => {
         {name: "Solde", status: "", observation: ''},
         {name: "Facture", status: "", observation: ''}
     ],
-    finallObservation: '',
-    validation: "",
+    validationStatus: "", 
+    validation: [  
+      {name: "vb", status: false},
+      {name: "pv", status: false},
+      {name: "validation", status: false}
+    ],
+    finallObservation: "",
     missionID: ""
   })
+  const [selectedOption, setSelectedOption] = useState(null);
   const missionID = theLocation.state?.id
   console.log("Mission id: ", missionID)
   useEffect( ()=> {
@@ -146,20 +152,27 @@ export const Newcontrol = () => {
     const isValid = control.pratics.every(p => p.status === 'conforme')
     setcontrol(prev => ({
       ...prev,
-      validation: isValid ? 'Validé' : 'Non Validé'
-    }))
+      validation: prev.validation.map(item => 
+        item.name === 'validation' ? { ...item, status: isValid ? true : false } : item
+      )
+    }));
     console.log("check pratics: ", isValid)
   }
   console.log("Check isvalid function: ", control.validation)
   useEffect(() => {
     handleValidation()
   }, [control.pratics])
+
   const handleFinallObservation = (observation) => {
     setcontrol(prev => ({
       ...prev,
       finallObservation: observation
     }))
   }
+
+  const handleClick = (option) => {
+    setSelectedOption(option);
+  };
 
   return (
     <div className="px-6 fleex flex-col ">
@@ -179,7 +192,7 @@ export const Newcontrol = () => {
                   <Select 
                     classNames={{
                       control: (state) =>
-                        `border !rounded-[10px] px-2 !min-w-[320px] !w-full focus:outline-blue ${state.isFocused ? 'ring-2 ring-blue-500 border-blue-500' : 'order-gray-300'}`,
+                        `border !rounded-[10px] px-2 !min-w-[320px] !w-full basis-full focus:outline-blue ${state.isFocused ? 'ring-2 ring-blue-500 border-blue-500' : 'order-gray-300'}`,
                       menu: () => 'border !rounded-[10px]  !mt-1 !p-0 overflow-hidden',
                       option: () => 'hover:bg-bg-blue hover:text-blue px-4 py-0',
                       placeholder: () => 'text-gray-300',
@@ -274,10 +287,38 @@ export const Newcontrol = () => {
               </div>
             </div>
           </div>
-          
           <div className={`step ${step === 3 ? '' : 'hidden'} w-full mb-4`}>
+            <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Verification</p>
+            <div>
+              {
+                control.pratics.map(pratic => (
+                  <div className='flex flex-wrap border rounded-[10px] p-3 my-2 '>
+                    <div className='basis-1/3'>
+                    {
+                      pratic.name
+                      }</div>
+                    <div className='flex  gap-2 basis-1/2'>
+                    {
+                      pratic.status === 'conforme' 
+                      ? (<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-checks"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 12l5 5l10 -10" /><path d="M2 12l5 5m5 -5l5 -5" /></svg>)
+                      : (<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="stroke-red-500 icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>) 
+                    }
+                      {pratic.status.split('-').join(' ')}</div>
+                    {
+                      (pratic.status === 'non-conforme') 
+                      ? (pratic.observation !== ''
+                        ? (<div className='basis-full'>{pratic.observation}</div>)
+                        : <p className='basis-full'>Aucun observation</p>
+                      )
+                      : null
+                    }
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+          <div className={`step ${step === 4 ? '' : 'hidden'} w-full mb-4`}>
             <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Validation</p>
-
             <div className='m-4'>
               {
                 control.validation === 'Validé'
@@ -295,23 +336,39 @@ export const Newcontrol = () => {
                   <div>
                     <h2 className="text-2xl font-bold text-red-500">Certaines pratiques ne sont pas conformées!</h2>
                     <p className="text-lg text-gray-600 mt-2">L'entreprise ne répond pas à toutes les exigences.</p>
+                    <div className='flex justify-between gap-4 mt-4'>
+                      <button type='button' onClick={() => handleClick('vb')} className='basis-full bg-[#F9F9F9] relative border border-[#E4E4E4] rounded-[10px] hover:!border-blue hover:bg-bg-blue hover:text-blue transition-colors px-3 h-12 flex items-center' htmlFor='vb'>
+                        <p className='font-semibold'>Verbalisation</p>
+                      </button>
 
-                    
-                    <div>
-                      <p className="text-black">Statut: <span className="text-xl text-red-500 font-semibold mt-2">Non Validé</span></p>
+                      <button type='button' onClick={() => handleClick('pv')} className='basis-full bg-[#F9F9F9] relative border border-[#E4E4E4] rounded-[10px] hover:!border-blue hover:bg-bg-blue hover:text-blue transition-colors px-3 h-12 flex items-center' htmlFor='pv'>
+                        <p className='font-semibold'>PV</p>
+                      </button>
                     </div>
 
-                    <div className="my-4 ">
-                      <label htmlFor="final-observation" className="font-medium">Observation :</label>
-                      <textarea
-                        id="final-observation"
-                        className="w-full p-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue placeholder-gray-400"
-                        rows="3"
-                        placeholder="Veuillez fournir des détails"
-                        value={control.finallObservation}
-                        onChange={(e) => handleFinallObservation(e.target.value)}
-                      />
-                    </div>
+                    {
+                      selectedOption === 'vb' && (
+                        <div className="my-4 ">
+                        <label htmlFor="final-observation" className="font-medium">Verbalisation :</label>
+                        <textarea
+                          id="final-observation"
+                          className="w-full p-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue placeholder-gray-400"
+                          rows="3"
+                          placeholder="Veuillez fournir des détails"
+                          value={control.finallObservation}
+                          onChange={(e) => handleFinallObservation(e.target.value)}
+                        />
+                      </div>
+                      )
+                    }
+
+                    {
+                      selectedOption === 'pv' && (
+                        <form action="" className='w-full p-2 mt-2 border rounded-md'>
+                          inserting the PV
+                        </form>
+                      )
+                    }
                   </div>
                 )
               }

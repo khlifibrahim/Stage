@@ -66,12 +66,12 @@ function ListEnterprise( {role} ) {
             <div className="form flex items-start justify-center h-full">
                 <div className="table">
                     <div className="table-head flex items-center justify-evenly w-full border-[#E4E4E4] rounded-[10px] overflow-hidden">
-                        <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Nom</p></div>
-                        <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-md:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none '>ATP</p></div>
                         <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>ICE</p></div>
+                        <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-md:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none '>RS</p></div>
+                        <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Province/Prefecture</p></div>
                         <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-md:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Adresse</p></div>
                         <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-md:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Telephone</p></div>
-                        <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Activité</p></div>
+                        <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Secteur</p></div>
                     </div>
 
 
@@ -81,11 +81,11 @@ function ListEnterprise( {role} ) {
                         <div className="text-center py-4 text-red-500">{error}</div>
                     ) : enterprises.length > 0 ? enterprises.slice(start, end).map((item, i) => (
                         <div key={i} onClick={() => handleDetails(item.ICE)} className="table-rows flex items-center justify-evenly py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
-                            <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${item.raison_sociale}` || 'item name'}</p></div>
-                            <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{`${item.numero_ATP}` || 'ATP'}</p></div>
                             <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{item.ICE || 'ICE'}</p></div>
+                            <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${item.raison_sociale}` || 'item name'}</p></div>
+                            <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{`${item.province_prefecture}` || 'ATP'}</p></div>
                             <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{item.adresse_siege || 'Oujda angade'}</p></div>
-                            <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{item.telephone || '0600000000'}</p></div>
+                            <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{item.telephone || 'Aucun'}</p></div>
                             <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{item.secteur_entreprise || 'Avtivité'}</p></div>
                         </div>
                     )) : (
@@ -101,10 +101,13 @@ function ListEnterprise( {role} ) {
 
             {(enterprises.length > 0 && totalPage > 1 ) &&
                 (<div className="navigation flex items-center justify-between ">
-                    <button
-                        className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
+                    <button 
+                        className='px-3 py-2 flex  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
                         onClick={prevPage}
-                    >Précédente</button>
+                    >
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
+                        <p className='max-md:hidden'>Précédente</p>
+                    </button>
 
                     <div className='flex gap-2'>
 
@@ -113,18 +116,16 @@ function ListEnterprise( {role} ) {
                                 <span key={page} onClick={() => setCurrentPage(page)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === page ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{page}</span>
                             ))
                         }
-                        {/* {
-                            Array.from({ length: totalPage }).map((_, i) => (
-                                <span key={i} onClick={() => setCurrentPage(i + 1)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === (i + 1) ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{i + 1}</span>
-                            ))
-                        } */}
 
                     </div>
 
-                    <button
-                        className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
+                    <button 
+                        className='px-3 py-2 flex bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
                         onClick={nextPage}
-                    >Suivante</button>
+                    >
+                        <p className="max-md:hidden">Suivante</p>
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    </button>
                 </div>)
             }
         </div>
