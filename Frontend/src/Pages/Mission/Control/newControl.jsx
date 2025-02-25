@@ -186,7 +186,7 @@ export const Newcontrol = () => {
                     }}
                     options={enterprises.map(ent => ({
                       value: ent.ICE,
-                      label: `${ent.nom_entreprise} - ${ent.ICE}`
+                      label: `${ent.raison_sociale} - ${ent.ICE}`
                     }))} 
                     onChange={handleEnterpriseSelect}
                     placeholder="Nom d'Entreprise ..."

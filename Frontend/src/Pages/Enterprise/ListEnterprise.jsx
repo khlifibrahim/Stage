@@ -9,12 +9,29 @@ function ListEnterprise( {role} ) {
     const theNavigate = useNavigate()
     const dispatch = useDispatch()
     const {enterprises, loading, error} = useSelector(state => state.enterprise)
-
+    console.log("List entreprise: ", enterprises)
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 4
-    const totalPage = [(Math.ceil(enterprises.length / itemsPerPage))];
+    const totalPage = (Math.ceil(enterprises.length / itemsPerPage));
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage
+    const showMaxBtn = 3
+    const handlenavigation = ()=> {
+        if(totalPage <= showMaxBtn) {
+            return Array.from({ length: totalPage }).map(i => i)
+        }else {
+            const pages = []
+            if(currentPage - 1 >= 1) {
+                pages.push(currentPage - 1)
+            }
+            pages.push(currentPage)
+            if(currentPage + 1 <= totalPage) {
+                pages.push(currentPage + 1)
+            }
+            console.log('Display: ', pages)
+            return pages
+        }
+    }
 
     useEffect( ()=> {
         dispatch(fetchEnterprise())
@@ -64,12 +81,12 @@ function ListEnterprise( {role} ) {
                         <div className="text-center py-4 text-red-500">{error}</div>
                     ) : enterprises.length > 0 ? enterprises.slice(start, end).map((item, i) => (
                         <div key={i} onClick={() => handleDetails(item.ICE)} className="table-rows flex items-center justify-evenly py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
-                            <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${item.nom_entreprise}` || 'item name'}</p></div>
+                            <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${item.raison_sociale}` || 'item name'}</p></div>
                             <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{`${item.numero_ATP}` || 'ATP'}</p></div>
                             <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{item.ICE || 'ICE'}</p></div>
-                            <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{item.adresse || 'Oujda angade'}</p></div>
+                            <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{item.adresse_siege || 'Oujda angade'}</p></div>
                             <div className="table-base-row px-3 w-full max-md:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{item.telephone || '0600000000'}</p></div>
-                            <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{item.activite || 'Avtivité'}</p></div>
+                            <div className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{item.secteur_entreprise || 'Avtivité'}</p></div>
                         </div>
                     )) : (
                         <div className='flex flex-col items-center justify-center px-3 w-full text-center font-medium my-10'>
@@ -82,7 +99,7 @@ function ListEnterprise( {role} ) {
                 </div>
             </div>
 
-            {(enterprises.length > 0 && totalPage[0] > 1 ) &&
+            {(enterprises.length > 0 && totalPage > 1 ) &&
                 (<div className="navigation flex items-center justify-between ">
                     <button
                         className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
@@ -92,10 +109,15 @@ function ListEnterprise( {role} ) {
                     <div className='flex gap-2'>
 
                         {
+                            handlenavigation().map(page => (
+                                <span key={page} onClick={() => setCurrentPage(page)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === page ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{page}</span>
+                            ))
+                        }
+                        {/* {
                             Array.from({ length: totalPage }).map((_, i) => (
                                 <span key={i} onClick={() => setCurrentPage(i + 1)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === (i + 1) ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{i + 1}</span>
                             ))
-                        }
+                        } */}
 
                     </div>
 

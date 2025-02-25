@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '../../Redux/Actions/auth.actions';
@@ -6,7 +6,9 @@ import { SIDEBAR_MENU } from '../Utilities/role.permissions'
 import logo from '../../assets/small-logo.png';
 
 function SideBar({ role, open, toggleSidbare }) {
-
+    useEffect(()=> {
+        
+    }, [])
     const location = useLocation()
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -149,7 +151,7 @@ function SideBar({ role, open, toggleSidbare }) {
                                         <div onClick={() => toggleSubMenu(link)} className={`flex items-center justify-between w-full gap-5 px-4 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer ${active ? 'bg-bg-blue text-blue' : ''}  max-lg:px-2 max-lg:gap-0 lg:px-2`}>
                                             <div className='flex items-center justify-start gap-2'>
                                                 <span className="icon hover:svg>stroke-blue">{link.icon}</span>
-                                                <p className='font-poppins font-medium text-[14px] leading-5 max-lg:hidden'> {link.content} </p>
+                                                <p className='font-poppins font-medium text-[14px] leading-5'> {link.content} </p>
                                             </div>
 
                                             {link.subMenu && (
@@ -168,7 +170,7 @@ function SideBar({ role, open, toggleSidbare }) {
                                                 <Link key={i} to={sub.path}  onClick={() => window.innerWidth < 768 && toggleSidbare()}>
                                                     <div className={`flex items-center justify-start gap-3 px-8 h-11 rounded-[10px] transition-colors hover:bg-bg-blue hover:text-blue cursor-pointer `}>
                                                         <span className="icon hover:stroke-blue">{sub.icon}</span>
-                                                        <p className='font-poppins font-medium text-[14px] leading-5 max-lg:hidden'> {sub.content} </p>
+                                                        <p className='font-poppins font-medium text-[14px] leading-5'> {sub.content} </p>
                                                     </div>
                                                 </Link>)
                                             }

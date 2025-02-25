@@ -109,7 +109,7 @@ function ListMissions({role, user}) {
   return (
     <div className='flex flex-col mb-4'>
       <div className="header flex items-center justify-between flex-wrap">
-        <h1 className={`font-poppins font-bold text-3xl mb-8 ${role === 'CADRE' ? 'basis-full' : ''}`}>List des Order Missions</h1>
+        <h1 className={`font-poppins font-bold text-3xl max-md:basis-5/6 mb-8 ${role === 'CADRE' ? 'basis-full' : ''}`}>List des Order Missions</h1>
         {role !== 'CADRE' && 
         (<div className="flex items-center justify-end gap-4">
           <button
@@ -117,10 +117,10 @@ function ListMissions({role, user}) {
             className=" flex gap-2 px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors"
           >
             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /><path d="M15 12h-6" /><path d="M12 9v6" /></svg>
-            Order Mission
+            <p className='hidden md:block'>Order Mission</p>
           </button>
         </div>)}
-        <div className='basis-1/2'>
+        <div className='basis-1/2 max-md:basis-full'>
           <div className='searchBox flex justify-center items-center w-[334px] h-[38px] px-3 rounded-[10px] border-border border focus-within:border-blue overflow-hidden max-md:basis-full max-md:justify-center max-md:w-full'>
               <span className=''>
                   <svg  xmlns="http://www.w3.org/2000/svg"  width="18"  height="18"  viewBox="0 0 24 24"  fill="none"  stroke="#B6B6B6"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
@@ -163,8 +163,8 @@ function ListMissions({role, user}) {
         </div>)}
       </div>
       <div className="form flex items-start justify-center h-full mt-2">
-        <div className="table">
-          <div className="table-head flex items-center justify-evenly w-full border-[#E4E4E4] rounded-[10px] overflow-hidden">
+        <div className="table  max-lg:grid max-lg:grid-cols-1">
+          <div className="table-head flex items-center justify-evenly w-full border-[#E4E4E4] rounded-[10px] overflow-hidden max-lg:hidden">
             <div className="table-base-header p-3 w-full bg-[#F9F9F9]"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Cadre</p></div>
             <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-lg:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Grade</p></div>
             <div className="table-base-header p-3 w-full bg-[#F9F9F9] max-lg:hidden"><p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>Destination</p></div>
@@ -175,23 +175,26 @@ function ListMissions({role, user}) {
 
 
           {orderMissions.length > 0 ? handleFilterChange.slice(start, end).map((mission, i) => (
-            <div key={i} className="table-rows flex items-center justify-evenly py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{`${mission.cadre_nom} ${mission.cadre_prenom}` || 'Mission name'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{mission.grade_name || 'Wireframing and Prototyping'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none">{dateFormat(mission.departure_date) || 'August 1, 2024'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full">
+            <div key={i} className="table-rows flex items-center justify-evenly py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4] max-lg:flex-col">
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none max-lg:font-bold max-lg:text-lg">{`${mission.cadre_nom} ${mission.cadre_prenom}` || 'Mission name'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full "><p className="text-[#727272] rounded bg-transparent border-none ">{mission.grade_name || 'Wireframing and Prototyping'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:col-span-1 "><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:col-span-1"><p className="text-[#727272] rounded bg-transparent border-none">{dateFormat(mission.departure_date) || 'August 1, 2024'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-md:-order-1">
                 <div className={`flex items-center just gap-2 px-3 py-1 w-fit border-none rounded-full ${mission.status === "En Attente" ? "!bg-[rgba(255,156,156,0.44)]" : mission.status === "En Cours" ? "!bg-[rgba(156,195,255,0.44)]" : "!bg-[rgba(183,255,159,0.44)]"}`}>
                   <span className={`w-3 h-3 rounded-full ${mission.status === "En Attente" ? "!bg-[#DC2626]" : mission.status === "En Cours" ? "bg-[#3083FF] " : "bg-[#259800] "}`}></span>
                   <p className={`rounded bg-transparent border-none ${mission.status === "En Attente" ? " text-[#DC2626]" : mission.status === "En Cours" ? " text-[#3083FF]" : " text-[#259800]"}`}>{mission.status || 'En Attente'}</p>
                 </div>
               </div>
+              
               <div className="relative table-base-row flex justify-end  px-3 w-1/4 border-[#E4E4E4] rounded-[4px] ">
-                <span className="text-[#727272] rounded bg-transparent border-none">
+                <span className="text-[#727272] rounded bg-transparent border-none ">
+                  
                 {
                   (<svg onClick={() => toggleMissionMenu(mission.mission_id)}  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>)
                   
-                }</span>
+                }
+                </span>
                 {
                   openMissionMenu === mission.mission_id && (
                   <div  className='absolute top-6 right-12 z-50 shadow-lg bg-[#E4E4E4] rounded-[12px] overflow-hidden' ref={missionMenuRef}>

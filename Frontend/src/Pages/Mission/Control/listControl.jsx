@@ -161,12 +161,12 @@ export const ListControl = ({ role, user}) => {
         : (
           handleFilterChange.slice(start, end).map((orderMission, i) => (
             <div key={i} className='my-2'>
-              <div className='table-head flex items-stretch justify-between w-full border-[#E4E4E4] rounded-[10px] overflow-hidden cursor-pointer'>
-                <div onClick={() => handleMissionControlsCollaps(i)} className='table-base-header p-3 basis-9 w-full bg-[#F9F9F9]'>
+              <div className='table-head flex items-stretch justify-between w-full bg-[#F9F9F9] border-[#E4E4E4] rounded-[10px] overflow-hidden cursor-pointer max-md:flex-col max-md:flex-wrap '>
+                <div onClick={() => handleMissionControlsCollaps(i)} className='table-base-header p-3 basis-9 w-full bg-[#F9F9F9] max-md:w-min max-md:!basis-1/2'>
                   <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  className={`${!collapse[i] ? '-rotate-90' : ''} transition-transform`}><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 9c.852 0 1.297 .986 .783 1.623l-.076 .084l-6 6a1 1 0 0 1 -1.32 .083l-.094 -.083l-6 -6l-.083 -.094l-.054 -.077l-.054 -.096l-.017 -.036l-.027 -.067l-.032 -.108l-.01 -.053l-.01 -.06l-.004 -.057v-.118l.005 -.058l.009 -.06l.01 -.052l.032 -.108l.027 -.067l.07 -.132l.065 -.09l.073 -.081l.094 -.083l.077 -.054l.096 -.054l.036 -.017l.067 -.027l.108 -.032l.053 -.01l.06 -.01l.057 -.004l12.059 -.002z" /></svg>
                 </div>
                 {role !== 'CADRE' 
-                && (<div className='table-base-header p-3 w-full  bg-[#F9F9F9]'>
+                && (<div className='table-base-header p-3 w-full  bg-[#F9F9F9] max-md:basis-auto'>
                   <p className='font-bold leading-[150%] text-[14px] text-[#727272] text-left bg-transparent border-none'>{`${orderMission.cadre_nom} ${orderMission.cadre_prenom}`}</p>
                 </div>)}
                 <div className='table-base-header p-3 w-full bg-[#F9F9F9]'>
@@ -175,10 +175,10 @@ export const ListControl = ({ role, user}) => {
                 <div className='table-base-header p-3 w-full bg-[#F9F9F9]'>
                   <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>{`${orderMission.duration_days} Jours`}</p>
                 </div>
-                <div className='table-base-header p-3 w-full bg-[#F9F9F9]'>
+                <div className='table-base-header p-3 w-full bg-[#F9F9F9] max-md:hidden'>
                   <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>{orderMission.status}</p>
                 </div>
-                <div className='table-base-header p-3 w-full bg-[#F9F9F9]'>
+                <div className='table-base-header p-3 w-full bg-[#F9F9F9]  max-md:-order-2  max-md:w-min max-md:!basis-1/2 '>
                   <div className="flex items-center justify-end gap-4 bg-transparent border-none">
                     <button
                       onClick={() => theNavigation('/dashboard/orderMissions/control/add', {state: {id: orderMission.mission_id}})}
@@ -199,7 +199,7 @@ export const ListControl = ({ role, user}) => {
                       {controls.length > 0 
                       && controls .filter((control, i) => orderMission.mission_id === control.mission_id)
                         .map ((control, i) => (
-                            <div key={i} className='flex justify-between items-center'>
+                            <div key={i} className='flex justify-between items-center max-md:flex-wrap'>
                             <span className='w-8 h-[2px] bg-[#E4E4E4]'></span>
                             <div key={i} className="table-rows flex items-center justify-evenly basis-full py-2 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
                               <div  className="table-base-row px-3 w-full bg-transparent border-none"><p className="text-[#727272] rounded bg-transparent border-none">{`${control.nom_entreprise}` || 'Entreprise name'}</p></div>

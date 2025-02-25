@@ -578,7 +578,7 @@ function NewMission() {
 
             <button
               type="submit"
-              className="px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors"
+              className="px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors max-md:basis-full"
             >
               {editMode ? "Mettre à jour" : "Sauvegarder"}
             </button>
