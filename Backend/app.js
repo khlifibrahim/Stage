@@ -34,7 +34,7 @@ app.use('/api/control', control)
 
 
 app.get("/", (req, res) => {
-    
+    res.send('App is running...')
 });
 
 app.listen(port, async () => {
