@@ -1,0 +1,99 @@
+#print-area {
+    direction: rtl;
+    text-align: right;
+    width: 100%;
+  }
+  .print-container {
+    width: 580px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .table-section table {
+    width: 100%;
+    border-collapse: collapse;
+    
+  }
+  
+  .table-section td {
+    padding: 10px;
+    border: 1px solid #000;
+    
+  }
+  .signature-section {
+    margin-top: 20px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+  }
+  
+  .signature-line {
+    font-weight: bold;
+    margin: 0; 
+  }
+  
+  .refusal-note {
+    font-style: italic;
+  
+    margin: 0; 
+    
+    margin-top: 10px; 
+  }
+  
+  .delegates-section, .inspection-details, .observation-section, .declaration-section, .additional-info, .closing-section {
+    margin-top: 20px;
+  }
+  
+  .print-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .print-button:hover {
+    background-color: #0056b3;
+  }
+  
+  @media print {
+    .print-button {
+        display: none;
+    }
+  
+    .print-container {
+        width: 100%;
+        padding: 0;
+    }
+  }
+  .delegates-section, .inspection-details, .observation-section, .declaration-section, .additional-info, .closing-section, .signatures {
+      margin-top: 20px;
+  }
+  .logo-container {
+    text-align: center;
+    margin-bottom: 10px; 
+  }
+  
+  .logo {
+    max-width: 100%;
+    height: auto;
+    width: 150px; 
+  }
+  
+  
+  
+  
+  
