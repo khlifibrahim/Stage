@@ -4,7 +4,7 @@ import logo from '../../../assets/logo.png';
 
 
 
-const Print=()=>{
+const Print=( {} )=>{
 
     const handlePrint=()=>{
 
