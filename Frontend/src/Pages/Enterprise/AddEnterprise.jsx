@@ -85,7 +85,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Raison Sociale..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -97,7 +97,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="ICE..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -109,7 +109,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Region..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -121,7 +121,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Province/Prefecture..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -133,7 +133,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Zone Industrielle..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -145,7 +145,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Adresse Siege..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -157,7 +157,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Taille Entreprise..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -169,7 +169,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Forme Juridique..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -181,7 +181,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Numero RC..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -193,7 +193,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Identifiant Fiscal..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -205,7 +205,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Numero CNSS..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -217,7 +217,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Telephone..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -229,7 +229,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Email..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -241,7 +241,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Secteur Entreprise..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
             <div className=" flex flex-col grow basis-auto">
@@ -253,7 +253,7 @@ function AddEnterprise() {
                 onChange={handleEntrepriseChange}
                 placeholder="Point Contact Nom..."
                 className="border rounded-lg px-4 py-2 focus:outline-blue"
-                
+                required
               />
             </div>
           </div>

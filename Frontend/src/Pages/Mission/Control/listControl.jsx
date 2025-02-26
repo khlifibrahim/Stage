@@ -115,7 +115,7 @@ export const ListControl = ({ role, user}) => {
       })
     };
   return (
-    <div>
+    <div className='text-left'>
       <h1> 
         {
           message && (
@@ -127,7 +127,7 @@ export const ListControl = ({ role, user}) => {
       </h1>
       
       <div className="header flex items-center justify-between flex-wrap">
-        <h1 className='font-poppins font-bold text-3xl basis-full mb-4'>List des Control</h1>
+        <h1 className='font-poppins font-bold text-3xl basis-full text-left mb-4'>List des Control</h1>
         
         <div className='basis-1/2'>
           <div className='searchBox flex justify-center items-center w-[334px] h-[38px] px-3 rounded-[10px] border-border border focus-within:border-blue overflow-hidden max-md:basis-full max-md:justify-center max-md:w-full'>
