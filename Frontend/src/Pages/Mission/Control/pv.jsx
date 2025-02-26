@@ -1,12 +1,8 @@
 import React, { useState } from "react";
-import "./PvVide.css";
-import logo from "./assets/logo.png";
+import "./Pvcss.css";
+import logo from "../../../assets/logo.png";
 
-<<<<<<< HEAD
 const Print = ({ sendData }) => {
-=======
-const Print = ({ formData }) => {
->>>>>>> 37407c538f03ed39afc51cc9bdb3628970889c0a
   
 
     const [formData, setFormData] = useState({
@@ -46,11 +42,12 @@ const Print = ({ formData }) => {
             ...prevData,
             [name]: value,
         }));
-        sendData((prevDataS) => ({
-            ...prevDataS,
-            [name]: value,
-        }));
+        
     };
+
+    const confirm = ()=> {
+        sendData(formData);
+    }
 
     return (
         <>
@@ -142,9 +139,14 @@ const Print = ({ formData }) => {
                     <p className="refusal-note">توقيع المصرح (في حالة رفضه، تتم الإشارة إلى ذلك من طرف الباحث)</p>
                 </div>
 
-                <button onClick={handlePrint} className="print-button">
-                    Imprimer
-                </button>
+                <div className="flex gap-4">
+                    <button onClick={handlePrint} type="button" className="print-button">
+                        Imprimer
+                    </button>
+                    <button onClick={confirm} type="button">
+                        Confirmer
+                    </button>
+                </div>
             </div>
         </>
     );

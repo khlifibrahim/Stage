@@ -23,13 +23,12 @@ export const Newcontrol = () => {
         {name: "Solde", status: "", observation: ''},
         {name: "Facture", status: "", observation: ''}
     ],
-    validationStatus: "", 
     validation: [  
       {name: "vb", status: false},
-      {name: "pv", status: false},
-      {name: "validation", status: false}
+      {name: "pv", content: false}
     ],
     finallObservation: "",
+    pv: {},
     missionID: ""
   })
   const [selectedOption, setSelectedOption] = useState(null);
@@ -104,10 +103,10 @@ export const Newcontrol = () => {
         step + 1
       )
     }else {
-      console.log('control Created!!')
-      dispatch(createControl(control));
-      console.log("After dispatch control: ", control)
-      theNavigate('/dashboard/orderMissions/control/list', {state: {message: "Controle Créé avec succée!"}})
+      console.log('control Created!!', control)
+      // dispatch(createControl(control));
+      // console.log("After dispatch control: ", control)
+      // theNavigate('/dashboard/orderMissions/control/list', {state: {message: "Controle Créé avec succée!"}})
     }
 
   }
@@ -174,6 +173,12 @@ export const Newcontrol = () => {
   const handleClick = (option) => {
     setSelectedOption(option);
   };
+  const handlePVData = (data) => {
+    setcontrol(prev => ({
+      ...prev,
+      pv: data
+    }))
+  }
 
   return (
     <div className="px-6 fleex flex-col ">
@@ -366,7 +371,7 @@ export const Newcontrol = () => {
                     {
                       selectedOption === 'pv' && (
                         <form action="" className='w-full p-2 mt-2 border rounded-md'>
-                          <Print />
+                          <Print sendData={handlePVData}/>
                         </form>
                       )
                     }
