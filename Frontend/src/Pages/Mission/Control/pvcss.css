@@ -69,16 +69,7 @@
     background-color: #0056b3;
   }
   
-  @media print {
-    .print-button {
-        display: none;
-    }
-  
-    .print-container {
-        width: 100%;
-        padding: 0;
-    }
-  }
+ 
   .delegates-section, .inspection-details, .observation-section, .declaration-section, .additional-info, .closing-section, .signatures {
       margin-top: 20px;
   }
@@ -93,7 +84,28 @@
     width: 50%; 
     margin: auto
   }
-  
+@media (max-width: 768px) {
+  .print-container {
+      padding: 10px;
+  }
+
+  .table-section table {
+      width: 100%;
+      display: block;
+      overflow-x: auto;
+  }
+
+  input, textarea {
+      width: 100%;
+  }
+}
+
+/* Dotted placeholders */
+input::placeholder,
+textarea::placeholder {
+  font-family: monospace;
+  letter-spacing: 2px;
+}
   
   
   

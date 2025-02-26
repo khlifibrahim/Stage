@@ -1,12 +1,7 @@
 import React, { useState } from "react";
-import "./PvVide.css";
-import logo from "./assets/logo.png";
-
-<<<<<<< HEAD
+import "./pvcss.css";
+// import logo from '../../assets/logo.png';
 const Print = ({ sendData }) => {
-=======
-const Print = ({ formData }) => {
->>>>>>> 37407c538f03ed39afc51cc9bdb3628970889c0a
   
 
     const [formData, setFormData] = useState({
@@ -46,10 +41,7 @@ const Print = ({ formData }) => {
             ...prevData,
             [name]: value,
         }));
-        sendData((prevDataS) => ({
-            ...prevDataS,
-            [name]: value,
-        }));
+        sendData(formData );
     };
 
     return (
