@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom'
 import PrintableMission from '../../Components/Utilities/PrintableMission'
 import Instance from "../../Api/axios";
-import { createOrderMission } from '../../Redux/Actions/orderMission.actions';
-
+import Select from 'react-select';
 
 
 function NewMission() {
@@ -13,12 +12,13 @@ function NewMission() {
   const [editMode, setEditMode] = useState(false)
   const [search, setSearch] = useState("");
   const [cadreList, setCadreList] = useState([]);
+  console.log("cadre:" ,cadreList)
   const [selectedCadre, setSelectedCadre] = useState(null);
   const [serviceCars, setServiceCars] = useState([]);
 
   const [accompaniedSearch, setAccompaniedSearch] = useState("");
   const [accompaniedList, setAccompaniedList] = useState([]);
-  const [selectedAccompanied, setSelectedAccompanied] = useState(null);
+  console.log("accom: ", accompaniedList)
 
   const [destinationList, setDestinationList] = useState([]);
   const [objectOptions, setObjectOptions] = useState([]);
@@ -67,13 +67,12 @@ function NewMission() {
   // ----- Fetch Accompanied Cadres
   useEffect(() => {
     const fetchAccompaniedCadres = async () => {
-      if (accompaniedSearch.trim() === "") {
-
-        setAccompaniedList([]);
-        return;
-      }
       try {
-        const response = await Instance.post("/missions/searchCadre", { name: accompaniedSearch });
+        const response = await Instance.get("/missions/getCadre");
+        console.log("respo: ", response)
+        // const accompWithoutCadre = response.filter(selectedCadre => (
+
+        // ))
         setAccompaniedList(response.data.cadres || []);
       } catch (error) {
         console.error(error);
@@ -235,6 +234,13 @@ function NewMission() {
     }
   };
 
+  const handleAccomSelect = (selectedCom) => {
+    setMission(prev => ({
+      ...prev, 
+      companion: selectedCom.value
+    }))
+    setDispalyError(null)
+  }
 
 
   // when submite the form
@@ -279,22 +285,6 @@ function NewMission() {
     console.log(modalPopUpPrint)
     setModalPopUpPrint(!modalPopUpPrint)
   };
-
-
-
-  const handlePrint = () => {
-    if (!hidePrint) {
-      const printArea = document.getElementById("print-area").innerHTML;
-      
-      const printConten = document.body.innerHTML;
-
-      document.body.innerHTML = printArea;
-      window.print()
-      document.body.innerHTML = printConten;
-      window.location.reload()
-    }
-
-  }
 
   return (
     <div className="p-6 max-md:p-0 max-md:px-3">
@@ -535,24 +525,6 @@ function NewMission() {
         <div className="flex flex-col">
           <label className="font-medium text-sm mb-1">Sera accompagné de</label>
           <div className="relative flex flex-col">
-            {/* <input
-              type="text"
-              value={accompaniedSearch}
-              onChange={(e) => setAccompaniedSearch(e.target.value)}
-              placeholder="Nom d'accompagnateur..."
-              className="border rounded-lg px-4 py-2 focus:outline-blue"
-            />
-            <div className={`absolute top-11 left-0 w-full bg-white border rounded-lg ${accompaniedList.length > 0 ? 'border' : ''}`}>
-              {accompaniedList.map((cadre, i) => (
-                <div
-                  key={i}
-                  onClick={() => handleAccompaniedChange(cadre)}
-                  className="px-4 py-2 cursor-pointer hover:bg-bg-blue hover:text-blue"
-                >
-                  {cadre.prenom} {cadre.nom}
-                </div>
-              ))}
-            </div> */}
             <Select 
               classNames={{
                 control: (state) =>
@@ -561,11 +533,11 @@ function NewMission() {
                 option: () => 'hover:bg-bg-blue hover:text-blue px-4 py-0',
                 placeholder: () => 'text-gray-300',
               }}
-              options={enterprises.map(ent => ({
-                value: ent.ICE,
-                label: `${ent.raison_sociale} - ${ent.ICE}`
+              options={accompaniedList.map(acc => ({
+                value: acc.ICE,
+                label: `${acc.raison_sociale} - ${acc.ICE}`
               }))} 
-              onChange={handleEnterpriseSelect}
+              onChange={handleAccomSelect}
               placeholder="Nom d'Entreprise ..."
               noOptionsMessage={()=> "Aucune entreprise trouvé"}
               isSearchable

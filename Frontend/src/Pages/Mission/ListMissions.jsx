@@ -10,7 +10,7 @@ function ListMissions({role, user}) {
   const dispatch = useDispatch();
   const { orderMissions, loading, error} = useSelector(state => state.orderMission)
   console.log("Missions List redux: ",orderMissions)
-  const [mission, setMission] = useState({})
+  
   const [missionsList, setMissionsList] = useState([])
   const [filter, setFilter] = useState(null)
   const [isFilterMenuOpen, setFilterMenuOpen] = useState(false)
@@ -61,13 +61,16 @@ function ListMissions({role, user}) {
       setCurrentPage(currentPage - 1)
     }
   }
-
   
+  
+  const [mission, setMission] = useState()
   const handleDetails = (missionId) => {
-    const selectedMission = missionsList.find(item => {
-      return missionsList.mission_id === item.missionId
+    const selectedMission = orderMissions.find(item => {
+      return item.mission_id === missionId
     })
-    // setMission(selectedMission)
+    
+    
+    setMission(selectedMission)
     dispatch(updateOrderMission(missionId, selectedMission))
     setModalPopUpPrint(!modalPopUpPrint)
   };
@@ -256,7 +259,7 @@ function ListMissions({role, user}) {
                 <span onClick={handleDetails} className='absolute left-4 top-4 z-50 p-2 rounded-[10px] bg-bg-blue'>
                   <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  className="stroke-white hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
                 </span>
-                <PrintableMission id="print-area"  mission={orderMissions.missionId} close={modalPopUpPrint}/>
+                <PrintableMission id="print-area"  mission={mission} close={modalPopUpPrint}/>
               </div>
             </div>
             )

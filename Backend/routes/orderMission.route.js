@@ -5,6 +5,7 @@ import {
         updateOrderMission, 
         updateOrderMissionStatus,
         deleteOrderMission,
+        getCadre,
         searchCadre,
         getServiceCars,
         getObjectOptions,
@@ -17,6 +18,7 @@ router.post('/getOrderMission', getOrderMission)
 router.get('/getServiceCars', getServiceCars)
 router.get('/getObjectOptions', getObjectOptions)
 router.get('/getDestinations', getDestinations)
+router.get('/getCadre', getCadre)
 router.post('/searchCadre', searchCadre)
 router.post('/createOrderMission', createOrderMission)
 router.put('/updateOrderMission/:id', updateOrderMission)
