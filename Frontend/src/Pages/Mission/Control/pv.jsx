@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import "./PvVide.css";
 import logo from "./assets/logo.png";
 
+<<<<<<< HEAD
 const Print = ({ sendData }) => {
+=======
+const Print = ({ formData }) => {
+>>>>>>> 37407c538f03ed39afc51cc9bdb3628970889c0a
   
 
     const [formData, setFormData] = useState({
