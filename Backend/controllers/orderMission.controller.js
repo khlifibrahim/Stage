@@ -1,5 +1,3 @@
-// import { connect, connection } from "mongoose"
-import { connect } from "mongoose";
 import { connectSQL } from "../database/connectDB.js"
 
 
@@ -127,6 +125,27 @@ export const getDestinations = async (req, res) => {
     }
 }
 
+export const getCadre = async (req, res) => {
+    try {
+        const connect = await connectSQL();
+
+        
+        const [cadres] = await connect.query(`SELECT * FROM cadre ;`)
+        console.log(cadres)
+        
+        return res.status(200).json({
+                success: true,
+                message: 'Cadres fetched successfully',
+                cadres: cadres
+            })
+    } catch (error) {
+        console.log('Error fetching cadres: ', error);
+        return res.status(500).json({
+            success: false,
+            message: 'No cadre found!!'
+        })
+    }
+}
 export const searchCadre = async (req, res) => {
     try {
         const connect = await connectSQL();
