@@ -3,6 +3,34 @@ import "./PvVide.css";
 import logo from "./assets/logo.png";
 
 const Print = ({ formData, setFormData }) => {
+  
+
+    const [formData, setFormData] = useState({
+        number: "",
+        day: "",
+        hour: "",
+        place: "",
+        sell: "",
+        observation: "",
+        fullname: "",
+        Dbirth: "",
+        placeOfBirth: "",
+        Fname: "",
+        Mname: "",
+        idCard: "",
+        idExpiry: "",
+        nationality: "",
+        address: "",
+        role: "",
+        confession: "",
+        info: "",
+        DATEof: "",
+        HOURof: "",
+        HISname: "",
+        copy: ""
+    });
+
+
     const handlePrint = () => {
         window.print();
     };
@@ -62,20 +90,17 @@ const Print = ({ formData, setFormData }) => {
                     </table>
                 </div>
 
-                {/* Inspection Details */}
                 <div className="inspection-details">
                     <p>في يوم <input type="date" name="day" value={formData.day} onChange={handleInputChange} /> على الساعة <input type="text" name="hour" value={formData.hour} onChange={handleInputChange} /></p>
                     <p>إلى المحل التجاري الكائن مقره <input type="text" name="place" value={formData.place} onChange={handleInputChange} /></p>
                     <p>والذي يستغل في بيع <input type="text" name="sell" value={formData.sell} onChange={handleInputChange} /></p>
                 </div>
 
-                {/* Observations */}
                 <div className="observation-section">
                     <p>وبعد أن عرضنا على الشخص الماثل أمامنا صفتنا وبطاقاتنا المهنية وأبلغناه بطبيعة مهمتنا وأسسها القانونية، عاينا ما يلي:</p>
                     <textarea name="observation" value={formData.observation} onChange={handleInputChange}></textarea>
                 </div>
 
-                {/* Declaration Section */}
                 <div className="declaration-section">
                     <p>وقد أدلى لنا الشخص الماثل أمامنا بما يلي:</p>
                     <p>الاسم الشخصي والعائلي: <input type="text" name="fullname" value={formData.fullname} onChange={handleInputChange} /></p>
@@ -87,19 +112,16 @@ const Print = ({ formData, setFormData }) => {
                     <p>بصفته(ها): <input type="text" name="role" value={formData.role} onChange={handleInputChange} /></p>
                 </div>
 
-                {/* Confession */}
                 <div className="observation-section">
                     <p>وأثناء الاستماع إليه(ها)، صرح(ت) لنا بما يلي:</p>
                     <textarea name="confession" value={formData.confession} onChange={handleInputChange}></textarea>
                 </div>
 
-                {/* Additional Information */}
                 <div className="additional-info">
                     <p>معلومات إضافية:</p>
                     <textarea name="info" value={formData.info} onChange={handleInputChange}></textarea>
                 </div>
 
-                {/* Closing Section */}
                 <div className="closing-section">
                     <p>أقفل المحضر بتاريخ <input type="date" name="DATEof" value={formData.DATEof} onChange={handleInputChange} /> على الساعة <input type="text" name="HOURof" value={formData.HOURof} onChange={handleInputChange} /></p>
                     <p>حيث حرر في ثلاث نسخ وسلمت نسخة منه للسيد(ة) <input type="text" name="HISname" value={formData.HISname} onChange={handleInputChange} />.</p>
