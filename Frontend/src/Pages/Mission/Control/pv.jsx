@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./PvVide.css";
 import logo from "./assets/logo.png";
 
-const Print = ({ formData, setFormData }) => {
+const Print = ({ sendData }) => {
   
 
     const [formData, setFormData] = useState({
@@ -40,6 +40,10 @@ const Print = ({ formData, setFormData }) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
+            [name]: value,
+        }));
+        sendData((prevDataS) => ({
+            ...prevDataS,
             [name]: value,
         }));
     };
