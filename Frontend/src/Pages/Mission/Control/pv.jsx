@@ -1,14 +1,26 @@
-import react from "react";
-import './PvVide.css';
-import logo from './assets/logo.png';
+import react, { useState } from "react";
+import './pvcss.css';
+import logo from '../../../assets/logo.png';
 
 
 
 const Print=()=>{
 
     const handlePrint=()=>{
+
         window.print();
     }
+    const [data, setData] = useState({})
+    const handleDataChange = (e)=> {
+        const {name, value} = e.target
+
+        setData(prev => ({
+            ...prev,
+            [name] : value
+        }))
+    }
+
+
     return(
         <>
         
@@ -51,7 +63,7 @@ const Print=()=>{
                                 <p className="font-bold text-center">
                                 محضر إثباث المخالفات <br/>حرر طبقا للمادة 169 من القانون رقم 31.08  <br/>القاضي بتحديد تدابير لحماية المستهلك
                                 </p>
-                                <p className="text-center">......./......../.......رقم </p>
+                                <p className="text-center">......./......../....... رقم </p>
                         </td>
                         </tr>
                     </tbody>
@@ -71,7 +83,7 @@ const Print=()=>{
             </div>
 
             <div className="inspection-details">
-                <p>في يوم………………………… على الساعة ………………….…...</p>
+                <p>في يوم <input type="text" name="day" value={data.day}/> على الساعة <input type="text" name="hour" value={data.hour} /></p>
                 <p>إلى المحل التجاري الكائن مقره ب………………………………………………….</p>
                 <p>والذي يستغل في بيع………………………………………………..</p>
             </div>

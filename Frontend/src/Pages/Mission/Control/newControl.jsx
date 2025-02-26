@@ -4,6 +4,7 @@ import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise } from '../../../Redux/Actions/enterprise.actions';
 import { createControl } from '../../../Redux/Actions/control.actions';
+import Print from './pv'
 
 
 export const Newcontrol = () => {
@@ -365,7 +366,7 @@ export const Newcontrol = () => {
                     {
                       selectedOption === 'pv' && (
                         <form action="" className='w-full p-2 mt-2 border rounded-md'>
-                          inserting the PV
+                          <Print />
                         </form>
                       )
                     }
