@@ -22,6 +22,23 @@ function ListMissions({role, user}) {
   const totalPage = [(Math.ceil(orderMissions.length / itemsPerPage))];
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage
+  const showMaxBtn = 3
+  const handlenavigation = ()=> {
+      if(totalPage <= showMaxBtn) {
+          return Array.from({ length: totalPage }).map(i => i)
+      }else {
+          const pages = []
+          if(currentPage - 1 >= 1) {
+              pages.push(currentPage - 1)
+          }
+          pages.push(currentPage)
+          if(currentPage + 1 <= totalPage) {
+              pages.push(currentPage + 1)
+          }
+          console.log('Display: ', pages)
+          return pages
+      }
+  }
   
   useEffect(() => {
     dispatch(fetchOrderMissions(role, user.id_utilisateur))
@@ -133,7 +150,7 @@ function ListMissions({role, user}) {
         </div>
         {/* filter menu */}
         {role !== "CADRE" &&
-        (<div className="filter flex items-center justify-end basis-1/2 gap-4 my-2" >
+        (<div className="filter flex items-center justify-end basis-1/2 gap-4 my-2 max-md:basis-full" >
           <p className='font-medium text-base'>Trier par: </p>
 
           <div className='flex items-center justify-between gap-2 relative' ref={filterMenuRef}>
@@ -228,27 +245,33 @@ function ListMissions({role, user}) {
         </div>
       </div>
 
-      {(orderMissions.length > 0) &&
+      {(orderMissions.length > 0 && totalPage > 1) &&
         (<div className="navigation flex items-center justify-between ">
           <button 
-            className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
+            className='flex items-center justify-between px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
             onClick={prevPage}
-          >Précédente</button>
+          >
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
+            <p className='max-md:hidden'>Précédente</p>
+          </button>
   
           <div className='flex gap-2'>
-  
-            {
-              Array.from({length: totalPage}).map((_, i) => (
-                <span key={i} onClick={()=> setCurrentPage(i + 1)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === (i+1) ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{i + 1}</span>
-              ))
-            }
-  
-            </div>
+
+              {
+                  handlenavigation().map(page => (
+                      <span key={page} onClick={() => setCurrentPage(page)} className={`cursor-pointer px-3 py-2 transition-colors ${currentPage === page ? 'bg-bg-blue  text-blue' : 'bg-[#E4E4E4] '} font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`}>{page}</span>
+                  ))
+              }
+
+          </div>
   
           <button 
-            className='px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
+            className='flex items-center justify-between px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors'
             onClick={nextPage}
-          >Suivante</button>
+          >
+            <p className="max-md:hidden">Suivante</p>
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+        </button>
         </div>)
       }
 

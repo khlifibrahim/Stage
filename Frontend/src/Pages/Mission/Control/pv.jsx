@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./pvcss.css";
 import logo from '../../../assets/logo.png';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useEffect } from "react";
 =======
 >>>>>>> 3a95f6f8156606aa8630488bf682a11aba6bdc5a
@@ -42,6 +43,19 @@ const Print = ({ sendData }) => {
     }, [isConfirmed]);
     const handlePrint = (e) => {
         e.preventDefault()
+=======
+
+
+
+
+const Print = ({ sendData }) => {
+  
+
+    const [formData, setFormData] = useState({});
+
+
+    const handlePrint = () => {
+>>>>>>> e51f7ac097f5fb9993f412bacbdfc0e4dbed2d9c
         window.print();
     };
     const handleConfirm=(e)=>{
@@ -50,7 +64,7 @@ const Print = ({ sendData }) => {
     }
 
 
-    // Function to handle changes in inputs
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -102,7 +116,7 @@ const Print = ({ sendData }) => {
                                         القاضي بتحديد تدابير لحماية المستهلك
                                     </p>
                                     <p className="text-center">
-                                        <input type="text" name="number" value={formData.number} onChange={handleInputChange} /> رقم
+                                        <input type="text" placeholder="............" name="number" value={formData.number} onChange={handleInputChange} /> رقم
                                     </p>
                                 </td>
                             </tr>

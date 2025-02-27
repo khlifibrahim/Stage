@@ -301,7 +301,7 @@ function NewMission() {
         {/* Groupe: Nom et Titre */}
         <div className="flex gap-6 mb-4 max-md:flex-col ">
           <div className=" flex flex-col flex-1">
-            <label className="font-medium text-sm mb-1">Nom*</label>
+            <label className="font-medium text-sm mb-1">Nom <span className="text-red-500">*</span></label>
             <div className="relative flex flex-col flex-1 ">
               <input
                 type="text"
@@ -327,7 +327,7 @@ function NewMission() {
             </div>
           </div>
           <div className="flex flex-col flex-1 ">
-            <label className="">Titre*</label>
+            <label className="">Titre  <span className="text-red-500">*</span></label>
             <input
               type="text"
               name="grade"
@@ -335,6 +335,7 @@ function NewMission() {
               onChange={handleCadreChange}
               placeholder="Titre..."
               className="border rounded-lg px-4 py-2 focus:outline-blue"
+              disabled={cadre.grade !== ''}
               required
             />
           </div>
@@ -351,7 +352,7 @@ function NewMission() {
               onChange={handleCadreChange}
               placeholder="Délégation..."
               className="border rounded-lg px-4 py-2 focus:outline-blue"
-              
+              disabled={cadre.nom !== ''}
             />
           </div>
 
@@ -411,7 +412,7 @@ function NewMission() {
             />
           </div>
           <div className="flex flex-col flex-1">
-            <label className="font-medium text-sm mb-1">Heure départ*</label>
+            <label className="font-medium text-sm mb-1">Heure départ </label>
             <input
               type="time"
               name="depHour"
@@ -426,7 +427,7 @@ function NewMission() {
         {/* Groupe: Heure arrivée et Durée */}
         <div className="flex gap-6 mb-4 max-md:flex-col">
           <div className="flex flex-col flex-1">
-            <label className="font-medium text-sm mb-1">Heure d'arrivée*</label>
+            <label className="font-medium text-sm mb-1">Heure d'arrivée</label>
             <input
               type="time"
               name="arrHour"

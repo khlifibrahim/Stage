@@ -13,8 +13,6 @@ export const connectSQL = async () => {
           database: process.env.DB_NAME,
           port: process.env.DB_PORT,
           waitForConnections: true,
-          connectionLimit: 10, 
-          queueLimit: 0
         });
     
         console.log('Connected to the MySQL database.', process.env.DB_NAME , ' ', process.env.DB_WB);
