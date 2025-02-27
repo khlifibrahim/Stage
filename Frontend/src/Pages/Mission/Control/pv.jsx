@@ -1,12 +1,7 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
 import "./pvcss.css";
-// import logo from '../../assets/logo.png';
-=======
-import "./Pvcss.css";
-import logo from "../../../assets/logo.png";
-
->>>>>>> f7d457f0fdb9f2d725f268a333e80aabcd0196d5
+import logo from '../../../assets/logo.png';
+import { useEffect } from "react";
 const Print = ({ sendData }) => {
   
 
@@ -34,11 +29,23 @@ const Print = ({ sendData }) => {
         HISname: "",
         copy: ""
     });
-
-
-    const handlePrint = () => {
+    const [isConfirmed,setisConfirmed]=useState('')
+    useEffect(() => {
+        if (isConfirmed) {
+            document.querySelectorAll(".print-container input, .print-container textarea").forEach((element) => {
+                element.disabled = true;
+            });
+        }
+    }, [isConfirmed]);
+    const handlePrint = (e) => {
+        e.preventDefault()
         window.print();
     };
+    const handleConfirm=(e)=>{
+        e.preventDefault()
+        setisConfirmed(true)
+    }
+
 
     // Function to handle changes in inputs
     const handleInputChange = (e) => {
@@ -47,16 +54,8 @@ const Print = ({ sendData }) => {
             ...prevData,
             [name]: value,
         }));
-<<<<<<< HEAD
         sendData(formData );
-=======
-        
->>>>>>> f7d457f0fdb9f2d725f268a333e80aabcd0196d5
     };
-
-    const confirm = ()=> {
-        sendData(formData);
-    }
 
     return (
         <>
@@ -147,16 +146,16 @@ const Print = ({ sendData }) => {
                     <p className="signature-line">توقيع محرر المحضر</p>
                     <p className="refusal-note">توقيع المصرح (في حالة رفضه، تتم الإشارة إلى ذلك من طرف الباحث)</p>
                 </div>
-
-                <div className="flex gap-4">
-                    <button onClick={handlePrint} type="button" className="print-button">
-                        Imprimer
-                    </button>
-                    <button onClick={confirm} type="button">
-                        Confirmer
-                    </button>
-                </div>
+               <div className="button-group">
+               <button onClick={handleConfirm} className="confirm-button">
+                    confirm
+                </button>
+                <button disabled={!isConfirmed} onClick={handlePrint} className="print-button">
+                    Imprimer
+                </button>
+               </div>
             </div>
+
         </>
     );
 };
