@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import "./pvcss.css";
 import logo from '../../../assets/logo.png';
+<<<<<<< HEAD
 import { useEffect } from "react";
+=======
+>>>>>>> 3a95f6f8156606aa8630488bf682a11aba6bdc5a
 const Print = ({ sendData }) => {
   
 
@@ -54,7 +57,11 @@ const Print = ({ sendData }) => {
             ...prevData,
             [name]: value,
         }));
+<<<<<<< HEAD
         sendData(formData );
+=======
+        
+>>>>>>> 3a95f6f8156606aa8630488bf682a11aba6bdc5a
     };
 
     return (

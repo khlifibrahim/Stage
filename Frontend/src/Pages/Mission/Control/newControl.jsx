@@ -249,26 +249,26 @@ export const Newcontrol = () => {
                           <div className="flex items-center gap-3">
 
                             <div className={`flex items-center cursor-pointer hover:text-blue`}>
-                              <div className='grid place-items-center place-content-center mt-1'>
-                                <input onChange={() => handleRadioChange(i, 'conforme')} className={`peer col-start-1 row-start-1 mr-2 appearance-none shrink-0 mt-1 w-4 h-4 border-2 border-blue rounded-full `} type="radio" value="conforme"
+                              <label htmlFor={`${p.name}-conforme`} className={`${p.status === 'conforme' ? 'bg-blue text-white' : ''} relative cursor-pointer px-3 py-1 rounded-[10px] bg-[#E4E4E4]`}>
+                                <input onChange={() => handleRadioChange(i, 'conforme')} 
+                                  className={`appearance-none shrink-0 mt-1 absolute top-0 left-0 w-full h-full cursor-pointer`} type="radio" value="conforme"
                                   name={`conforme`}
                                   id={`${p.name}-conforme`}
                                   checked={p.status === "conforme"}/>
-                                <div className={`col-start-1 row-start-1 w-2 h-2 rounded-full ${p.status === 'conforme' ? 'bg-blue': 'bg-transparent'} mt-1 mr-2`}/>
-                              </div>
-                              <label htmlFor={`${p.name}-conforme`} className='cursor-pointer mt-2'>conforme</label>
+                                  <p>Conforme</p>
+                                </label>
                             </div>
+                            
 
                             <div className={`flex items-center cursor-pointer hover:text-blue`} >
-                              <div className='grid place-items-center place-content-center mt-1'>
-                                <input onChange={() => handleRadioChange(i, 'non-conforme')} className={`peer col-start-1 row-start-1 mr-2 appearance-none shrink-0 mt-1 w-4 h-4 border-2 border-blue rounded-full `} type="radio"
+                              <label htmlFor={`${p.name}-non-conforme`} className={`${p.status === 'non-conforme' ? 'bg-blue text-white' : ''} relative cursor-pointer px-3 py-1 rounded-[10px] bg-[#E4E4E4]`}>
+                                <input onChange={() => handleRadioChange(i, 'non-conforme')} className={`cursor-pointer appearance-none shrink-0 mt-1 absolute top-0 left-0 w-full h-full`} type="radio"
                                   value="non-conforme"
                                   name={`non-conforme`}
                                   id={`${p.name}-non-conforme`}
                                   checked={p.status === "non-conforme"}/>
-                                <div className={`col-start-1 row-start-1 w-2 h-2 rounded-full ${p.status === 'non-conforme' ? 'bg-blue' : 'bg-transparent'} mt-1 mr-2`}/>
-                              </div>
-                              <label htmlFor={`${p.name}-non-conforme`} className='cursor-pointer mt-2'>Non conforme</label>
+                                  Non Conforme
+                                </label>
                             </div>
                           </div>
 
