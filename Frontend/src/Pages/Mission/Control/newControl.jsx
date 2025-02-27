@@ -347,7 +347,7 @@ export const Newcontrol = () => {
                     {
                       selectedOption === 'vb' && (
                         <div className="my-4 ">
-                        <label htmlFor="final-observation" className="font-medium">Verbalisation :</label>
+                        <label htmlFor="final-observation" className="font-medium">Avertissments :</label>
                         <textarea
                           id="final-observation"
                           className="w-full p-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue placeholder-gray-400"
@@ -385,3 +385,9 @@ export const Newcontrol = () => {
 
 
 export default Newcontrol
+
+
+// PV: 
+// ADRESS SIEGE ل التجاري الكائن مقره 
+// يستغل في بيع  type commerce
+//  وأسسها القانونية، عاينا ما يلي: les pratcs 
