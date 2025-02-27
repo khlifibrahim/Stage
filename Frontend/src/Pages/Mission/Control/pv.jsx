@@ -1,50 +1,7 @@
 import React, { useState } from "react";
 import "./pvcss.css";
 import logo from '../../../assets/logo.png';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { useEffect } from "react";
-=======
->>>>>>> 3a95f6f8156606aa8630488bf682a11aba6bdc5a
-const Print = ({ sendData }) => {
-  
-
-    const [formData, setFormData] = useState({
-        number: "",
-        day: "",
-        hour: "",
-        place: "",
-        sell: "",
-        observation: "",
-        fullname: "",
-        Dbirth: "",
-        placeOfBirth: "",
-        Fname: "",
-        Mname: "",
-        idCard: "",
-        idExpiry: "",
-        nationality: "",
-        address: "",
-        role: "",
-        confession: "",
-        info: "",
-        DATEof: "",
-        HOURof: "",
-        HISname: "",
-        copy: ""
-    });
-    const [isConfirmed,setisConfirmed]=useState('')
-    useEffect(() => {
-        if (isConfirmed) {
-            document.querySelectorAll(".print-container input, .print-container textarea").forEach((element) => {
-                element.disabled = true;
-            });
-        }
-    }, [isConfirmed]);
-    const handlePrint = (e) => {
-        e.preventDefault()
-=======
-
 
 
 
@@ -55,7 +12,6 @@ const Print = ({ sendData }) => {
 
 
     const handlePrint = () => {
->>>>>>> e51f7ac097f5fb9993f412bacbdfc0e4dbed2d9c
         window.print();
     };
     const handleConfirm=(e)=>{
@@ -71,11 +27,7 @@ const Print = ({ sendData }) => {
             ...prevData,
             [name]: value,
         }));
-<<<<<<< HEAD
         sendData(formData );
-=======
-        
->>>>>>> 3a95f6f8156606aa8630488bf682a11aba6bdc5a
     };
 
     return (
