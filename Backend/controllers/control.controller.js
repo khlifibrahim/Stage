@@ -10,7 +10,7 @@ export const fetchControls = async (req, res) =>{
                         INNER JOIN entreprise e ON ec.ICE = e.ICE;`;
 
         const [result] = await connect.query(query);
-
+        console.log('Controls list: ', result)
         res.status(200).json({
             success: true,
             message: "All controls fetched successfully",
@@ -26,7 +26,7 @@ export const fetchControls = async (req, res) =>{
 export const createControl = async (req, res) => {
     const control = req.body
     const convertDate = control.executedAt.at
-
+    console.log('Add Control: ', control)
     if(!control.entID) return res.status(400).json({
         success: false,
         message: 'Entreprise ID required!'
@@ -48,7 +48,8 @@ export const createControl = async (req, res) => {
                                 p_comment,
                                 v_comment,
                                 f_observation,
-                                mission_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                                validation,
+                                mission_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         const values = [
             control.executedAt.at,
             control.pratics[0].status,
@@ -62,6 +63,7 @@ export const createControl = async (req, res) => {
             control.pratics[3].observation,
             control.pratics[4].observation,
             control.finallObservation,
+            control.validation,
             control.missionID
         ]
         const [response] = await connect.execute(query, values)

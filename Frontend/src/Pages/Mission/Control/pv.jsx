@@ -1,40 +1,21 @@
 import React, { useState } from "react";
 import "./pvcss.css";
 import logo from '../../../assets/logo.png';
+
+
+
+
 const Print = ({ sendData }) => {
   
 
-    const [formData, setFormData] = useState({
-        number: "",
-        day: "",
-        hour: "",
-        place: "",
-        sell: "",
-        observation: "",
-        fullname: "",
-        Dbirth: "",
-        placeOfBirth: "",
-        Fname: "",
-        Mname: "",
-        idCard: "",
-        idExpiry: "",
-        nationality: "",
-        address: "",
-        role: "",
-        confession: "",
-        info: "",
-        DATEof: "",
-        HOURof: "",
-        HISname: "",
-        copy: ""
-    });
+    const [formData, setFormData] = useState({});
 
 
     const handlePrint = () => {
         window.print();
     };
 
-    // Function to handle changes in inputs
+    
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -86,7 +67,7 @@ const Print = ({ sendData }) => {
                                         القاضي بتحديد تدابير لحماية المستهلك
                                     </p>
                                     <p className="text-center">
-                                        <input type="text" name="number" value={formData.number} onChange={handleInputChange} /> رقم
+                                        <input type="text" placeholder="............" name="number" value={formData.number} onChange={handleInputChange} /> رقم
                                     </p>
                                 </td>
                             </tr>

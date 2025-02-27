@@ -133,7 +133,7 @@ function ListMissions({role, user}) {
         </div>
         {/* filter menu */}
         {role !== "CADRE" &&
-        (<div className="filter flex items-center justify-end basis-1/2 gap-4 my-2" >
+        (<div className="filter flex items-center justify-end basis-1/2 gap-4 my-2 max-md:basis-full" >
           <p className='font-medium text-base'>Trier par: </p>
 
           <div className='flex items-center justify-between gap-2 relative' ref={filterMenuRef}>

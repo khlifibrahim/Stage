@@ -13,23 +13,15 @@ export const Newcontrol = () => {
   const theLocation = useLocation();
   const {enterprises} = useSelector(state => state.enterprise)
   const [control, setcontrol] = useState({
-    entID: "",
-    executedAt: {executed: false, at: ''},
+    // missionID: "",
     pratics: [
-        {name: "Affichage des prix", status: "", observation: ''},
-        {name: "Etiquetage", status: "", observation: ''},
-        {name: "Publicite", status: "", observation: ''},
-        {name: "Garantie", status: "", observation: ''},
-        {name: "Solde", status: "", observation: ''},
-        {name: "Facture", status: "", observation: ''}
-    ],
-    validation: [  
-      {name: "vb", status: false},
-      {name: "pv", content: false}
-    ],
-    finallObservation: "",
-    pv: {},
-    missionID: ""
+            {name: "Affichage des prix", status: "conforme", observation: ''},
+            {name: "Etiquetage", status: "conforme", observation: ''},
+            {name: "Publicite", status: "conforme", observation: ''},
+            {name: "Garantie", status: "conforme", observation: ''},
+            {name: "Solde", status: "conforme", observation: ''},
+            {name: "Facture", status: "conforme", observation: ''}
+        ],
   })
   const [selectedOption, setSelectedOption] = useState(null);
   const missionID = theLocation.state?.id
@@ -45,7 +37,7 @@ export const Newcontrol = () => {
   const [step, setStep] = useState(1)
   const steps = Array.from(document.getElementsByClassName('step'))
   useEffect(() => {
-    if(!control.executedAt.executed) {
+    if(!control.executedAt?.executed) {
       const currentDate = new Date();
       const at = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
       console.log(at)
@@ -104,9 +96,9 @@ export const Newcontrol = () => {
       )
     }else {
       console.log('control Created!!', control)
-      // dispatch(createControl(control));
-      // console.log("After dispatch control: ", control)
-      // theNavigate('/dashboard/orderMissions/control/list', {state: {message: "Controle Créé avec succée!"}})
+      dispatch(createControl(control));
+      console.log("After dispatch control: ", control)
+      theNavigate('/dashboard/orderMissions/control/list', {state: {message: "Controle Créé avec succée!"}})
     }
 
   }
@@ -149,12 +141,11 @@ export const Newcontrol = () => {
     }))
   };
   const handleValidation = () => {
-    const isValid = control.pratics.every(p => p.status === 'conforme')
+    const isValid = control.pratics?.every(p => p.status === 'conforme')
+    console.log("isValid: ", isValid)
     setcontrol(prev => ({
       ...prev,
-      validation: prev.validation.map(item => 
-        item.name === 'validation' ? { ...item, status: isValid ? true : false } : item
-      )
+      validation: isValid === true ? 'Validé' : 'Non Validé'
     }));
     console.log("check pratics: ", isValid)
   }
@@ -212,7 +203,7 @@ export const Newcontrol = () => {
                     noOptionsMessage={()=> "Aucune entreprise trouvé"}
                     isSearchable
                     />
-                {  control.entID === '' &&
+                {  !control?.entID &&
                   (<button type='button' onClick={handleAddEntreprise} className={`px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors `}>Ajouter</button>)
                 }
                 </div>
@@ -228,7 +219,7 @@ export const Newcontrol = () => {
                 <div className=''>
                   <p>Executer à: </p>
                   <p> {
-                      control.executedAt.executed 
+                      control.executedAt?.executed 
                       ? control.executedAt.at 
                       : 'Pas encore' 
                     }</p>
@@ -297,7 +288,7 @@ export const Newcontrol = () => {
             <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Verification</p>
             <div>
               {
-                control.pratics.map(pratic => (
+                control.pratics?.map(pratic => (
                   <div className='flex flex-wrap border rounded-[10px] p-3 my-2 '>
                     <div className='basis-1/3'>
                     {
@@ -326,6 +317,7 @@ export const Newcontrol = () => {
           <div className={`step ${step === 4 ? '' : 'hidden'} w-full mb-4`}>
             <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Validation</p>
             <div className='m-4'>
+              {console.log("validation: ", control)}
               {
                 control.validation === 'Validé'
                 ?  (
