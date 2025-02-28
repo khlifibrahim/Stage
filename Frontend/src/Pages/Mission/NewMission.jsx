@@ -26,27 +26,27 @@ function NewMission() {
   const [selectCar, setSelectCar] = useState("service");
 
   const [cadre, setCadre] = useState({
-    id: "",
-    nom: "",
-    prenom: "",
-    delegation: "",
-    grade: "",
-    carPlat: null
+    // id: "",
+    // nom: "",
+    // prenom: "",
+    // delegation: "",
+    // grade: "",
+    // carPlat: null
   });
 
   const [mission, setMission] = useState({
-    missionId: null,
-    cadreId: "",
-    destinationId: "",
-    destinationName: "",
-    objectId: "",
-    objectName: "",
-    depDate: "",
-    depHour: null,
-    arrHour: null,
-    durationDays: "",
-    plateNumber: null,
-    companion: null
+    // missionId: null,
+    // cadreId: "",
+    // destinationId: "",
+    // destinationName: "",
+    // objectId: "",
+    // objectName: "",
+    // depDate: "",
+    // depHour: null,
+    // arrHour: null,
+    // durationDays: "",
+    // plateNumber: null,
+    // companion: ""
   });
   const [hidePrint, setHidePrint] = useState(true)
 
@@ -175,7 +175,7 @@ function NewMission() {
   // -- Handlers :
   // handling inputs values
   const handleCadreChange = (selected) => {
-    console.log('detec the selected cadre: ', selected.cadre_id)
+    // console.log('detec the selected cadre: ', selected.cadre_id)
     setSelectedCadre(selected);
     setSearch(`${selected.nom} ${selected.prenom}`);
 
@@ -222,9 +222,11 @@ function NewMission() {
         plateNumber: null
       }))
     }
+  };
+
+  useEffect(() => {
     if (
-      cadre.nom !== '' &&
-      cadre.prenom !== '' &&
+      mission.cadreId !== '' &&
       mission.durationDays !== '' &&
       mission.depDate !== '' &&
       mission.destinationId !== '' &&
@@ -232,14 +234,21 @@ function NewMission() {
     ) {
       setHidePrint(!hidePrint)
     }
-  };
+  }, [mission])
 
-  const handleAccomSelect = (selectedCom) => {
-    setMission(prev => ({
-      ...prev, 
-      companion: selectedCom.value
-    }))
-    setDispalyError(null)
+  const handleAccomSelect = (nom) => {
+    if(nom === `${cadre.nom} ${cadre.prenom}`) {
+      return setMission(prev => ({
+        ...prev,
+        companion: ''
+      }))
+    }else {
+      setMission(prev => ({
+        ...prev, 
+        companion: nom.value
+      }))
+    }
+    
   }
 
 
@@ -534,18 +543,19 @@ function NewMission() {
                 option: () => 'hover:bg-bg-blue hover:text-blue px-4 py-0',
                 placeholder: () => 'text-gray-300',
               }}
-              options={accompaniedList.map(acc => ({
-                value: acc.ICE,
-                label: `${acc.raison_sociale} - ${acc.ICE}`
+              options={accompaniedList.filter(acc => acc.cadre_id !== mission.cadreId)
+                .map(acc => ({
+                value: acc.nom,
+                label: acc.nom
               }))} 
               onChange={handleAccomSelect}
-              placeholder="Nom d'Entreprise ..."
-              noOptionsMessage={()=> "Aucune entreprise trouvé"}
+              placeholder="Nom d'accompagnion ..."
+              noOptionsMessage={()=> "Aucune accompagnion trouvé"}
               isSearchable
               />
           </div>
         </div>
-
+              {console.log('Mission :', mission)}
 
 
         {/* Groupe: Boutons */}
@@ -594,7 +604,7 @@ function NewMission() {
                 </button>
                 <button
                   type="button"
-                  onClick={handlePrint}
+                  onClick={hidePrint}
                   className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors "
                 >
                   Imprimer
