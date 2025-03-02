@@ -50,6 +50,8 @@ function NewMission() {
   });
   const [hidePrint, setHidePrint] = useState(true)
 
+  const today = new Date();
+  const todayISOString= today.toISOString().split('T')[0];
   // -- Fetching From API :
   // ----- Fetch Object Options
   useEffect(() => {
@@ -353,7 +355,7 @@ function NewMission() {
         {/* Groupe: Délégation et Destination */}
         <div className="flex gap-6 mb-4 max-md:flex-col">
           <div className="flex flex-col flex-1">
-            <label className="font-medium text-sm mb-1">Délégation*</label>
+            <label className="font-medium text-sm mb-1">Délégation <span className="text-red-500">*</span></label>
             <input
               type="text"
               name="delegation"
@@ -367,7 +369,7 @@ function NewMission() {
 
           {/*  Destination */}
           <div className="flex flex-col flex-1">
-            <label className="font-medium text-sm mb-1">Destination*</label>
+            <label className="font-medium text-sm mb-1">Destination <span className="text-red-500">*</span></label>
             <select
               name="destinationId"
               value={mission.destinationId}
@@ -410,14 +412,14 @@ function NewMission() {
         {/* Groupe: Date et Heure */}
         <div className="flex gap-6 mb-4 max-md:flex-col">
           <div className="flex flex-col flex-1">
-            <label className="font-medium text-sm mb-1">Date départ*</label>
+            <label className="font-medium text-sm mb-1">Date départ <span className="text-red-500">*</span></label>
             <input
               type="date"
               name="depDate"
               value={mission.depDate}
               onChange={handleMissionChange}
               className="border rounded-lg px-4 py-2 focus:outline-blue"
-
+              min={todayISOString}
             />
           </div>
           <div className="flex flex-col flex-1">
@@ -447,13 +449,13 @@ function NewMission() {
             />
           </div>
           <div className="flex flex-col flex-1">
-            <label className="font-medium text-sm mb-1">Durée de la mission*</label>
+            <label className="font-medium text-sm mb-1">Durée de la mission <span className="text-red-500">*</span></label>
             <input
               type="text"
               name="durationDays"
               value={mission.durationDays}
               onChange={handleMissionChange}
-              placeholder="Durée (en heures)..."
+              placeholder="Durée (en jours)..."
               className="border rounded-lg px-4 py-2 focus:outline-blue"
 
             />

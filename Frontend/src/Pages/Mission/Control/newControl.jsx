@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Select from 'react-select';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
-import { fetchEnterprise } from '../../../Redux/Actions/enterprise.actions';
+import { fetchEnterprise, getEnterpriseById } from '../../../Redux/Actions/enterprise.actions';
 import { createControl } from '../../../Redux/Actions/control.actions';
 import Print from './pv'
 
@@ -11,9 +11,9 @@ export const Newcontrol = () => {
   const dispatch = useDispatch()
   const theNavigate = useNavigate()
   const theLocation = useLocation();
-  const {enterprises} = useSelector(state => state.enterprise)
+  const {enterprises, enterprise} = useSelector(state => state.enterprise)
+  console.log("Check ent: ", enterprise)
   const [control, setcontrol] = useState({
-    // missionID: "",
     pratics: [
             {name: "Affichage des prix", status: "conforme", observation: ''},
             {name: "Etiquetage", status: "conforme", observation: ''},
@@ -23,9 +23,10 @@ export const Newcontrol = () => {
             {name: "Facture", status: "conforme", observation: ''}
         ],
   })
+  console.log("Check Control: ", control)
   const [selectedOption, setSelectedOption] = useState(null);
   const missionID = theLocation.state?.id
-  console.log("Mission id: ", missionID)
+
   useEffect( ()=> {
     setcontrol(prev => ({
       ...prev,
@@ -40,7 +41,7 @@ export const Newcontrol = () => {
     if(!control.executedAt?.executed) {
       const currentDate = new Date();
       const at = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
-      console.log(at)
+
       setcontrol(prev => ({
         ...prev,
         executedAt: {executed: true, at: at}
@@ -50,7 +51,12 @@ export const Newcontrol = () => {
   useEffect( ()=> {
     dispatch(fetchEnterprise())
   }, [dispatch])
-
+  useEffect(()=> {
+    if(control.entID) {
+      dispatch(getEnterpriseById(control.entID))
+    }
+  }, [dispatch, control.entID])
+  
   function isValide () {
     switch (step) {
       case 1:
@@ -66,7 +72,11 @@ export const Newcontrol = () => {
         }
         break;
       case 2:
-        if(!control.pratics.every(p => p.status !== '')) {
+        const hadConform = control.pratics.every(p => p.status !== 'conforme');
+        const hasNonConformWithObs = control.pratics.some (
+          p => (p.status === 'non-conforme' && p.observation === '')
+        )
+        if(hadConform) {
           setDispalyError(
             (<div className='absolute top-10 left-1/4 z-50 transition-all'>
               <p className='text-red-500 font-medium text-lg bg-red-200 px-4 py-3 rounded-[10px] '>Valider les pratique!</p>
@@ -76,6 +86,13 @@ export const Newcontrol = () => {
             setDispalyError(null)
           }, 2000)
           return false
+        }else if (hasNonConformWithObs) {
+            setDispalyError(
+              (<div className='absolute top-10 left-1/4 z-50 transition-all'>
+                <p className='text-red-500 font-medium text-lg bg-red-200 px-4 py-3 rounded-[10px] '>Saisie un Observation!</p>
+              </div>)
+            )
+            return false
         }
         break;
       
@@ -95,9 +112,7 @@ export const Newcontrol = () => {
         step + 1
       )
     }else {
-      console.log('control Created!!', control)
       dispatch(createControl(control));
-      console.log("After dispatch control: ", control)
       theNavigate('/dashboard/orderMissions/control/list', {state: {message: "Controle Créé avec succée!"}})
     }
 
@@ -142,14 +157,11 @@ export const Newcontrol = () => {
   };
   const handleValidation = () => {
     const isValid = control.pratics?.every(p => p.status === 'conforme')
-    console.log("isValid: ", isValid)
     setcontrol(prev => ({
       ...prev,
       validation: isValid === true ? 'Validé' : 'Non Validé'
     }));
-    console.log("check pratics: ", isValid)
   }
-  console.log("Check isvalid function: ", control.validation)
   useEffect(() => {
     handleValidation()
   }, [control.pratics])
@@ -182,10 +194,10 @@ export const Newcontrol = () => {
       <form onSubmit={next} action="" className='h-full flex flex-col justify-between'>
         <div className="steps w-full min-h-full flex items-stretch justify-center">
           <div className={`step ${step === 1 ? '' : 'hidden'} w-full`}>
-            <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Choisi un Entreprise</p>
+            <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Choisi une Entreprise</p>
             <div className='flex flex-col items-start justify-center flex-wrap'>
-                <label className="font-medium text-sm mb-1 gap-2">ICE *</label>
-                <div className="flex gap-2 grow basis-auto max-md:w-full">
+                <label className="font-medium text-sm mb-1 gap-2">Raison Social/ICE *</label>
+                <div className="flex gap-2 grow flex-wrap basis-auto max-md:w-full">
                   <Select 
                     classNames={{
                       control: (state) =>
@@ -204,12 +216,12 @@ export const Newcontrol = () => {
                     isSearchable
                     />
                 {  !control?.entID &&
-                  (<button type='button' onClick={handleAddEntreprise} className={`px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors `}>Ajouter</button>)
+                  (<button type='button' onClick={handleAddEntreprise} className={`px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors max-md:basis-full`}>Ajouter</button>)
                 }
                 </div>
                 { DispalyError && <p className={`basis-full text-red-500 text-sm`}>{DispalyError} </p>}
 
-                
+                {/* <Print sendData={handlePVData} addsg={enterprise[0].adresse_siege}/> */}
             </div>
           </div>
           <div className={`step ${step === 2 ? '' : 'hidden'} w-full mb-4`}>
@@ -317,7 +329,6 @@ export const Newcontrol = () => {
           <div className={`step ${step === 4 ? '' : 'hidden'} w-full mb-4`}>
             <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Validation</p>
             <div className='m-4'>
-              {console.log("validation: ", control)}
               {
                 control.validation === 'Validé'
                 ?  (
@@ -336,7 +347,7 @@ export const Newcontrol = () => {
                     <p className="text-lg text-gray-600 mt-2">L'entreprise ne répond pas à toutes les exigences.</p>
                     <div className='flex justify-between gap-4 mt-4'>
                       <button type='button' onClick={() => handleClick('vb')} className='basis-full bg-[#F9F9F9] relative border border-[#E4E4E4] rounded-[10px] hover:!border-blue hover:bg-bg-blue hover:text-blue transition-colors px-3 h-12 flex items-center' htmlFor='vb'>
-                        <p className='font-semibold'>Verbalisation</p>
+                        <p className='font-semibold'>Avertissments</p>
                       </button>
 
                       <button type='button' onClick={() => handleClick('pv')} className='basis-full bg-[#F9F9F9] relative border border-[#E4E4E4] rounded-[10px] hover:!border-blue hover:bg-bg-blue hover:text-blue transition-colors px-3 h-12 flex items-center' htmlFor='pv'>
@@ -362,9 +373,7 @@ export const Newcontrol = () => {
 
                     {
                       selectedOption === 'pv' && (
-                        <form action="" className='w-full p-2 mt-2 border rounded-md'>
-                          <Print sendData={handlePVData}/>
-                        </form>
+                          <Print sendData={handlePVData} addsg={enterprise[0].adresse_siege} pratics={control.pratics.filter(p => p.status === 'non-conforme')}/>
                       )
                     }
                   </div>

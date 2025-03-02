@@ -52,14 +52,18 @@ function Printablemission({ mission }) {
             <p>Heure départ: {` ${mission.depHour || mission.heure_de_depart || ""}`}</p>
             <p>Heure arrivée: {` ${mission.arrHour || mission.heure_arrive || ""}`}</p>
           </div>
-          <div className="mb-4 text-base">
+          { mission.s_matricule == mission.carPlate &&  
+          (<div className="mb-4 text-base">
             <p>M. {`${mission.nom ||mission.mission_nom} ${mission.prenom || mission.mission_prenom}`} est autorisé à utiliser :</p>
             <ul className="list-disc ml-6">
-              <li>la voiture de service n°: {`${mission.s_matricule || ""}`}</li>
-              <li>sa voiture personnelle n°: {`${mission.carPlate || ""}`}</li>
-              <li>Sera accompagné de: {`${mission.companion || 'xxxxxxx'}`}</li>
+              {
+                mission.s_matricule === ''
+                ? (<li>la voiture de service n°: {`${mission.s_matricule || ""}`}</li>)
+                : (<li>sa voiture personnelle n°: {`${mission.carPlate || ""}`}</li>)
+              }
+              { mission.companion && (<li>Sera accompagné de: {`${mission.companion || 'xxxxxxx'}`}</li>)}
             </ul>
-          </div>
+          </div>)}
     
           {/* Footer */}
           <div className="flex justify-between items-center mt-20">

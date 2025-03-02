@@ -25,11 +25,35 @@ export const getEnterpriseList = async (req, res) => {
     }
 }
 
-export const searchEnterprise = (req, res) => {
+export const getEnterpriseById = async (req, res) => {
+    const {id} = req.body
     try {
-        res.send('searching...')
+        const connect = await connectSQL();
+        const query = `
+            SELECT *
+            FROM defaultdb.entreprise
+            WHERE ICE = ?
+            ;
+        `;
+        const [result] = await connect.query(query, id)
+
+        if(result.length > 0) {
+            res.status(200).json({
+                success: true,
+                message: 'enterprise fetchd successfully!!',
+                enterprise: result
+            })
+        } else {
+            res.status(400).json({
+                success: false,
+                message: 'enterprise not found!!'
+            })
+        }
     } catch (error) {
-        
+        res.status(500).json({
+            success: false,
+            message: 'Server Error!!'
+        })
     }
 }
 
