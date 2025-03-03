@@ -25,12 +25,19 @@ export const fetchControls = async (req, res) =>{
 }
 export const createControl = async (req, res) => {
     const control = req.body
-    const convertDate = control.executedAt.at
+    
     console.log('Add Control: ', control)
     if(!control.entID) return res.status(400).json({
         success: false,
         message: 'Entreprise ID required!'
     })
+
+    const a_comment = control.pratics[0].observation || null;
+    const t_comment = control.pratics[1].observation || null;
+    const s_comment = control.pratics[2].observation || null;
+    const p_comment = control.pratics[3].observation || null;
+    const v_comment = control.pratics[4].observation || null;
+    const f_comment = control.finallObservation || null;
 
     try {
         const connect = await connectSQL()
@@ -57,12 +64,12 @@ export const createControl = async (req, res) => {
             control.pratics[2].status,
             control.pratics[3].status,
             control.pratics[4].status,
-            control.pratics[0].observation,
-            control.pratics[1].observation,
-            control.pratics[2].observation,
-            control.pratics[3].observation,
-            control.pratics[4].observation,
-            control.finallObservation,
+            a_comment,
+            t_comment,
+            s_comment,
+            p_comment,
+            v_comment,
+            f_comment,
             control.validation,
             control.missionID
         ]

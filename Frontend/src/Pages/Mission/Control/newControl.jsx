@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise, getEnterpriseById } from '../../../Redux/Actions/enterprise.actions';
 import { createControl } from '../../../Redux/Actions/control.actions';
 import Print from './pv'
+import PvPrint from './PvPrint'
 
 
 export const Newcontrol = () => {
@@ -15,12 +16,12 @@ export const Newcontrol = () => {
   console.log("Check ent: ", enterprise)
   const [control, setcontrol] = useState({
     pratics: [
-            {name: "Affichage des prix", status: "conforme", observation: ''},
-            {name: "Etiquetage", status: "conforme", observation: ''},
-            {name: "Publicite", status: "conforme", observation: ''},
-            {name: "Garantie", status: "conforme", observation: ''},
-            {name: "Solde", status: "conforme", observation: ''},
-            {name: "Facture", status: "conforme", observation: ''}
+            {name: "Affichage des prix", status: "conforme", observation: '' || null},
+            {name: "Etiquetage", status: "conforme", observation: '' || null},
+            {name: "Publicite", status: "conforme", observation: '' || null},
+            {name: "Garantie", status: "conforme", observation: '' || null},
+            {name: "Solde", status: "conforme", observation: '' || null},
+            {name: "Facture", status: "conforme", observation: '' || null}
         ],
   })
   console.log("Check Control: ", control)
@@ -373,7 +374,7 @@ export const Newcontrol = () => {
 
                     {
                       selectedOption === 'pv' && (
-                          <Print sendData={handlePVData} addsg={enterprise[0].adresse_siege} pratics={control.pratics.filter(p => p.status === 'non-conforme')}/>
+                          <PvPrint sendData={handlePVData} addsg={enterprise[0].adresse_siege} pratics={control.pratics.filter(p => p.status === 'non-conforme')}/>
                       )
                     }
                   </div>
@@ -385,7 +386,7 @@ export const Newcontrol = () => {
 
         <div className={`flex items-center ${step === 1 ? 'justify-end' : 'justify-between'} mb-2`}>
           <button onClick={prev} className={`${step === 1 ? 'hidden' : ''} px-3 py-2  bg-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`} disabled={step === 1 ? true : false}>Avant</button>
-          <button type='submit' onClick={next} className={`px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`} >{step === steps.length ? 'Validé': 'Suivant' } </button>
+          <button type='submit' onClick={next} className={`px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors`} >{step === steps.length ? 'Terminer': 'Suivant' } </button>
         </div>
       </form>
     </div>

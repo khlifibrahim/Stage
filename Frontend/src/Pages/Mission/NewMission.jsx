@@ -282,15 +282,6 @@ function NewMission() {
     }
   };
 
-  const handleIgnore = () => {
-    setCadreList([])
-    setAccompaniedList([])
-    setSearch("")
-    setAccompaniedSearch("")
-    setDestinationList([])
-    setObjectOptions([])
-    setHidePrint(false)
-  }
 
   const handlepopUp = () => {
     console.log(modalPopUpPrint)
@@ -391,7 +382,7 @@ function NewMission() {
 
         {/* Objet */}
         <div className="flex flex-col mb-4">
-          <label className="font-medium text-sm mb-1">Objet</label>
+          <label className="font-medium text-sm mb-1">Objet <span className="text-red-500">*</span></label>
           <select
             name="objectId"
             value={mission.objectId}
@@ -599,7 +590,7 @@ function NewMission() {
               <div className="w-[580px] my-4 pb-4 absolute flex items-center justify-between">
                 <button
                   type="button"
-                  onClick={handleIgnore}
+                  onClick={handlepopUp}
                   className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626] transition-colors "
                 >
                   Annuler

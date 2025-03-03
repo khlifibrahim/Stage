@@ -234,7 +234,7 @@ export const ListControl = ({ role, user}) => {
                               <div  className="table-base-row px-3 w-full bg-transparent border-none">
                                 <div className={`flex items-center just gap-2 px-2 py-1 w-fit border-none rounded-full ${control.validation === "Non Validé" ? "!bg-[rgba(255,156,156,0.44)]" : "!bg-[rgba(183,255,159,0.44)]"}`}>
                                   <span className={`w-3 h-3 rounded-full ${control.validation === "Non Validé" ? "!bg-[#DC2626]" : "bg-[#259800] "}`}></span>
-                                  <p className={`rounded bg-transparent border-none ${control.validation === "Non Validé" ? " text-[#DC2626]" : " text-[#259800]"}`}>{control.validation || 'Non Validé'}</p>
+                                  <p className={`rounded bg-transparent border-none ${control.validation === "Non Validé" ? " text-[#DC2626]" : " text-[#259800]"}`}>{control.validation || 'Non Confomre'}</p>
                                 </div>
                               </div>
                               
