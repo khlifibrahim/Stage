@@ -287,6 +287,10 @@ function NewMission() {
     console.log(modalPopUpPrint)
     setModalPopUpPrint(!modalPopUpPrint)
   };
+  const handleIgnore = () => {
+    navigate('/dashboard/orderMissions/listMissionOrders')
+    setHidePrint(false)
+  }
 
   return (
     <div className="p-6 max-md:p-0 max-md:px-3">

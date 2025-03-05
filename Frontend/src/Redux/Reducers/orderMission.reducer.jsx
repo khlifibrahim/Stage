@@ -49,7 +49,12 @@ function orderMissionReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: false,
-                orderMissions: action.payload
+                // orderMissions: action.payload
+                orderMissions: action.payload.sort((a, b) => {
+                    const dateA = new Date(a.departure_date);
+                    const dateB = new Date(b.departure_date);
+                    return dateB - dateA
+                })
             }
         case CREATE_ORDERMISSION_SUCCESS:
             return {

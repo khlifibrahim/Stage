@@ -50,7 +50,8 @@ export  const getOrderMission = async (req, res) => {
 
         if( role === 'CADRE') {
             const [missions] = await connect.query(queryForCadre, [userid])
-
+            console.log('Missions for Cadre: ', missions)
+            
             res.status(200).json({
                 success: true,
                 message: 'Missions fetched successfully',
@@ -58,6 +59,9 @@ export  const getOrderMission = async (req, res) => {
             })
         }else {
             const [missions] = await connect.query(queryForAll)
+            console.log('###################################\n###################################')
+            console.log('################# Missions for Director: ', missions)
+            console.log('###################################\n###################################')
 
             res.status(200).json({
                 success: true,

@@ -200,10 +200,10 @@ export const ListControl = ({ role, user}) => {
                   <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>{`${orderMission.duration_days} Jours`}</p>
                 </div>
                 <div className='table-base-header p-3 w-full bg-[#F9F9F9] max-md:hidden'>
-                  <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>{orderMission.status}</p>
+                  <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>{orderMission.closed === 0 ? (orderMission.status) : 'Cloturé'}</p>
                 </div>
                 <div className='table-base-header p-3 w-full bg-[#F9F9F9]  max-md:-order-2  max-md:w-min max-md:!basis-1/2 '>
-                  { orderMission.status !== 'Validé' &&
+                  { orderMission.closed === 0 &&
                   (<div className="flex items-center justify-end gap-4 bg-transparent border-none">
                     <button
                       onClick={() => theNavigation('/dashboard/orderMissions/control/add', {state: {id: orderMission.mission_id}})}

@@ -86,21 +86,19 @@ function ListMissions({role, user}) {
       return item.mission_id === missionId
     })
     
-    
     setMission(selectedMission)
     dispatch(updateOrderMission(missionId, selectedMission))
     setModalPopUpPrint(!modalPopUpPrint)
   };
 
   const handleMissionStatus = (id)=> {
-    const roleOfStatus = role === 'CADRE' ? "Validé" : "En Cours"
+    const roleOfStatus = role === 'CADRE' ? "En Cours" : "En Attente"
     
     if(role === 'CADRE') {
       navigate('/dashboard/orderMissions/control/add', { state: {id : id}})
     }else {
       dispatch(attributeOrderMission(id, roleOfStatus))
     }
-    // dispatch(attributeOrderMission(id, roleOfStatus))
   }
   const hendleEdit = (mission) => {
     navigate('/dashboard/orderMissions/addMissionOrders', 
@@ -200,10 +198,26 @@ function ListMissions({role, user}) {
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full "><p className="text-[#727272] rounded bg-transparent border-none ">{mission.Object_type || 'Wireframing and Prototyping'}</p></div>
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:col-span-1 "><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:col-span-1"><p className="text-[#727272] rounded bg-transparent border-none">{dateFormat(mission.departure_date) || 'August 1, 2024'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-md:-order-1">
-                <div className={`flex items-center just gap-2 px-3 py-1 w-fit border-none rounded-full ${mission.status === "En Attente" ? "!bg-[rgba(255,156,156,0.44)]" : mission.status === "En Cours" ? "!bg-[rgba(156,195,255,0.44)]" : "!bg-[rgba(183,255,159,0.44)]"}`}>
-                  <span className={`w-3 h-3 rounded-full ${mission.status === "En Attente" ? "!bg-[#DC2626]" : mission.status === "En Cours" ? "bg-[#3083FF] " : "bg-[#259800] "}`}></span>
-                  <p className={`rounded bg-transparent border-none ${mission.status === "En Attente" ? " text-[#DC2626]" : mission.status === "En Cours" ? " text-[#3083FF]" : " text-[#259800]"}`}>{mission.status || 'En Attente'}</p>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-md:-order-1"> { /* mission.status === "En Attente" ? "!bg-[rgba(255,156,156,0.44)]" : mission.status === "En Cours" ? "!bg-[rgba(183,255,159,0.44)]" :  "!bg-[rgba(131,131,131,0.44)]" */}
+                <div className={`flex items-center just gap-2 px-3 py-1 w-fit border-none rounded-full ${mission.closed === 1 ? '!bg-[rgba(131,131,131,0.44)]' :mission.status === "En Attente" ? "!bg-[rgba(255,156,156,0.44)]" : mission.status === "En Cours" ? "!bg-[rgba(183,255,159,0.44)]" :  "!bg-[rgba(131,131,131,0.44)]"}`}>
+                  <span className={`w-3 h-3 rounded-full 
+                  ${
+                    mission.closed === 1 
+                      ? "bg-[#727272]"
+                      : mission.status === "En Attente" 
+                        ? "!bg-[#DC2626]" 
+                        : mission.status === "En Cours" 
+                          ? "bg-[#259800]"
+                          : "bg-[#727272]" 
+                    }`}></span>
+                  <p className={`rounded bg-transparent border-none ${mission.closed === 1 
+                            ? "text-[#727272]" 
+                            : mission.status === "En Attente" 
+                              ? "text-[#DC2626]"
+                              : mission.status === "En Cours" 
+                                ? "text-[#259800]" 
+                                : "text-[#727272]" 
+            }`}>{mission.close === 1 ? 'Cloturé' : (mission.status || 'En Attente')}</p>
                 </div>
               </div>
               
@@ -221,13 +235,13 @@ function ListMissions({role, user}) {
                     {
                       role !== "CADRE" ? (
                         <div>
-                          <p onClick={() => handleMissionStatus(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Attribuer</p>
+                          { mission.close === 0 && <p onClick={() => handleMissionStatus(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Attribuer</p>}
                           <p onClick={() => hendleEdit(mission)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Modifier</p>
                           <p onClick={() => handleDelete(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626] cursor-pointer'>Supprimer</p>
                         </div>
                       )
                       : (
-                        <p onClick={() => handleMissionStatus(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Executer</p>
+                        mission.close === 0 && <p onClick={() => handleMissionStatus(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Executer</p>
                       )
                     }
                   </div>
