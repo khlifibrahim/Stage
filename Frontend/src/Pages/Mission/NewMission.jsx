@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from 'react-router-dom'
-import PrintableMission from '../../Components/Utilities/PrintableMission'
+import { useReactToPrint } from 'react-to-print';
+import Printablemission from '../../Components/Utilities/PrintableMission'
 import Instance from "../../Api/axios";
 import Select from 'react-select';
+import './NewMission.css';
 
 
 function NewMission() {
@@ -12,42 +14,36 @@ function NewMission() {
   const [editMode, setEditMode] = useState(false)
   const [search, setSearch] = useState("");
   const [cadreList, setCadreList] = useState([]);
-  console.log("cadre:" ,cadreList)
+  // console.log("cadre:" ,cadreList)
   const [selectedCadre, setSelectedCadre] = useState(null);
   const [serviceCars, setServiceCars] = useState([]);
 
   const [accompaniedSearch, setAccompaniedSearch] = useState("");
   const [accompaniedList, setAccompaniedList] = useState([]);
-  console.log("accom: ", accompaniedList)
+  // console.log("accom: ", accompaniedList)
 
   const [destinationList, setDestinationList] = useState([]);
   const [objectOptions, setObjectOptions] = useState([]);
   const [modalPopUpPrint, setModalPopUpPrint] = useState(false)
   const [selectCar, setSelectCar] = useState("service");
 
-  const [cadre, setCadre] = useState({
-    // id: "",
-    // nom: "",
-    // prenom: "",
-    // delegation: "",
-    // grade: "",
-    // carPlat: null
-  });
+  const [cadre, setCadre] = useState({});
 
   const [mission, setMission] = useState({
-    // missionId: null,
-    // cadreId: "",
-    // destinationId: "",
-    // destinationName: "",
-    // objectId: "",
-    // objectName: "",
-    // depDate: "",
-    // depHour: null,
-    // arrHour: null,
-    // durationDays: "",
-    // plateNumber: null,
-    // companion: ""
+    cadreId: "",
+    durationDays: "",
+    depDate: "",
+    destinationId: "",
+    objectId: ""
   });
+  const [missionToPrint, setMissionToPrint] = useState({
+      cadreId: "",
+      durationDays:"",
+      depDate: "",
+      destinationId: "",
+      objectId: "",
+  })
+  console.log("MissionToPrint: ", missionToPrint)
   const [hidePrint, setHidePrint] = useState(true)
 
   const today = new Date();
@@ -72,9 +68,7 @@ function NewMission() {
       try {
         const response = await Instance.get("/missions/getCadre");
         console.log("respo: ", response)
-        // const accompWithoutCadre = response.filter(selectedCadre => (
-
-        // ))
+        
         setAccompaniedList(response.data.cadres || []);
       } catch (error) {
         console.error(error);
@@ -123,7 +117,7 @@ function NewMission() {
         const response = await Instance.post("/missions/searchCadre", { name: search });
         setCadreList(response.data.cadres || []);
       } catch (error) {
-        console.log(error.response.data);
+        // console.log(error.response.data);
         setCadreList([]);
       }
     };
@@ -173,6 +167,24 @@ function NewMission() {
     }
   }, [location.state])
 
+  useEffect(()=> {
+    const timer = setTimeout(()=> {
+      const checkMissionToPrint = Object.keys(missionToPrint).length === 0
+      if (
+        mission.cadreId !== "" &&
+        mission.durationDays !== "" &&
+        mission.depDate !== "" &&
+        mission.destinationId !== "" &&
+        mission.objectId !== "" &&
+        !checkMissionToPrint
+      ) {
+        setHidePrint(prev => { return false })
+      }
+    }, 300)
+
+    return ()=> clearTimeout(timer)
+  }, [mission])
+
 
   // -- Handlers :
   // handling inputs values
@@ -189,54 +201,56 @@ function NewMission() {
       grade: selected.grade_name,
       carPlat: selected.p_matricule
     })
+    setMissionToPrint(prev => ({
+      ...prev,
+      id: selected.cadre_id,
+      nom: selected.nom,
+      prenom: selected.prenom,
+      delegation: selected.delegation,
+      grade: selected.grade_name,
+      carPlat: selected.p_matricule
+    }))
     setMission(prev => ({
       ...prev,
       cadreId: selected.cadre_id,
     }))
 
     if (selectCar === "service") {
-      console.log("Check the selected car: ", selectCar)
+      // console.log("Check the selected car: ", selectCar)
       setCadre(prev => ({
         ...prev,
         carPlat: null
       }))
     }
   };
-
-  const selectedDestination = destinationList.find(destination => { return destination.Id_des === mission.destinationId });
-  const destinationName = selectedDestination ? selectedDestination.Destination : "Aucune destination";
-  const selectedObject = objectOptions.find(object => { return object.Id_object === mission.objectId });
-  const objectName = selectedObject ? selectedObject.Object_type : "Aucun objet";
-
+  
+  const selectedDestination = destinationList.find(d => d.Id_des == mission.destinationId)?.Destination || '';
+  const selectedObject = objectOptions.find(o => o.Id_object == mission.objectId)?.Object_type || '';
   const handleMissionChange = (e) => {
-    const { name, value } = e.target
-
-
+    const { name, value } = e.target;
     setMission((prev) => ({
       ...prev,
       [name]: value,
-      destinationName: destinationName,
-      objectName: objectName,
+      destinationName: selectedDestination,
+      objectName: selectedObject,
+    }))
+    setMissionToPrint(prev => ({
+      ...prev,
+      [name]: value,
+      destinationName: selectedDestination,
+      objectName: selectedObject,
     }))
     if (selectCar === "personal") {
       setMission(prev => ({
         ...prev,
         plateNumber: null
       }))
+      setMissionToPrint(prev => ({
+        ...prev,
+        plateNumber: null
+      }))
     }
   };
-
-  useEffect(() => {
-    if (
-      mission.cadreId !== '' &&
-      mission.durationDays !== '' &&
-      mission.depDate !== '' &&
-      mission.destinationId !== '' &&
-      mission.objectId !== ''
-    ) {
-      setHidePrint(!hidePrint)
-    }
-  }, [mission])
 
   const handleAccomSelect = (nom) => {
     if(nom === `${cadre.nom} ${cadre.prenom}`) {
@@ -247,6 +261,10 @@ function NewMission() {
     }else {
       setMission(prev => ({
         ...prev, 
+        companion: nom.value
+      }))
+      setMissionToPrint(prev => ({
+        ...prev,
         companion: nom.value
       }))
     }
@@ -261,7 +279,7 @@ function NewMission() {
 
       if (editMode) {
         const result = await Instance.put(`/missions/updateOrderMission/${mission.missionId}`, mission)
-        console.log("-- Result of edit: ", result)
+        // console.log("-- Result of edit: ", result)
         if (result.status === 200) {
           navigate('/dashboard/orderMissions/listMissionOrders')
         } else {
@@ -269,7 +287,7 @@ function NewMission() {
         }
       } else {
         const result = await Instance.post('/missions/createOrderMission', mission)
-        console.log("-- Result of submit: ", result)
+        // console.log("-- Result of submit: ", result)
         if (result.status === 201) {
           navigate('/dashboard/orderMissions/listMissionOrders')
           setHidePrint(false)
@@ -277,20 +295,129 @@ function NewMission() {
       }
 
     } catch (error) {
-      console.log('error submite the mission', error.response?.data || error)
+      // console.log('error submite the mission', error.response?.data || error)
       throw error
     }
   };
 
 
   const handlepopUp = () => {
-    console.log(modalPopUpPrint)
+    // console.log(modalPopUpPrint)
     setModalPopUpPrint(!modalPopUpPrint)
   };
   const handleIgnore = () => {
     navigate('/dashboard/orderMissions/listMissionOrders')
     setHidePrint(false)
   }
+  const handlePrint = () => {
+    // Get the content to print
+    const printContent = document.querySelector('.printable-content');
+    
+    if (!printContent) {
+      console.error('Print content not found');
+      return;
+    }
+    
+    // Create a new window
+    const printWindow = window.open('', '_blank', 'height=600,width=800');
+    
+    // Write the HTML content to the new window
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Ordre de Mission</title>
+          <meta charset="utf-8">
+          <style>
+            @media print {
+              @page {
+                size: A4;
+                margin: 1cm;
+              }
+              
+              // body {
+              //   font-family: Arial, sans-serif;
+              //   margin: 0;
+              //   padding: 0;
+              // }
+              
+              .print-container {
+                width: 100%;
+                max-width: 21cm;
+                margin: 0 auto;
+                padding: 0;
+              }
+              .print-container .header .big-title{
+                text-align: center !important;
+              }
+              .print-container .header .big-title .delegation-ar{
+                font-weight: 700 !important;
+              }
+              .print-container .header .big-title .delegation{
+                font-size: 16px !important;
+              }
+              .print-container .order-mission-title{
+                margin:80px 0 !important;
+                }
+              .print-container .order-mission-title .order-mission-p {
+                font-size: 24px !important;
+                text-align: center !important;
+              }
+              .print-container .footer{
+                display: flex;
+                justify-content: space-between;
+                margin: 0 40px
+              }
+              
+              table {
+                width: 100%;
+                border-collapse: collapse;
+              }
+              
+              img {
+                max-width: 100%;
+              }
+            }
+            
+            /* Non-print styles */
+            body {
+              font-family: Arial, sans-serif;
+            }
+            
+            .print-container {
+              width: 100%;
+              max-width: 21cm;
+              margin: 0 auto;
+              padding: 1cm;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-container">
+            ${printContent.innerHTML}
+          </div>
+        </body>
+      </html>
+    `);
+    
+    // Close the document for writing
+    printWindow.document.close();
+    
+    // Wait for content to load before printing
+    printWindow.onload = function() {
+      printWindow.focus();
+      
+      // Add a small delay to ensure styles are applied
+      setTimeout(() => {
+        printWindow.print();
+        
+        // Close the window after printing (or when print dialog is closed)
+        printWindow.onafterprint = function() {
+          printWindow.close();
+        };
+      }, 500);
+    };
+  };
 
   return (
     <div className="p-6 max-md:p-0 max-md:px-3">
@@ -552,11 +679,11 @@ function NewMission() {
               />
           </div>
         </div>
-              {console.log('Mission :', mission)}
+              {/* {console.log('Mission :', mission)} */}
 
 
         {/* Groupe: Boutons */}
-        <div className="flex justify-between mt-6">
+        <div className="flex justify-between mt-6 max-md:flex-wrap max-md:gap-4">
           <button
             type="button"
             onClick={handleIgnore}
@@ -564,7 +691,7 @@ function NewMission() {
           >
             Annuler
           </button>
-          <div className="flex justify-end gap-4">
+          <div className="flex justify-end gap-4 max-md:basis-full">
             <button
               type="button"
               onClick={handlepopUp}
@@ -585,24 +712,26 @@ function NewMission() {
 
       {modalPopUpPrint &&
         (
-          <div className="fixed top-0 left-0 z-50 flex flex-col items-center justify-center  h-screen w-screen overflow-hidden bg-gray-600/55">
-            <div className="relative w-fit bg-white m-12 p-8 rounded-[12px] shadow-md overflow-y-auto no-scrollbar">
-              <span onClick={handlepopUp} className='absolute left-4 top-4 z-50 p-2 rounded-[10px] bg-bg-blue'>
+          <div className="fixed top-0 left-0 z-50 flex flex-col items-center justify-center  h-screen w-screen overflow-hidden bg-gray-600/55 max-md:w-full max-md:overflow-x-hidden print-hide">
+            <div className="relative w-fit bg-white m-12 p-8 rounded-[12px] shadow-md overflow-y-auto no-scrollbar max-md:!m-0 max-md:p-4 max-md:rounded-none">
+              <span onClick={handlepopUp} className='absolute left-4 top-4 z-50 p-2 rounded-[10px] bg-bg-blue print-hide'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-white hover:stroke-blue cursor-pointer icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
               </span>
-              <PrintableMission id="print-area" cadre={cadre} mission={mission} close={modalPopUpPrint} />
-              <div className="w-[580px] my-4 pb-4 absolute flex items-center justify-between">
+              <div className="printable-content">
+                <Printablemission mission={missionToPrint} close={modalPopUpPrint} />
+              </div>
+              <div className="w-[580px] my-4 pb-4 absolute flex items-center justify-between max-md:!w-full max-md:justify-around print-hide">
                 <button
                   type="button"
-                  onClick={handlepopUp}
-                  className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626] transition-colors "
+                  onClick={() => handlepopUp(false)}
+                  className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626] transition-colors print-button"
                 >
                   Annuler
                 </button>
                 <button
                   type="button"
-                  onClick={hidePrint}
-                  className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors "
+                  onClick={handlePrint}
+                  className="px-3 py-2 bg-[#E4E4E4] border-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors print-button"
                 >
                   Imprimer
                 </button>
@@ -611,6 +740,7 @@ function NewMission() {
           </div>
         )
       }
+
     </div>
 
   );

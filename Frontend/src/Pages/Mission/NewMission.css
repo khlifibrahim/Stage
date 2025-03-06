@@ -1,0 +1,109 @@
+/* Preview styles */
+.printable-content {
+  width: 100%;
+  /* max-width: 580px; */
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  /* border: 1px solid #e5e7eb; */
+}
+.printable-content button {
+  background-color: rgba(70, 134, 229, 1) !important;
+}
+
+/* Print styles - improved to maintain component design */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .printable-content,
+  .printable-content * {
+    visibility: visible !important;
+  }
+
+  .printable-content {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    
+    font-family: inherit !important;
+    font-size: inherit !important;
+    color: inherit !important;
+    background-color: white !important;
+  }
+  
+  /* Preserve table styling */
+  .printable-content table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+  
+  .printable-content td, 
+  .printable-content th {
+    padding: inherit !important;
+    border: inherit !important;
+  }
+  
+  /* Preserve image styling */
+  .printable-content img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .printable-content .header .big-title{
+    text-align: center !important;
+  }
+  .printable-content .header .big-title .delegation-ar{
+    font-weight: 700 !important;
+  }
+  .printable-content .header .big-title .delegation{
+    font-size: 16px !important;
+  }
+  .printable-content .header .big-title .order-mission-title{
+    margin:80px 0 !important;
+    }
+  .printable-content .header .big-title .order-mission-title .order-mission-p {
+    font-size: 24px !important;
+    text-align: center !important;
+  }
+  
+  /* Hide buttons during print */
+  .print-button, 
+  .print-hide {
+    display: none !important;
+  }
+  
+  /* Preserve layout and spacing */
+  .printable-content div,
+  .printable-content p,
+  .printable-content h1,
+  .printable-content h2,
+  .printable-content h3,
+  .printable-content h4,
+  .printable-content h5,
+  .printable-content h6 {
+    margin: inherit !important;
+    padding: inherit !important;
+    page-break-inside: avoid !important;
+  }
+  
+  /* Set page properties */
+  @page {
+    size: A4;
+    margin: 1cm;
+  }
+}
+
+/* Modal styles */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
