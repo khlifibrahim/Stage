@@ -3,12 +3,12 @@ import Select from 'react-select';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise, getEnterpriseById } from '../../../Redux/Actions/enterprise.actions';
-import { createControl } from '../../../Redux/Actions/control.actions';
+import { createControl } from '../../../Redux/Actions/control31.actions';
 import Print from './pv'
 import PvPrint from './PvPrint'
 
 
-export const Newcontrol = () => {
+export const NewControl31 = () => {
   const dispatch = useDispatch()
   const theNavigate = useNavigate()
   const theLocation = useLocation();
@@ -185,7 +185,7 @@ export const Newcontrol = () => {
   }
 
   return (
-    <div className="px-6 fleex flex-col ">
+    <div className="px-6 flex flex-col ">
       
       {/* Header */}
       <div className="mb-6">
@@ -394,10 +394,4 @@ export const Newcontrol = () => {
 }
 
 
-export default Newcontrol
-
-
-// PV: 
-// ADRESS SIEGE ل التجاري الكائن مقره 
-// يستغل في بيع  type commerce
-//  وأسسها القانونية، عاينا ما يلي: les pratcs 
+export default NewControl31

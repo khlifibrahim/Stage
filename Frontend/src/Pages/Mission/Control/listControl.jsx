@@ -3,15 +3,20 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useOnClickOutside } from '../../../Hooks/useOnClickOutside'
-import { fetchControls } from '../../../Redux/Actions/control.actions'
+import { fetchControls31 } from '../../../Redux/Actions/control31.actions'
+import { fetchControls24 } from '../../../Redux/Actions/control24.actions'
 import { fetchOrderMissions } from '../../../Redux/Actions/orderMission.actions'
 
 export const ListControl = ({ role, user}) => {
   const dispatch = useDispatch()
   const theNavigation = useNavigate()
   const theLocation = useLocation()
-  const { controls, loading, error} = useSelector(state => state.control)
-  const { orderMissions } = useSelector(state => state.orderMission)
+  const { controls_31, loading: loading31, error: error31} = useSelector(state => state.control31)
+  const { controls_24, loading: loading24, error: error24 } = useSelector(state => state.control24)
+  const { orderMissions, loading } = useSelector(state => state.orderMission)
+
+  const [controls, setControls] = useState([])
+  
 
   const initialMessage = theLocation.state?.message || ""
   const [message, setMessage] = useState(initialMessage)
@@ -27,10 +32,15 @@ export const ListControl = ({ role, user}) => {
   }, [])
 
   useEffect(() => {
-    dispatch(fetchControls())
+    dispatch(fetchControls31())
+    dispatch(fetchControls24())
     dispatch(fetchOrderMissions(role, user.id_utilisateur))
   }, [dispatch])
-
+  useEffect(() => {
+    const allControls = [...controls_31, ...controls_24]
+    setControls(allControls)
+  }, [])
+  
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
   const totalPage = (Math.ceil(orderMissions.length / itemsPerPage));
@@ -98,13 +108,13 @@ export const ListControl = ({ role, user}) => {
   }
 
   // const filterControlByMissions = ()=> {
-    const byControl = orderMissions.map(o => (
-      controls.filter(c => {
-        if (o.mission_id === c.mission_id) {
-          console.log(c)
-        }
-      })
-    ))
+    // const byControl = orderMissions.map(o => (
+    //   controls.filter(c => {
+    //     if (o.mission_id === c.mission_id) {
+    //       console.log(c)
+    //     }
+    //   })
+    // ))
 
     function dateFormat(dateValue) {
       if(!dateValue) return 'N/A';
@@ -173,6 +183,11 @@ export const ListControl = ({ role, user}) => {
               }
           </div>
         </div>)}
+          <div className="loi basis-full flex justify-between items-center gap-5">
+            <div className='w-full text-center py-2 bg-bg-blue rounded-[10px] font-medium text-blue cursor-pointer'>La loi 31.08</div>
+            <div className='w-full text-center py-2 bg-bg-blue rounded-[10px] font-medium text-blue cursor-pointer'>La loi 24.09</div>
+          </div>
+
       </div>
 
       {
@@ -206,7 +221,7 @@ export const ListControl = ({ role, user}) => {
                   { orderMission.closed === 0 &&
                   (<div className="flex items-center justify-end gap-4 bg-transparent border-none">
                     <button
-                      onClick={() => theNavigation('/dashboard/orderMissions/control/add', {state: {id: orderMission.mission_id}})}
+                      onClick={() => theNavigation('/dashboard/orderMissions/control/add/31-08', {state: {id: orderMission.mission_id}})}
                       className=" flex gap-2 px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors"
                     >
                       <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /><path d="M15 12h-6" /><path d="M12 9v6" /></svg>

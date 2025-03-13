@@ -11,7 +11,8 @@ import Statistic from '../Pages/Statisctic/Statisctic'
 import ListMissions from '../Pages/Mission/ListMissions'
 import NewMission from '../Pages/Mission/NewMission'
 import ListControl from '../Pages/Mission/Control/listControl'
-import NewControl from '../Pages/Mission/Control/newControl'
+import NewControl31 from '../Pages/Mission/Control/Control-31-08'
+import NewControl24 from '../Pages/Mission/Control/Control-24-09'
 import ListEnterprise from '../Pages/Enterprise/ListEnterprise'
 import AddEnterprise from '../Pages/Enterprise/AddEnterprise'
 import Unauthorized from '../Pages/unauthorized/unauthorized'
@@ -41,7 +42,10 @@ function AppRoutes() {
 
             <Route path="control">
               <Route path="list" element={<ListControl role={role} user={user} />} />
-              <Route path="add" element={<NewControl />} />
+              <Route path='add'>
+                <Route path="31-08" element={<NewControl31 />} />
+                <Route path='24-09' element={<NewControl24 />} />
+              </Route>
             </Route>
           </Route>
           

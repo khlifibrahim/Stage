@@ -10,6 +10,8 @@ import userRoutes from './routes/user.route.js';
 import mission from './routes/orderMission.route.js';
 import enterprise from './routes/enterprise.route.js';
 import control from './routes/control.route.js';
+import control24 from './routes/control.route.js';
+import products from './routes/products.route.js'
 
 
 dotenv.config();
@@ -26,6 +28,8 @@ app.use('/api/user', userRoutes)
 app.use('/api/missions', mission)
 app.use('/api/enterprise', enterprise)
 app.use('/api/control', control)
+app.use('/api/control/24', control24)
+app.use('/api/products', products)
 
 
 app.get("/", (req, res) => {

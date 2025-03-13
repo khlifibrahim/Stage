@@ -14,13 +14,11 @@ function NewMission() {
   const [editMode, setEditMode] = useState(false)
   const [search, setSearch] = useState("");
   const [cadreList, setCadreList] = useState([]);
-  // console.log("cadre:" ,cadreList)
   const [selectedCadre, setSelectedCadre] = useState(null);
   const [serviceCars, setServiceCars] = useState([]);
 
   const [accompaniedSearch, setAccompaniedSearch] = useState("");
   const [accompaniedList, setAccompaniedList] = useState([]);
-  // console.log("accom: ", accompaniedList)
 
   const [destinationList, setDestinationList] = useState([]);
   const [objectOptions, setObjectOptions] = useState([]);
@@ -268,7 +266,6 @@ function NewMission() {
         companion: nom.value
       }))
     }
-    
   }
 
 
@@ -310,18 +307,13 @@ function NewMission() {
     setHidePrint(false)
   }
   const handlePrint = () => {
-    // Get the content to print
     const printContent = document.querySelector('.printable-content');
     
     if (!printContent) {
       console.error('Print content not found');
       return;
     }
-    
-    // Create a new window
     const printWindow = window.open('', '_blank', 'height=600,width=800');
-    
-    // Write the HTML content to the new window
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
@@ -399,19 +391,11 @@ function NewMission() {
         </body>
       </html>
     `);
-    
-    // Close the document for writing
     printWindow.document.close();
-    
-    // Wait for content to load before printing
     printWindow.onload = function() {
       printWindow.focus();
-      
-      // Add a small delay to ensure styles are applied
       setTimeout(() => {
         printWindow.print();
-        
-        // Close the window after printing (or when print dialog is closed)
         printWindow.onafterprint = function() {
           printWindow.close();
         };
@@ -421,7 +405,6 @@ function NewMission() {
 
   return (
     <div className="p-6 max-md:p-0 max-md:px-3">
-      {/* Header */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-800">{editMode ? "Modifier l'Ordre de Mission" : "Créer Ordre Mission"}</h1>
       </div>
@@ -529,7 +512,25 @@ function NewMission() {
             ))}
           </select>
         </div>
-
+        
+        {mission.objectId === 4 &&
+        (<div className="flex flex-col mb-4">
+          <label className="font-medium text-sm mb-1">Control Type<span className="text-red-500">*</span></label>
+          <select
+            name="objectId"
+            value={mission.objectId}
+            onChange={handleMissionChange}
+            className="border rounded-lg px-4 py-2 focus:outline-blue"
+            required
+          >
+            <option value="" disabled>Sélectionnez un type d'objet...</option>
+            {objectTypeOptions.map(type => (
+              <option key={type.Id_object} value={type.Id_object || ""}>
+                {type.Object_type || "Aucun objet"}
+              </option>
+            ))}
+          </select>
+        </div>)}
 
         {/* Groupe: Date et Heure */}
         <div className="flex gap-6 mb-4 max-md:flex-col">

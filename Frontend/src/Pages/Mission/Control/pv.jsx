@@ -115,6 +115,18 @@ const Print = ({ sendData, ...rest }) => {
                     </table>
                 </div>
 
+                <div>
+                    <div className="cadres">
+                        <p>انتقلنا نحن الموقعين أسفله</p>
+                        <p>{}</p>
+                        <p>{}</p>
+                    </div>
+                <div>
+                    <p>المحلفين والمنتدبين للقيام بأعمال البحث عن المخالفات وإثباتها طبقا لأحكام المادة 166 من القانون رقم 31.08 القاضي بتحديد تدابير لحماية المستهلك والمرسوم رقم 2.12.503 الصادر في 4 ذي القعدة 1434 (11 سبتمبر 2013) بتطبيق بعض أحكام القانون رقم 31.08 لاسيما المادة 4 منه.
+                    والعاملين تحت إشراف مندوب وزارة الصناعة والتجارة بوجدة والمفوضين من قبله لمعاينة المخالفات لأحكام هذا القانون ونصوصه التطبيقية وإثباتها.
+                    </p>
+                </div>
+                </div>
                 <div className="inspection-details">
                     <p>في يوم <input type="date" name="day" value={formData.day} onChange={handleInputChange} /> على الساعة <input type="time" name="hour" value={formData.hour} onChange={handleInputChange} /></p>
                     <p>إلى المحل التجاري الكائن مقره <input className="px-3 outline-none focus:border focus:border-blue rounded-[10px] w-[50%]" placeholder="........................" type="text" name="place" value={formData.place} onChange={handleInputChange} /></p>

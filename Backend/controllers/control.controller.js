@@ -10,11 +10,16 @@ export const fetchControls = async (req, res) =>{
                         INNER JOIN entreprise e ON ec.ICE = e.ICE;`;
 
         const [result] = await connect.query(query);
-        console.log('Controls list: ', result)
+        const controlsList = result.map(control => ({
+            ...control, 
+            loi: 'Loi 31'
+        }));
+
+        console.log('Controls list: ', controlsList)
         res.status(200).json({
             success: true,
             message: "All controls fetched successfully",
-            controls: result
+            controls: controlsList
         })
     } catch (error) {
         res.status(500).json({
@@ -85,16 +90,14 @@ export const createControl = async (req, res) => {
                     message: 'Control created successfully!'
                 })
             }else {
-                if(result.affectedRows === 1 ) {
-                    res.status(400).json({
-                        success: false,
-                        message: 'Error while linking control with entreprise!'
-                    })
-                }
+                res.status(400).json({
+                    success: false,
+                    message: 'Error while linking control with entreprise!'
+                })
             }
         }else {
-            res.status(400).json({
-                success: flase,
+            res.status(500).json({
+                success: false,
                 message: 'Error while creating control!'
             })
 
