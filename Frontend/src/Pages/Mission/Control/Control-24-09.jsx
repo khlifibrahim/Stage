@@ -22,10 +22,12 @@ function NewControl24() {
   const [stepValid, setStepVaid] = useState()
 
   const missionID = theLocation.state?.id
+  const cadreid = theLocation.state?.cadreId
   
   useEffect( ()=> {
     setControl(prev => ({
       ...prev,
+      cadreId: cadreid,
       missionID: missionID
     }))
   }, [theLocation.state])
@@ -88,11 +90,6 @@ function NewControl24() {
     setSelectedProduct(selected);
   }
 
-console.log('famillies[control.familleProductId] ',famillies[control.productId])
-console.log('Selected prod : ', selectedProduct)
-console.log('The Control State: ', control)
-console.log('Famillies: ', famillies)
-
 const handleControl = (field, value) => {
   setControl(prev => {
     const newState = {
@@ -111,6 +108,14 @@ const handleControl = (field, value) => {
     return newState
   });
 };
+
+const handleStatus = (status) => {
+  setControl(prev => ({
+    ...prev,
+    status: status
+  }))
+}
+
 
 // console.log('Check step is valid: ', stepValid)
 
@@ -158,8 +163,8 @@ const handleControl = (field, value) => {
         )
       if(stepValid) {return setStep(steps.length)}
       }else {
-        // dispatch(createControl(control));
-        // theNavigate('/dashboard/orderMissions/control/list', {state: {message: "Controle Créé avec succée!"}})
+        dispatch(createControl24(control));
+        theNavigate('/dashboard/orderMissions/control/list', {state: {message: "Controle Créé avec succée!"}})
         console.log('Produit Crée Avec Succée')
         console.log(control)
       }
@@ -181,7 +186,7 @@ const handleControl = (field, value) => {
   }
 
   const handleNewProduct = () => {
-    dispatch(createControl(control));
+    dispatch(createControl24(control));
     setStep(2)
   }
 
@@ -403,20 +408,20 @@ const handleControl = (field, value) => {
         <div className={`step ${step === 6 ? '' : 'hidden'} w-full max-md:text-sm`}>
           <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Validation</p>
           {
-            control.controlDoc  && control.controlPh 
-            ? (<div className='flex flex-col items-start my-4'>
-              <div className="mb-4 text-green-500 flex gap-2 justify-center items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2 max-md:!text-base">Contrôle Validé avec Succès</h3>
-              </div>
-              <p className="text-gray-600 max-w-md">
-                Le produit <b>{control?.productname || ''}</b> de l'entreprise <b>{Enterprise?.raison_sociale || ''} </b> 
-                a passé avec succès l'ensemble des contrôles requis et est conforme aux réglementations en vigueur.
-              </p>
-            </div>)
-            : (<div className='flex flex-col items-start my-4'>
+            control.controlDoc || control.controlPh 
+            ? (<div onChange={()=> handleStatus('Validé')} className='flex flex-col items-start my-4'>
+                <div className="mb-4 text-green-500 flex gap-2 justify-center items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-2 max-md:!text-base">Contrôle Validé avec Succès</h3>
+                </div>
+                <p className="text-gray-600 max-w-md">
+                  Le produit <b>{control?.productname || ''}</b> de l'entreprise <b>{Enterprise?.raison_sociale || ''} </b> 
+                  a passé avec succès l'ensemble des contrôles requis et est conforme aux réglementations en vigueur.
+                </p>
+              </div>)
+            : (<div onChange={()=> handleStatus('Non Validé')} className='flex flex-col items-start my-4'>
               <div className="mb-4 text-green-500 flex gap-2 justify-center items-center">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="stroke-red-400 icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
                 <h3 className="text-2xl font-bold text-gray-800 mb-2 ax-md:!text-sm">Contrôle N'est pas Validé</h3>
@@ -425,6 +430,16 @@ const handleControl = (field, value) => {
                 Le produit de L'entreprise <b>{Enterprise?.raison_sociale || ''} </b> 
                 n'est pas passé avec l'ensemble des contrôles requis.
               </p>
+              <div className='w-full'>
+                <p className='mt-2 text-lg font-semibold'>Observation</p>
+                <textarea 
+                  value={control.observation}  
+                  onChange={(e) => handleControl('observation', e.target.value)} 
+                  name="" 
+                  id=""
+                  className='p-2 row-span-full col-span-10 w-full focus:outline-blue rounded-[10px] border-2 border-gray-300'
+                ></textarea>
+              </div>
             </div>)
           }
         </div>
@@ -432,7 +447,7 @@ const handleControl = (field, value) => {
       <div className={`flex flex-wrap gap-4 items-center ${step === 1 ? 'justify-end' : 'justify-between'} my-4  max-md:justify-between`}>
       {
             step === steps.length && 
-            (<button type='submit' onClick={handleNewProduct} className={`px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors max-md:basis-full`} >Ajouter un Produit</button>)
+            (<button type='submit' onClick={handleNewProduct} className={`px-3 py-2  bg-[#E4E4E4]  font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors hidden max-md:block max-md:basis-full`} >Ajouter un Produit</button>)
           }
         
         <button onClick={prev} className={`${step === 1 ? 'hidden' : ''} px-3 py-2  bg-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue  transition-colors `} disabled={step === 1 ? true : false}>Avant</button>

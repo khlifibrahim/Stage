@@ -91,15 +91,47 @@ function ListMissions({role, user}) {
     setModalPopUpPrint(!modalPopUpPrint)
   };
 
-  const handleMissionStatus = (id)=> {
-    const roleOfStatus = role === 'CADRE' ? "En Cours" : "En Attente"
+  const handleControlNavigation = (controlType, navigate) => {
+    switch (controlType) {
+      case "Verification":
+        navigate("/dashboard", { state: {id : id }});
+        break;
+      case "Reunion":
+        navigate("/dashboard", { state: {id : id }});
+        break;
+      case "Controle_Loi_3108":
+        navigate("/dashboard/orderMissions/control/add/31-08", { state: {id : id }});
+        break;
+      case "Controle_Loi_2409_Importation":
+        navigate("/dashboard", { state: {id : id }});
+        break;
+      case "Controle_Loi_2409_Local":
+        navigate("/dashboard/orderMissions/control/add/24-09", { state: {id : id }});
+        break;
+      case "Visite":
+        navigate("/dashboard", { state: {id : id }});
+        break;
+      case "Commission mixte":
+        navigate("/dashboard", { state: {id : id }});
+        break;
+      default:
+        console.warn("Unknown control type:", controlType);
+        break;
+    }
+  };
+
+  const handleMissionStatus = async (id, to)=> {
+    const roleOfStatus = role === 'CADRE' ? "En Attente" : "En Cours"
     
     if(role === 'CADRE') {
-      navigate('/dashboard/orderMissions/control/add', { state: {id : id}})
+      // navigate('/dashboard/orderMissions/control/add', { state: {id : id}})
+      handleControlNavigation(id, to)
     }else {
-      dispatch(attributeOrderMission(id, roleOfStatus))
+      await dispatch(attributeOrderMission(id, roleOfStatus))
+      await dispatch(fetchOrderMissions(role, user.id_utilisateur))
     }
   }
+
   const hendleEdit = (mission) => {
     navigate('/dashboard/orderMissions/addMissionOrders', 
       { state : { 
@@ -108,12 +140,11 @@ function ListMissions({role, user}) {
       }})
   }
 
-  const handleDelete = (id)=> {
-    dispatch(deleteOrderMission(id))
-    dispatch(fetchOrderMissions(role, user.id_utilisateur))
+  const handleDelete = async (id)=> {
+    await dispatch(deleteOrderMission(id));
+    await dispatch(fetchOrderMissions(role, user.id_utilisateur))
   }
 
-  
   function dateFormat(dateValue) {
     if(!dateValue) return 'N/A';
     const date = new Date(dateValue);
@@ -235,13 +266,13 @@ function ListMissions({role, user}) {
                     {
                       role !== "CADRE" ? (
                         <div>
-                          { mission.close === 0 && <p onClick={() => handleMissionStatus(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Attribuer</p>}
+                          { mission.closed === 0 && <p onClick={() => handleMissionStatus(mission.mission_id, mission.Object_type)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Attribuer</p>}
                           <p onClick={() => hendleEdit(mission)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Modifier</p>
                           <p onClick={() => handleDelete(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-[rgba(255,156,156,0.44)] hover:text-[#DC2626] cursor-pointer'>Supprimer</p>
                         </div>
                       )
                       : (
-                        mission.close === 0 && <p onClick={() => handleMissionStatus(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Executer</p>
+                        mission.closed === 0 && <p onClick={() => handleMissionStatus(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Executer</p>
                       )
                     }
                   </div>

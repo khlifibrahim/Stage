@@ -4,8 +4,10 @@ import {
         createOrderMission, 
         updateOrderMission, 
         updateOrderMissionStatus,
+        getOrderMissionById,
         deleteOrderMission,
         getCadre,
+        getCadreById,
         searchCadre,
         getServiceCars,
         getObjectOptions,
@@ -15,10 +17,12 @@ import {
 const router = express.Router();
 
 router.post('/getOrderMission', getOrderMission)
+router.get('/getOrderMissionById/:id', getOrderMissionById)
 router.get('/getServiceCars', getServiceCars)
 router.get('/getObjectOptions', getObjectOptions)
 router.get('/getDestinations', getDestinations)
 router.get('/getCadre', getCadre)
+router.get('/getCadre/:id', getCadreById)
 router.post('/searchCadre', searchCadre)
 router.post('/createOrderMission', createOrderMission)
 router.put('/updateOrderMission/:id', updateOrderMission)

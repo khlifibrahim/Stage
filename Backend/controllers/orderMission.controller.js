@@ -78,6 +78,31 @@ export  const getOrderMission = async (req, res) => {
     }
 }
 
+export const getOrderMissionById = async (req, res) => {
+    const { id } = req.params
+    
+    try {
+        const connect = await connectSQL();
+        const query = `SELECT * FROM defaultdb.mission WHERE mission_id = ?`;
+        
+        const [missions] = await connect.query(query, [id])
+        
+        res.status(200).json({
+            success: true,
+            message: 'Missions fetched successfully',
+            missions: missions[0]
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching missions data',
+            error: error.message
+        })
+    }
+
+}
+
 export const getServiceCars = async (req, res) => {
     try {
         const connect = await connectSQL();
@@ -150,6 +175,33 @@ export const getCadre = async (req, res) => {
         })
     }
 }
+
+export const getCadreById = async (req, res) => {
+    const { id } = req.params
+    try {
+        const connect = await connectSQL();
+
+        
+        const [cadres] = await connect.query(`SELECT c.*, u.* 
+                                                FROM cadre c
+                                                JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
+                                                WHERE c.cadre_id = ?;`, [id])
+        console.log(cadres)
+        
+        return res.status(200).json({
+                success: true,
+                message: 'Cadres fetched successfully',
+                cadres: cadres
+            })
+    } catch (error) {
+        console.log('Error fetching cadres: ', error);
+        return res.status(500).json({
+            success: false,
+            message: 'No cadre found!!'
+        })
+    }
+}
+
 export const searchCadre = async (req, res) => {
     try {
         const connect = await connectSQL();

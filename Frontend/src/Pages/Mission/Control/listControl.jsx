@@ -16,7 +16,9 @@ export const ListControl = ({ role, user}) => {
   const { orderMissions, loading } = useSelector(state => state.orderMission)
 
   const [controls, setControls] = useState([])
-  
+  console.log('List Control: ', controls)
+  console.log('Control 31: ', controls_31)
+  console.log('Control 24: ', controls_24)
 
   const initialMessage = theLocation.state?.message || ""
   const [message, setMessage] = useState(initialMessage)
@@ -39,7 +41,7 @@ export const ListControl = ({ role, user}) => {
   useEffect(() => {
     const allControls = [...controls_31, ...controls_24]
     setControls(allControls)
-  }, [])
+  }, [controls_31, controls_24])
   
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 4
@@ -126,7 +128,34 @@ export const ListControl = ({ role, user}) => {
       })
     };
 
-    console.log('List Control: ', controls)
+    const handleControlNavigation = (controlType, id) => {
+      switch (controlType) {
+        case "Verification":
+          theNavigation("/dashboard", { state: {id : id }});
+          break;
+        case "Reunion":
+          theNavigation("/dashboard", { state: {id : id }});
+          break;
+        case "Controle_Loi_3108":
+          theNavigation("/dashboard/orderMissions/control/add/31-08", { state: {id : id }});
+          break;
+        case "Controle_Loi_2409_Importation":
+          theNavigation("/dashboard", { state: {id : id }});
+          break;
+        case "Controle_Loi_2409_Local":
+          theNavigation("/dashboard/orderMissions/control/add/24-09", { state: {id : id }});
+          break;
+        case "Visite":
+          theNavigation("/dashboard", { state: {id : id }});
+          break;
+        case "Commission mixte":
+          theNavigation("/dashboard", { state: {id : id }});
+          break;
+        default:
+          console.warn("Unknown control type:", controlType);
+          break;
+      }
+    };
   return (
     <div className='text-left'>
       <h1> 
@@ -221,7 +250,7 @@ export const ListControl = ({ role, user}) => {
                   { orderMission.closed === 0 &&
                   (<div className="flex items-center justify-end gap-4 bg-transparent border-none">
                     <button
-                      onClick={() => theNavigation('/dashboard/orderMissions/control/add/31-08', {state: {id: orderMission.mission_id}})}
+                      onClick={() => handleControlNavigation(orderMission.Object_type, orderMission.mission_id)}
                       className=" flex gap-2 px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors"
                     >
                       <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2"  strokeLinecap="round"  strokeLinejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /><path d="M15 12h-6" /><path d="M12 9v6" /></svg>
@@ -238,7 +267,7 @@ export const ListControl = ({ role, user}) => {
                     <div  className="w-20 min-h-full bg-transparent border-none flex items-stretch justify-end basis-10"><div className='border-l-[2px] w-[1px] h-[90.9%] py-6 flex justify-center items-center border-[#E4E4E4] rounded-sm'></div></div>
                     <div className="table">
                       {controls.length > 0 
-                      && controls .filter((control, i) => orderMission.mission_id === control.mission_id)
+                      && controls.filter((control, i) => orderMission.mission_id === control.mission_id)
                         .map ((control, i) => (
                             <div key={i} className='flex justify-between items-center max-md:flex-wrap'>
                             <span className='w-8 h-[2px] bg-[#E4E4E4]'></span>

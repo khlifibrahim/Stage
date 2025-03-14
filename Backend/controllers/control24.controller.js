@@ -9,7 +9,7 @@ export const getAllControls = async (req, res) => {
             ...control, 
             loi: 'loi 24'
         }));
-        console.log('Controls 24: ', controls)
+        console.log('Controls 24: ', controlsList)
         res.status(200).json({ 
             success: true,
             controls24: controlsList 
@@ -54,23 +54,43 @@ export const createControl24 = async (req, res) => {
     try {
         const connection = await connectSQL();
         const {
-            id_mission, id_cadre, entreprise, id_familleproduit, id_produit,
-            control_documentaire, controle_physqiue, prelevement, etiquette_prelevement,
+            missionID, cadreId, entID, familleProductId, productId,
+            controlDoc, controlPh, prelevement, etiquette_prelevement,
             pv_prevelement, bc_prevelement, status, observation
         } = req.body;
 
         const query = `
             INSERT INTO control24_09local 
-            (id_mission, id_cadre, entreprise, id_familleproduit, id_produit, 
-            control_documentaire, controle_physqiue, prelevement, etiquette_prelevement, 
-            pv_prevelement, bc_prevelement, status, observation) 
+            (id_mission, 
+            id_cadre, 
+            entreprise, 
+            id_familleproduit, 
+            id_produit, 
+            control_documentaire, 
+            controle_physqiue, 
+            prelevement, 
+            etiquette_prelevement, 
+            pv_prevelement, 
+            bc_prevelement, 
+            status, 
+            observation) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
         const values = [
-            id_mission, id_cadre, entreprise, id_familleproduit, id_produit,
-            control_documentaire, controle_physqiue, prelevement, etiquette_prelevement,
-            pv_prevelement, bc_prevelement, status, observation
+            missionID, 
+            cadreId, 
+            entID, 
+            familleProductId, 
+            productId,
+            controlDoc || 0, 
+            controlPh || 0, 
+            prelevement || 0, 
+            etiquette_prelevement || null,
+            pv_prevelement || null, 
+            bc_prevelement || null, 
+            status, 
+            observation || null
         ];
 
         await connection.query(query, values);
@@ -80,6 +100,7 @@ export const createControl24 = async (req, res) => {
             message: "Control created successfully" 
         });
     } catch (error) {
+        console.log('Error adding Control Local 24: ', error)
         res.status(500).json({ 
             success: false,
             message: "Error creating control", 
