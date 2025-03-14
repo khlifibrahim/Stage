@@ -4,7 +4,7 @@ import Profile from '../Utilities/Profile'
 function Header( {open} ) {
   
   return (
-    <div className='sticky top-0 z-40 w-full min-h-[102px] flex justify-between items-center '>
+    <div className='sticky top-0 z-40 px-[32px] w-full min-h-[102px] flex justify-between items-center border-b border-b-[#B6B6B6]'>
       <div onClick={open} className={`mobileMenu ${!open ? 'max-lg:hidden': ''} max-lg:block lg:hidden cursor-pointer`}>
           <svg  xmlns="http://www.w3.org/2000/svg"  width="32"  height="32"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="hover:stroke-blue icon icon-tabler icons-tabler-outline icon-tabler-menu-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
       </div>
