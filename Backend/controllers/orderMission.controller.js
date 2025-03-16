@@ -1,35 +1,98 @@
 import { connectSQL } from "../database/connectDB.js"
 
 
-export  const getOrderMission = async (req, res) => {
+// export  const getOrderMission = async (req, res) => {
+//     const { role, userid } = req.body
+//     console.log("Role Send to backend: ", role)
+//     try {
+//         const connect = await connectSQL();
+
+//         const queryForAll = `
+        //     SELECT 
+        //         m.*,
+        //         c.cadre_id,
+        //         c.delegation,
+        //         c.p_matricule AS carPlate,
+        //         u.nom AS cadre_nom,
+        //         u.prenom AS cadre_prenom,
+        //         g.grade_name,
+        //         d.Destination,
+        //         o.Object_type
+        //     FROM mission m
+        //     JOIN mission_cadre mc ON m.mission_id = mc.mission_id
+        //     JOIN cadre c ON mc.cadre_id = c.cadre_id
+        //     JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
+        //     JOIN grade g ON c.grade_id = g.grade_id
+        //     JOIN Destination d ON m.Id_des = d.id_des
+        //     JOIN Object o ON m.Id_object = o.Id_object
+        //     ;
+        // `;
+
+//         const queryForCadre = `
+                        // SELECT 
+                        //     m.*,
+                        //     c.cadre_id,
+                        //     c.delegation,
+                        //     c.p_matricule AS carPlate,
+                        //     u.nom AS cadre_nom,
+                        //     u.prenom AS cadre_prenom,
+                        //     g.grade_name,
+                        //     d.Destination,
+                        //     o.Object_type
+                        // FROM mission m
+                        // JOIN mission_cadre mc ON m.mission_id = mc.mission_id
+                        // JOIN cadre c ON mc.cadre_id = c.cadre_id
+                        // JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
+                        // JOIN grade g ON c.grade_id = g.grade_id
+                        // JOIN Destination d ON m.Id_des = d.id_des
+                        // JOIN Object o ON m.Id_object = o.Id_object
+                        // WHERE m.status = 'En Cours' AND u.id_utilisateur = ?;`
+
+//         if( role === 'CADRE') {
+//             const [missions] = await connect.query(queryForCadre, [userid])
+//             console.log('Missions for Cadre: ', missions)
+            
+//             res.status(200).json({
+//                 success: true,
+//                 message: 'Missions fetched successfully',
+//                 missions: missions
+//             })
+//         }else {
+//             const [missions] = await connect.query(queryForAll)
+//             console.log('###################################\n###################################')
+//             console.log('################# Missions for Director: ', missions)
+//             console.log('###################################\n###################################')
+
+//             res.status(200).json({
+//                 success: true,
+//                 message: 'Missions fetched successfully',
+//                 missions: missions
+//             })
+//         }
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: 'Error fetching missions data',
+//             error: error.message
+//         })
+//     }
+// }
+
+export const getOrderMission = async (req, res) => {
     const { role, userid } = req.body
-    console.log("Role Send to backend: ", role)
+    
+    console.log("Fetching missions for role:", role);
+    
     try {
         const connect = await connectSQL();
-
-        const queryForAll = `
-            SELECT 
-                m.*,
-                c.cadre_id,
-                c.delegation,
-                c.p_matricule AS carPlate,
-                u.nom AS cadre_nom,
-                u.prenom AS cadre_prenom,
-                g.grade_name,
-                d.Destination,
-                o.Object_type
-            FROM mission m
-            JOIN mission_cadre mc ON m.mission_id = mc.mission_id
-            JOIN cadre c ON mc.cadre_id = c.cadre_id
-            JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
-            JOIN grade g ON c.grade_id = g.grade_id
-            JOIN Destination d ON m.Id_des = d.id_des
-            JOIN Object o ON m.Id_object = o.Id_object
-            ;
-        `;
-
-        const queryForCadre = `
-                        SELECT 
+        
+        let query;
+        let params = [];
+        
+        switch(role) {
+            case 'DIRECTEUR':
+                query = `
+                    SELECT 
                             m.*,
                             c.cadre_id,
                             c.delegation,
@@ -46,37 +109,103 @@ export  const getOrderMission = async (req, res) => {
                         JOIN grade g ON c.grade_id = g.grade_id
                         JOIN Destination d ON m.Id_des = d.id_des
                         JOIN Object o ON m.Id_object = o.Id_object
-                        WHERE m.status = 'En Cours' AND u.id_utilisateur = ?;`
-
-        if( role === 'CADRE') {
-            const [missions] = await connect.query(queryForCadre, [userid])
-            console.log('Missions for Cadre: ', missions)
-            
-            res.status(200).json({
-                success: true,
-                message: 'Missions fetched successfully',
-                missions: missions
-            })
-        }else {
-            const [missions] = await connect.query(queryForAll)
-            console.log('###################################\n###################################')
-            console.log('################# Missions for Director: ', missions)
-            console.log('###################################\n###################################')
-
-            res.status(200).json({
-                success: true,
-                message: 'Missions fetched successfully',
-                missions: missions
-            })
+                        ;
+                    `;
+                break;
+            case 'CHEFSERVICE':
+                query = `
+                    SELECT 
+                        m.*,
+                        c.cadre_id,
+                        c.delegation,
+                        c.p_matricule AS carPlate,
+                        u.nom AS cadre_nom,
+                        u.prenom AS cadre_prenom,
+                        g.grade_name,
+                        d.Destination,
+                        o.Object_type
+                    FROM mission m
+                    JOIN mission_cadre mc ON m.mission_id = mc.mission_id
+                    JOIN cadre c ON mc.cadre_id = c.cadre_id
+                    JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
+                    JOIN grade g ON c.grade_id = g.grade_id
+                    JOIN Destination d ON m.Id_des = d.id_des
+                    JOIN Object o ON m.Id_object = o.Id_object
+                    ;
+                `;
+                break;
+                
+            case 'CADRE':
+                query = `
+                    SELECT 
+                        m.*,
+                        c.cadre_id,
+                        c.delegation,
+                        c.p_matricule AS carPlate,
+                        u.nom AS cadre_nom,
+                        u.prenom AS cadre_prenom,
+                        g.grade_name,
+                        d.Destination,
+                        o.Object_type
+                    FROM mission m
+                    JOIN mission_cadre mc ON m.mission_id = mc.mission_id
+                    JOIN cadre c ON mc.cadre_id = c.cadre_id
+                    JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
+                    JOIN grade g ON c.grade_id = g.grade_id
+                    JOIN Destination d ON m.Id_des = d.id_des
+                    JOIN Object o ON m.Id_object = o.Id_object
+                    WHERE m.status = 'En Cours' AND u.id_utilisateur = ?
+                `;
+                // query = `
+                //     SELECT 
+                //         m.*,
+                //         c.cadre_id,
+                //         c.delegation,
+                //         c.p_matricule AS carPlate,
+                //         u.nom AS cadre_nom,
+                //         u.prenom AS cadre_prenom,
+                //         g.grade_name,
+                //         d.Destination,
+                //         o.Object_type
+                //     FROM mission m
+                //     JOIN mission_cadre mc ON m.mission_id = mc.mission_id
+                //     JOIN cadre c ON mc.cadre_id = c.cadre_id
+                //     JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
+                //     JOIN grade g ON c.grade_id = g.grade_id
+                //     JOIN Destination d ON m.Id_des = d.id_des
+                //     JOIN Object o ON m.Id_object = o.Id_object
+                //     JOIN Profile p ON u.id_profile = p.id_profile
+                //     WHERE p.nom_profile = 'Cadre' AND u.id_utilisateur = ?
+                // `;
+                params = [userid];
+                break;
+                
+            default:
+                return res.status(400).json({
+                    success: false,
+                    message: 'Invalid role provided'
+                });
         }
+        
+        const [missions] = await connect.query(query, params);
+        
+        console.log(`Missions fetched for role ${role}:`, missions);
+        
+        res.status(200).json({
+            success: true,
+            message: 'Missions fetched successfully',
+            missions: missions
+        })
+        
     } catch (error) {
+        console.error('Error fetching missions by role:', error);
         res.status(500).json({
             success: false,
-            message: 'Error fetching missions data',
+            message: 'Error fetching missions',
             error: error.message
-        })
+        });
     }
-}
+};
 
 export const getOrderMissionById = async (req, res) => {
     const { id } = req.params

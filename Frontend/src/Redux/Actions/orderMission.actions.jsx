@@ -18,6 +18,7 @@ import {
 } from '../Actions/Types.actions'
 
 export const fetchOrderMissions = (role, userid) => async (dispatch) => {
+    console.log('Checking Role& Userid from action: ', role, userid)
     try {
         dispatch({ type: FETCH_ORDERMISSIONS_REQUEST})
 

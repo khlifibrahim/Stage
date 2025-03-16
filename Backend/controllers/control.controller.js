@@ -12,7 +12,7 @@ export const fetchControls = async (req, res) =>{
         const [result] = await connect.query(query);
         const controlsList = result.map(control => ({
             ...control, 
-            loi: 'Loi 31'
+            loi: '3108'
         }));
 
         console.log('Controls list: ', controlsList)

@@ -91,7 +91,7 @@ function ListMissions({role, user}) {
     setModalPopUpPrint(!modalPopUpPrint)
   };
 
-  const handleControlNavigation = (controlType, navigate) => {
+  const handleControlNavigation = (controlType, id) => {
     switch (controlType) {
       case "Verification":
         navigate("/dashboard", { state: {id : id }});
@@ -224,12 +224,12 @@ function ListMissions({role, user}) {
 
 
           {orderMissions.length > 0 ? handleFilterChange.slice(start, end).map((mission, i) => (
-            <div key={i} className="table-rows flex items-center justify-evenly py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4] max-lg:flex-col">
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full"><p className="text-[#727272] rounded bg-transparent border-none max-lg:font-bold max-lg:text-lg">{`${mission.cadre_nom} ${mission.cadre_prenom}` || 'Mission name'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full "><p className="text-[#727272] rounded bg-transparent border-none ">{mission.Object_type || 'Wireframing and Prototyping'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:col-span-1 "><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:col-span-1"><p className="text-[#727272] rounded bg-transparent border-none">{dateFormat(mission.departure_date) || 'August 1, 2024'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-md:-order-1"> { /* mission.status === "En Attente" ? "!bg-[rgba(255,156,156,0.44)]" : mission.status === "En Cours" ? "!bg-[rgba(183,255,159,0.44)]" :  "!bg-[rgba(131,131,131,0.44)]" */}
+            <div key={i} className="table-rows flex items-center justify-evenly max-lg:flex-wrap-reverse max-lg:justify-start max-lg:items-start flex-wrap py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:text- max-lg:basis-1/2"><p className="text-[#727272] rounded bg-transparent border-none max-lg:font-bold max-lg:text-lg">{`${mission.cadre_nom} ${mission.cadre_prenom}` || 'Mission name'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:text- max-lg:basis-1/2 "><p className="text-[#727272] rounded bg-transparent border-none ">{mission.Object_type || 'Aucun'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:text- max-lg:hidden "><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:text- max-lg:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{dateFormat(mission.departure_date) || 'August 1, 2024'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:text- max-lg:basis-1/2"> { /* mission.status === "En Attente" ? "!bg-[rgba(255,156,156,0.44)]" : mission.status === "En Cours" ? "!bg-[rgba(183,255,159,0.44)]" :  "!bg-[rgba(131,131,131,0.44)]" */}
                 <div className={`flex items-center just gap-2 px-3 py-1 w-fit border-none rounded-full ${mission.closed === 1 ? '!bg-[rgba(131,131,131,0.44)]' :mission.status === "En Attente" ? "!bg-[rgba(255,156,156,0.44)]" : mission.status === "En Cours" ? "!bg-[rgba(183,255,159,0.44)]" :  "!bg-[rgba(131,131,131,0.44)]"}`}>
                   <span className={`w-3 h-3 rounded-full 
                   ${
@@ -252,7 +252,7 @@ function ListMissions({role, user}) {
                 </div>
               </div>
               
-              <div className="relative table-base-row flex justify-end  px-3 w-1/4 border-[#E4E4E4] rounded-[4px] ">
+              <div className="relative table-base-row flex justify-end  px-3 w-1/4 border-[#E4E4E4] rounded-[4px] max-lg:w-20 max-lg:basis-1/2">
                 <span className="text-[#727272] rounded bg-transparent border-none ">
                   
                 {
@@ -272,7 +272,7 @@ function ListMissions({role, user}) {
                         </div>
                       )
                       : (
-                        mission.closed === 0 && <p onClick={() => handleMissionStatus(mission.mission_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Executer</p>
+                        mission.closed === 0 && <p onClick={() => handleControlNavigation(mission.Object_type, mission.mission_id, mission.cadre_id)} className='min-h-fit !py-2 !px-4 rounded-[10px] hover:bg-bg-blue hover:text-blue cursor-pointer'>Executer</p>
                       )
                     }
                   </div>

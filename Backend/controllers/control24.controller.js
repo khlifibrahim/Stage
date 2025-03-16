@@ -2,22 +2,24 @@ import { connectSQL } from "../database/connectDB.js";
 
 
 export const getAllControls = async (req, res) => {
+    const connection = await connectSQL();
     try {
-        const connection = await connectSQL();
         const [controls] = await connection.query("SELECT * FROM control24_09local");
         const controlsList = controls.map(control => ({
             ...control, 
-            loi: 'loi 24'
+            loi: '2409'
         }));
         console.log('Controls 24: ', controlsList)
         res.status(200).json({ 
             success: true,
             controls24: controlsList 
         });
+
     } catch (error) {
         res.status(500).json({ 
             success: false,
-            message: "Error fetching controls", error: error.message });
+            message: "Error fetching controls", 
+            error: error.message });
     }
 };
 

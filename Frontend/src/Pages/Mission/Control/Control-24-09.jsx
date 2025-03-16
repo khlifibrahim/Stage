@@ -23,6 +23,9 @@ function NewControl24() {
 
   const missionID = theLocation.state?.id
   const cadreid = theLocation.state?.cadreId
+
+  console.log('Mission Id :' , missionID)
+  console.log('Cadre id: ', cadreid)
   
   useEffect( ()=> {
     setControl(prev => ({
