@@ -27,6 +27,15 @@ const PvPrint = ({ sendData, ...rest }) => {
         }));
     }, [rest.pratics, rest.addsg]);
 
+    const practiceTranslations = {
+        "Affichage des prix": "الإشارة إلى الأسعار",
+        "Etiquetage": "وضع البطاقات",
+        "Publicite": "الإشهار",
+        "Garantie": "الضمان",
+        "Solde": "التخفيضات",
+        "Facture": "الفاتورة"
+    };
+
     const handlePrint = () => {
         // Use the new printing utility
         printElement('print-area-pv', 'محضر إثبات المخالفات');
@@ -43,11 +52,6 @@ const PvPrint = ({ sendData, ...rest }) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        // setFormData((prevData) => ({
-        //     ...prevData,
-        //     [name]: value,
-        // }));
-        // sendData(formData);
 
         if (name === 'observation') {
             const observations = value.split('\n').map(line => {
@@ -147,7 +151,7 @@ const PvPrint = ({ sendData, ...rest }) => {
                         className="px-3 w-full min-h-16 outline-none focus:border focus:border-blue rounded-[10px]" 
                         placeholder="........................................................................................................................................................................" 
                         name="observation" 
-                        value={formData.observation?.map(o => `${o.name}: ${o.obs}`).join('\n') || ''} 
+                        value={formData.observation?.map(o => `${practiceTranslations[o.name] || o.name}: ${o.obs}`).join('\n') || ''} 
                         onChange={handleInputChange} 
                     />
                 </div>
