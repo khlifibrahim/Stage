@@ -43,11 +43,33 @@ const PvPrint = ({ sendData, ...rest }) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-        sendData(formData);
+        // setFormData((prevData) => ({
+        //     ...prevData,
+        //     [name]: value,
+        // }));
+        // sendData(formData);
+
+        if (name === 'observation') {
+            const observations = value.split('\n').map(line => {
+                const [name, ...obsParts] = line.split(': ');
+                return { 
+                    name: name || '', 
+                    obs: obsParts.join(': ') || '' 
+                };
+            });
+            
+            setFormData(prevData => ({
+                ...prevData,
+                [name]: observations,
+            }));
+        } else {
+            setFormData(prevData => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
+        
+        sendData({ ...formData, [name]: name === 'observation' ? observations : value });
     };
 
     return (
@@ -96,6 +118,21 @@ const PvPrint = ({ sendData, ...rest }) => {
                     </table>
                 </div>
 
+
+                <div>
+                    <p>
+                    انتقلنا نحن الموقعين أسفله
+                    <br /><br />
+                    - السيد أحمد أمين الوالي الحامل للبطاقة المهنية للباحث رقم 07 المسلمة بتاريخ 03 دجنبر 2014 
+                    <br />
+                    - السيد عبد الهادي مرباطي الحامل للبطاقة المهنية للباحث رقم 75 المسلمة بتاريخ 31 اكتوبر 2018
+                    <br /><br />
+                    المحلفين والمنتدبين للقيام بأعمال البحث عن المخالفات وإثباتها طبقا لأحكام المادة 166 من القانون رقم 31.08 القاضي بتحديد تدابير لحماية المستهلك والمرسوم رقم 2.12.503 الصادر في 4 ذي القعدة 1434 (11 سبتمبر 2013) بتطبيق بعض أحكام القانون رقم 31.08 لاسيما المادة 4 منه.
+                    <br /><br />
+                    والعاملين تحت إشراف مندوب وزارة الصناعة والتجارة بوجدة والمفوضين من قبله لمعاينة المخالفات لأحكام هذا القانون ونصوصه التطبيقية وإثباتها.
+                    <br /><br />
+                    </p>
+                </div>
                 <div className="inspection-details">
                     <div className="flex gap-2">
                         <p>في يوم <input type="date" name="day" value={formData.day || ''} onChange={handleInputChange} /> على الساعة <input type="time" name="hour" value={formData.hour || ''} onChange={handleInputChange} /></p>
@@ -107,7 +144,7 @@ const PvPrint = ({ sendData, ...rest }) => {
                 <div className="observation-section">
                     <p>وبعد أن عرضنا على الشخص الماثل أمامنا صفتنا وبطاقاتنا المهنية وأبلغناه بطبيعة مهمتنا وأسسها القانونية، عاينا ما يلي:</p>
                     <textarea 
-                        className="px-3 outline-none focus:border focus:border-blue rounded-[10px]" 
+                        className="px-3 w-full min-h-16 outline-none focus:border focus:border-blue rounded-[10px]" 
                         placeholder="........................................................................................................................................................................" 
                         name="observation" 
                         value={formData.observation?.map(o => `${o.name}: ${o.obs}`).join('\n') || ''} 

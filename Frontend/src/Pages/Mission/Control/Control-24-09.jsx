@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise, getEnterpriseById } from '../../../Redux/Actions/enterprise.actions';
 import { createControl24 } from '../../../Redux/Actions/control24.actions';
 import Select from 'react-select';
+import DQSM301bis from './forms-to-print/DQSM301bis'
 
 function NewControl24() {
   const dispatch = useDispatch()
@@ -17,7 +18,7 @@ function NewControl24() {
   const [famillies, setFamillies] = useState({})
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [DispalyError, setDispalyError] = useState(null)
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(5)
   const steps = Array.from(document.getElementsByClassName('step'))
   const [stepValid, setStepVaid] = useState()
 
@@ -55,10 +56,10 @@ function NewControl24() {
     const fetchFAmillyProdAndProducts = async () => {
         try {
           const famillyResponse = await Instance.get('/products/familly/list')
-          const famillies = famillyResponse.data.familly
+          const famillies = famillyResponse.data.familly || []
 
           const productsResponse = await Instance.get('/products/product/list')
-          const products = productsResponse.data.products
+          const products = productsResponse.data.products || []
           
           const famillyAndProducts = famillies.reduce((acc, familly) => {
             acc[familly.id_familleproduit] = {
@@ -407,6 +408,9 @@ const handleStatus = (status) => {
         </div>
         <div className={`step ${step === 5 ? '' : 'hidden'} w-full`}>
           <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Prelevement</p>
+          <div>
+              <DQSM301bis data={control} />
+          </div>
         </div>
         <div className={`step ${step === 6 ? '' : 'hidden'} w-full max-md:text-sm`}>
           <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Validation</p>

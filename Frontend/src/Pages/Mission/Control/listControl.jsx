@@ -229,9 +229,9 @@ export const ListControl = ({ role, user }) => {
       <div className="header flex items-center justify-between flex-wrap">
         <h1 className='font-poppins font-bold text-3xl basis-full  mb-4'>List des Control</h1>
         {/* filter menu */}
-        <div className="filter-group flex gap-4 items-center justify-between basis-full">
+        <div className="filter-group flex gap-4 items-center justify-between basis-full max-lg:flex-wrap lg:gap-2">
           {/* Cadre Filter Search */}
-          <div className="relative flex items-center ">
+          <div className="relative flex items-center max-lg:basis-full max-lg:w-full">
             <span className="absolute left-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B6B6B6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -244,16 +244,16 @@ export const ListControl = ({ role, user }) => {
               value={searchInput}
               onChange={(e) => setCadreSearch(e.target.value)}
               placeholder="Rechercher par Cadre..."
-              className="w-[240px] h-[38px] px-10 py-2 border border-[#E4E4E4] rounded-[10px] focus:outline-none focus:border-blue"
+              className="w-[240px] max-lg:w-full h-[38px] px-10 py-2 border border-[#E4E4E4] rounded-[10px] focus:outline-none focus:border-blue"
             />
           </div>
 
           {/* Loi Filter */}
           <div className='flex gap-2'>
-            <div ref={loiMenuRef} className="relative">
+            <div ref={loiMenuRef} className="relative max-lg:basis-full">
               <button
                 onClick={() => setIsLoiMenuOpen(!isLoiMenuOpen)}
-                className="flex items-center gap-2 px-4 py-2 bg-white border rounded-[10px] shadow-sm hover:bg-gray-50"
+                className="flex items-center gap-2 px-4 py-2 bg-white border rounded-[10px] shadow-sm hover:bg-gray-50 max-lg:w-full"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" />
@@ -285,7 +285,7 @@ export const ListControl = ({ role, user }) => {
             </div>
 
             {/* Status Filter */}
-            <div ref={statusMenuRef} className="relative">
+            <div ref={statusMenuRef} className="relative max-lg:basis-full">
               <button
                 onClick={() => setIsStatusMenuOpen(!isStatusMenuOpen)}
                 className="flex items-center gap-2 px-4 py-2 bg-white border rounded-[10px] shadow-sm hover:bg-gray-50"
@@ -333,29 +333,29 @@ export const ListControl = ({ role, user }) => {
           : (
             filteredMissions.slice(start, end).map((orderMission, i) => (
               <div key={i} className='my-2'>
-                <div className='table-head flex items-stretch justify-between w-full bg-[#F9F9F9] border-[#E4E4E4] rounded-[10px] overflow-hidden cursor-pointer max-md:flex-col max-md:flex-wrap '>
-                  <div onClick={() => handleMissionControlsCollaps(i)} className='table-base-header p-3 basis-9 w-full bg-[#F9F9F9] max-md:w-min max-md:!basis-1/2'>
+                <div className='table-head flex items-stretch justify-between w-full bg-[#F9F9F9] border-[#E4E4E4] rounded-[10px] overflow-hidden cursor-pointer max-lg:flex-wrap '>
+                  <div onClick={() => handleMissionControlsCollaps(i)} className='table-base-header p-3 basis-9 w-full bg-[#F9F9F9] max-md:w-min max-lg:basis-7'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className={`${!collapse[i] ? '-rotate-90' : ''} transition-transform`}><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 9c.852 0 1.297 .986 .783 1.623l-.076 .084l-6 6a1 1 0 0 1 -1.32 .083l-.094 -.083l-6 -6l-.083 -.094l-.054 -.077l-.054 -.096l-.017 -.036l-.027 -.067l-.032 -.108l-.01 -.053l-.01 -.06l-.004 -.057v-.118l.005 -.058l.009 -.06l.01 -.052l.032 -.108l.027 -.067l.07 -.132l.065 -.09l.073 -.081l.094 -.083l.077 -.054l.096 -.054l.036 -.017l.067 -.027l.108 -.032l.053 -.01l.06 -.01l.057 -.004l12.059 -.002z" /></svg>
                   </div>
                   {role !== 'CADRE'
-                    && (<div className='table-base-header p-3 w-full  bg-[#F9F9F9] max-md:basis-auto'>
+                    && (<div className='table-base-header p-3 w-full  bg-[#F9F9F9] max-md:basis-auto max-lg:hidden'>
                       <p className='font-bold leading-[150%] text-[14px] text-[#727272] text-left bg-transparent border-none'>{`${orderMission.cadre_nom} ${orderMission.cadre_prenom}`}</p>
                     </div>)}
-                  <div className='table-base-header p-3 w-full bg-[#F9F9F9]'>
+                  <div className='table-base-header p-3 w-full bg-[#F9F9F9] max-lg:basis-1/2'>
                     <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>{orderMission.Destination}</p>
                   </div>
-                  <div className='table-base-header p-3 w-full bg-[#F9F9F9]'>
+                  <div className='table-base-header p-3 w-full bg-[#F9F9F9] max-lg:basis-1/5'>
                     <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>{`${orderMission.duration_days} Jours`}</p>
                   </div>
-                  <div className='table-base-header p-3 w-full bg-[#F9F9F9] max-md:hidden'>
+                  <div className='table-base-header p-3 w-full bg-[#F9F9F9] max-lg:hidden'>
                     <p className='font-bold leading-[150%] text-[14px] text-[#727272] bg-transparent border-none'>{orderMission.closed === 0 ? (orderMission.status) : 'Cloturé'}</p>
                   </div>
-                  <div className='table-base-header p-3 w-full bg-[#F9F9F9]  max-md:-order-2  max-md:w-min max-md:!basis-1/2 '>
+                  <div className='table-base-header p-3 w-full bg-[#F9F9F9] max-lg:basis-full '>
                     {orderMission.closed === 0 &&
                       (<div className="flex items-center justify-end gap-4 bg-transparent border-none">
                         <button
                           onClick={() => handleControlNavigation(orderMission.Object_type, orderMission.mission_id, orderMission.cadre_id)}
-                          className=" flex gap-2 px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors"
+                          className=" flex items-center justify-center gap-2 px-3 py-2 bg-bg-blue text-blue font-medium font-poppins text-base rounded-[10px] hover:bg-blue hover:text-white transition-colors  max-lg:w-full "
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" /><path d="M15 12h-6" /><path d="M12 9v6" /></svg>
                           Control
@@ -368,7 +368,7 @@ export const ListControl = ({ role, user }) => {
                 {collapse[i] && (
                   <div key={orderMission.mission_id} className="form flex items-stretch justify-center h-full">
                     <div className="w-20 min-h-full bg-transparent border-none flex items-stretch justify-end basis-10">
-                      <div className='border-l-[2px] w-[1px] h-[90.9%] py-6 flex justify-center items-center border-[#E4E4E4] rounded-sm'></div>
+                      <div className='border-l-[2px] w-[1px] h-[90.9%] py-6 flex justify-center items-center border-[#E4E4E4] rounded-sm max-lg:hidden'></div>
                     </div>
                     <div className="table">
                       {controls.length > 0 ? (
@@ -381,19 +381,19 @@ export const ListControl = ({ role, user }) => {
                                 ? (
                                   Object.keys(control).length > 0 ? (
                                     <>
-                                    <span className='w-8 h-[2px] bg-[#E4E4E4]'></span>
+                                    <span className='w-8 h-[2px] bg-[#E4E4E4] max-lg:hidden'></span>
                                     <div className="table-rows flex items-center justify-evenly basis-full py-2 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
                                       <div className="table-base-row px-3 w-full bg-transparent border-none">
                                         <p className="text-[#727272] rounded bg-transparent border-none">
                                           {control.raison_sociale || 'Entreprise name'}
                                         </p>
                                       </div>
-                                      <div className="table-base-row px-3 w-full bg-transparent border-none">
+                                      <div className="table-base-row px-3 w-full bg-transparent border-none  max-lg:hidden">
                                         <p className="text-[#727272] rounded bg-transparent border-none">
                                           {dateFormat(control.date_visite) || 'control name'}
                                         </p>
                                       </div>
-                                      <div className="table-base-row px-3 w-full max-lg:hidden bg-transparent border-none">
+                                      <div className="table-base-row px-3 w-full bg-transparent border-none max-lg:hidden">
                                         <p className="text-[#727272] rounded bg-transparent border-none">
                                           {control.f_observation || 'Oujda angade'}
                                         </p>
@@ -410,21 +410,21 @@ export const ListControl = ({ role, user }) => {
                                   </>
                                   ) : (
                                     <div className="flex items-center justify-center w-full p-4">
-                                    <p className="!text-[#727272] bg-transparent border-0">Aucun contrôle trouvé</p>
-                                  </div>
+                                      <p className="!text-[#727272] bg-transparent border-0">Aucun contrôle trouvé</p>
+                                    </div>
                                   )
                                 ) :  control.loi === '2409' ?  
                                 (
                                   Object.keys(control).length > 0 ? (
                                     <>
-                                      <span className='w-8 h-[2px] bg-[#E4E4E4]'></span>
+                                      <span className='w-8 h-[2px] bg-[#E4E4E4] max-lg:hidden'></span>
                                       <div className="table-rows flex items-center justify-evenly basis-full py-2 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
                                         <div className="table-base-row px-3 w-full bg-transparent border-none">
                                           <p className="text-[#727272] rounded bg-transparent border-none">
                                             {control.raison_sociale || 'Entreprise name'}
                                           </p>
                                         </div>
-                                        <div className="table-base-row px-3 w-full bg-transparent border-none">
+                                        <div className="table-base-row px-3 w-full bg-transparent border-none  max-lg:hidden">
                                           <p className="text-[#727272] rounded bg-transparent border-none">
                                             {dateFormat(control.date_visite) || 'control name'}
                                           </p>

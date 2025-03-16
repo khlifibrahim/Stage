@@ -271,7 +271,7 @@ function NewMission() {
     }
   }
 
-
+  console.log('Checking Mission: ', mission)
   // when submite the form
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -287,7 +287,7 @@ function NewMission() {
         }
       } else {
         const result = await Instance.post('/missions/createOrderMission', mission)
-        // console.log("-- Result of submit: ", result)
+        console.log("-- Result of submit: ", result)
         if (result.status === 201) {
           navigate('/dashboard/orderMissions/listMissionOrders')
           setHidePrint(false)

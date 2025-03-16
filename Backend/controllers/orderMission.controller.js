@@ -320,7 +320,7 @@ export const getCadreById = async (req, res) => {
         return res.status(200).json({
                 success: true,
                 message: 'Cadres fetched successfully',
-                cadres: cadres
+                cadres: cadres[0]
             })
     } catch (error) {
         console.log('Error fetching cadres: ', error);
@@ -377,20 +377,20 @@ export const searchCadre = async (req, res) => {
 
 export const createOrderMission  = async (req, res)=> {
 
+    const {
+        cadreId,
+        destinationId,
+        objectId,
+        depDate,
+        depHour,
+        arrHour,
+        durationDays,
+        plateNumber,
+        companion
+    } = req.body
     try {
         const connect = await connectSQL();
 
-        const {
-            cadreId,
-            destinationId,
-            objectId,
-            depDate,
-            depHour,
-            arrHour,
-            durationDays,
-            plateNumber,
-            companion
-        } = req.body
         if(
             !cadreId ||
             !destinationId ||
