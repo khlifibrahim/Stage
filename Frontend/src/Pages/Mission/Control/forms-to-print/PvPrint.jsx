@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./pvcss.css";
-import logo from '../../../assets/logo.png';
-import { printElement } from "../../../utils/printUtils";
+import logo from '../../../../assets/logo.png';
+import { printElement } from "../../../../utils/printUtils";
 
 const PvPrint = ({ sendData, ...rest }) => {
     const [formData, setFormData] = useState({});

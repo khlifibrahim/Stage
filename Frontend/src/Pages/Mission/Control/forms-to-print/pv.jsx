@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./pvcss.css";
-import logo from '../../../assets/logo.png';
+import logo from '../../../../assets/logo.png';
 
 
 

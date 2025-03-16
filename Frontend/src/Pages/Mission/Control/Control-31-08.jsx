@@ -4,8 +4,8 @@ import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { fetchEnterprise, getEnterpriseById } from '../../../Redux/Actions/enterprise.actions';
 import { createControl } from '../../../Redux/Actions/control31.actions';
-import Print from './pv'
-import PvPrint from './PvPrint'
+import Print from './forms-to-print/pv'
+import PvPrint from './forms-to-print/PvPrint'
 
 
 export const NewControl31 = () => {
