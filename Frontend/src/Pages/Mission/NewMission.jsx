@@ -742,7 +742,7 @@ function NewMission() {
               value={mission.depHour}
               onChange={handleMissionChange}
               className="border rounded-lg px-4 py-2 focus:outline-blue"
-
+              required
             />
           </div>
         </div>

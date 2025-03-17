@@ -18,7 +18,7 @@ function NewControl24() {
   const [famillies, setFamillies] = useState({})
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [DispalyError, setDispalyError] = useState(null)
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(5)
   const steps = Array.from(document.getElementsByClassName('step'))
   const [stepValid, setStepVaid] = useState()
 
