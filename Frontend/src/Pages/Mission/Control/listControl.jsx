@@ -140,10 +140,10 @@ export const ListControl = ({ role, user }) => {
 
       // Loi filter (dropdown)
       if (loiFilter !== 'all') {
-        if (loiFilter === '31-08' && mission.Object_type !== 'Controle_Loi_3108') {
+        if (loiFilter === '31-08' && (mission.Object_type.includes('loi 31-08') || mission.Object_type.includes('mission 1 :'))) {
           return false;
         }
-        if (loiFilter === '24-09' && !mission.Object_type.includes('2409')) {
+        if (loiFilter === '24-09' && !mission.Object_type.includes('loi 24-09')) {
           return false;
         }
       }
@@ -184,32 +184,110 @@ export const ListControl = ({ role, user }) => {
     })
   };
 
-  const handleControlNavigation = (controlType, id, cadreID) => {
-    switch (controlType) {
-      case "Verification":
-        theNavigation("/dashboard", { state: { id: id } });
-        break;
-      case "Reunion":
-        theNavigation("/dashboard", { state: { id: id } });
-        break;
-      case "Controle_Loi_3108":
-        theNavigation("/dashboard/orderMissions/control/add/31-08", { state: { id: id } });
-        break;
-      case "Controle_Loi_2409_Importation":
-        theNavigation("/dashboard", { state: { id: id } });
-        break;
-      case "Controle_Loi_2409_Local":
-        theNavigation("/dashboard/orderMissions/control/add/24-09", { state: { id: id, cadreId: cadreID } });
-        break;
-      case "Visite":
-        theNavigation("/dashboard", { state: { id: id } });
-        break;
-      case "Commission mixte":
-        theNavigation("/dashboard", { state: { id: id } });
-        break;
-      default:
-        console.warn("Unknown control type:", controlType);
-        break;
+  // const handleControlNavigation = (controlType, id, cadreID) => {
+  //   switch (controlType) {
+  //     case "Verification":
+  //       theNavigation("/dashboard", { state: { id: id } });
+  //       break;
+  //     case "Reunion":
+  //       theNavigation("/dashboard", { state: { id: id } });
+  //       break;
+  //     case "Controle_Loi_3108":
+  //       theNavigation("/dashboard/orderMissions/control/add/31-08", { state: { id: id } });
+  //       break;
+  //     case "Controle_Loi_2409_Importation":
+  //       theNavigation("/dashboard", { state: { id: id } });
+  //       break;
+  //     case "Controle_Loi_2409_Local":
+  //       theNavigation("/dashboard/orderMissions/control/add/24-09", { state: { id: id, cadreId: cadreID } });
+  //       break;
+  //     case "Visite":
+  //       theNavigation("/dashboard", { state: { id: id } });
+  //       break;
+  //     case "Commission mixte":
+  //       theNavigation("/dashboard", { state: { id: id } });
+  //       break;
+  //     default:
+  //       console.warn("Unknown control type:", controlType);
+  //       break;
+  //   }
+  // };
+  const handleControlNavigation = (objectType, id, cadreID) => {
+    // Convert to lowercase for case-insensitive matching
+    const normalizedType = objectType.toLowerCase();
+    console.log('Object type: --------------', objectType)
+  
+    // Law-based controls
+    if (normalizedType.includes('loi 31-08') || normalizedType.includes('mission 1 :')) {
+      theNavigation("/dashboard/orderMissions/control/add/31-08", { state: { id: id } });
+    }
+    else if (normalizedType.includes('loi 24-09') || normalizedType.includes('mission 2 :')) {
+      theNavigation("/dashboard/orderMissions/control/add/24-09", { state: { id: id, cadreId: cadreID } });
+    }
+    else if (normalizedType.includes('loi 77-15') || normalizedType.includes('mission 3 :')) {
+      theNavigation(`/dashboard/controls/77-15`);
+    }
+    else if (normalizedType.includes('loi 2-79') || normalizedType.includes('mission 4 :')) {
+      theNavigation(`/dashboard/controls/2-79`);
+    }
+  
+    // Specialized mission types
+    else if (normalizedType.includes('étude')) {
+      if (normalizedType.includes('environnement')) {
+        // theNavigation(`/dashboard/studies/environmental`);
+      } else {
+        // theNavigation(`/dashboard/studies/general`);
+      }
+    }
+    else if (normalizedType.includes('suivi financier')) {
+      // theNavigation(`/dashboard/follow-ups/financial`);
+    }
+    else if (normalizedType.includes('suivi physique')) {
+      // theNavigation(`/dashboard/follow-ups/physical`);
+    }
+    else if (normalizedType.includes('valorisation des espaces')) {
+      // theNavigation(`/dashboard/space-valuation`);
+    }
+  
+    // Investment support types
+    else if (normalizedType.includes('appui à l\'investissement')) {
+      if (normalizedType.includes('technologique')) {
+        // theNavigation(`/dashboard/investment/tech-support`);
+      } else if (normalizedType.includes('commercial')) {
+        // theNavigation(`/dashboard/investment/commercial-support`);
+      } else {
+        // theNavigation(`/dashboard/investment/general-support`);
+      }
+    }
+  
+    // Special programs and initiatives
+    else if (normalizedType.includes('indh')) {
+      // theNavigation(`/dashboard/programs/indh`);
+    }
+    else if (normalizedType.includes('fiet')) {
+      // theNavigation(`/dashboard/programs/fiet`);
+    }
+    else if (normalizedType.includes('oriental moubadara')) {
+      // theNavigation(`/dashboard/programs/oriental-initiative`);
+    }
+  
+    // OMPIC-related missions
+    else if (normalizedType.includes('ompic')) {
+      // theNavigation(`/dashboard/ompic-support`);
+    }
+  
+    // Default cases
+    else if (normalizedType.includes('contrôle')) {
+      // theNavigation(`/dashboard/general-controls`);
+    }
+    else if (normalizedType.includes('mission')) {
+      // theNavigation(`/dashboard/general-missions`);
+    }
+  
+    // Fallback for unknown types
+    else {
+      console.warn('Unknown mission type:', objectType);
+      navigate('/dashboard/orderMissions/listMissionOrders');
     }
   };
 

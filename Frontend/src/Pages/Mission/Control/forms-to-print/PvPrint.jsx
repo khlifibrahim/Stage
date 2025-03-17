@@ -123,7 +123,7 @@ const PvPrint = ({ sendData, ...rest }) => {
                 </div>
 
 
-                <div>
+                <div className="mt-4">
                     <p>
                     انتقلنا نحن الموقعين أسفله
                     <br /><br />
@@ -148,7 +148,7 @@ const PvPrint = ({ sendData, ...rest }) => {
                 <div className="observation-section">
                     <p>وبعد أن عرضنا على الشخص الماثل أمامنا صفتنا وبطاقاتنا المهنية وأبلغناه بطبيعة مهمتنا وأسسها القانونية، عاينا ما يلي:</p>
                     <textarea 
-                        className="px-3 w-full min-h-16 outline-none focus:border focus:border-blue rounded-[10px]" 
+                        className="px-3 w-full min-h-28 outline-none focus:border focus:border-blue rounded-[10px]" 
                         placeholder="........................................................................................................................................................................" 
                         name="observation" 
                         value={formData.observation?.map(o => `${practiceTranslations[o.name] || o.name}: ${o.obs}`).join('\n') || ''} 

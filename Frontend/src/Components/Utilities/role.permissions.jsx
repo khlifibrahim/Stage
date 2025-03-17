@@ -90,6 +90,7 @@ export const SIDEBAR_MENU = {
         { "Missions": ["Order Mission", "Nouv. Mission", "Liste Control", "Nouv. Control"] },
         { "Cadre": ["Liste Cadres"] },
         { "Entreprise": ["Liste Entreprises", "Nouv. Entreprise"] },
+        { "INDH": ["Liste Projets", "Nouv. Projet"] },
         { "Voitures": ["Liste Voitures", "Nouv. Voitures"] },
     ],
     "CHEF DE SERVICE": [

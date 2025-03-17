@@ -1,185 +1,237 @@
 #print-area-pv {
-    direction: rtl;
-    text-align: right;
-    width: 100%;
-  }
-  .print-container {
-    width: 580px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    direction: rtl;
-    
-  }
+  direction: rtl;
+  text-align: right;
+  width: 100%;
+}
+.print-container {
+  width: 580px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  direction: rtl;
   
-  #print-area  .header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+}
+
+#print-area  .header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.table-section t{
+  margin: 0 auto
+}
+.table-section table {
+  width: 100%;
+  border-collapse: collapse;
   
-  .title {
-    text-align: center;
-    margin-bottom: 40px;
-  }
+}
+
+.table-section td {
+  padding: 10px;
+  border: 1px solid #000;
   
-  .table-section t{
-    margin: 0 auto
-  }
-  .table-section table {
-    width: 100%;
-    border-collapse: collapse;
-    
-  }
+}
+.signature-section {
+  margin-top: 20px;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.signature-line {
+  font-weight: bold;
+  margin: 0; 
+}
+
+.refusal-note {
+  font-style: italic;
+
+  margin: 0; 
   
-  .table-section td {
-    padding: 10px;
-    border: 1px solid #000;
-    
-  }
-  .signature-section {
-    margin-top: 20px;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-  }
+  margin-top: 10px; 
+}
+
+.delegates-section, .inspection-details, .observation-section, .declaration-section, .additional-info, .closing-section {
+  margin-top: 20px;
+}
+
+.print-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  cursor: pointer;
   
-  .signature-line {
-    font-weight: bold;
-    margin: 0; 
-  }
-  
-  .refusal-note {
-    font-style: italic;
-  
-    margin: 0; 
-    
-    margin-top: 10px; 
-  }
-  
-  .delegates-section, .inspection-details, .observation-section, .declaration-section, .additional-info, .closing-section {
-    margin-top: 20px;
-  }
-  
-  .print-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    border-radius: 5px;
-    color: white;
-    border: none;
-    cursor: pointer;
-    
-  }
-  .print-button:disabled {
-    background-color: gray; 
-    color: white;
-    cursor: not-allowed;
+}
+.print-button:disabled {
+  background-color: gray; 
+  color: white;
+  cursor: not-allowed;
 }
 .print-button:not(:disabled) {
-  background-color: blue; /* Active state: Blue */
-  color: white;
+background-color: blue; /* Active state: Blue */
+color: white;
 }
 .print-button:not(:disabled):hover {
-  background-color: darkblue;
+background-color: darkblue;
 }
-  
-  
-  
- 
-  .delegates-section, .inspection-details, .observation-section, .declaration-section, .additional-info, .closing-section, .signatures {
-      margin-top: 20px;
-  }
-  .logo-container {
-    text-align: center;
-    margin-bottom: 10px; 
-  }
-  
-  .logo {
-    max-width: 100%;
-    height: auto;
-    width: 50%; 
-    margin: auto
-  }
-  @media print {
-    input, textarea {
-        border: none !important; 
-        outline: none !important; 
-        background-color: transparent !important; 
-    }
+
+
+
+
+.delegates-section, .inspection-details, .observation-section, .declaration-section, .additional-info, .closing-section, .signatures {
+    margin-top: 20px;
 }
-@media (max-width: 768px) {
-  .print-container {
-      padding: 10px;
-  }
+.logo-container {
+  text-align: center;
+  margin-bottom: 10px; 
+}
 
-  .table-section table {
-      width: 100%;
-      display: block;
-      overflow-x: auto;
-  }
-
-  input, textarea {
-      width: 100%;
-  }
+.logo {
+  max-width: 100%;
+  height: auto;
+  width: 50%; 
+  margin: auto
 }
 @media print {
-  body {
-    visibility: hidden;
-    direction: rtl;
-    text-align: right;
-  }
-
-  .print-container, .print-container * {
-    visibility: visible;
-  }
-
-  /* Optionally add margins or page breaks */
-  .print-container {
-    margin: 0;
-    padding: 0;
-  }
-
-  .page-break {
-    page-break-before: always;
-  }
+/* Reset basics */
+body, html {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100% !important;
+  visibility: visible !important;
+  direction: rtl;
 }
 
+/* Container styling */
+.print-container {
+  margin: 0 !important;
+  padding: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  visibility: visible !important;
+}
+
+/* Header adjustments */
+.header {
+  margin-top: 0 !important;
+}
+
+/* Hide UI elements */
+.buttons-container, .button-group, button, .print-button, .confirm-button {
+  display: none !important;
+}
+
+/* Form elements */
+input, textarea, select {
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Input visibility */
+.screen-only-input {
+  display: none !important;
+}
+
+.print-only-text {
+  display: inline !important;
+}
+
+/* Page settings */
+@page {
+  size: A4;
+  margin: 0.5cm;
+}
+
+/* Specific element overrides from original print styles */
+#print-area-pv {
+  visibility: visible !important;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.date-input, .time-input {
+  border: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+}
+@media (max-width: 768px) {
+.print-container {
+    padding: 10px;
+}
+
+.table-section table {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+}
+
+input, textarea {
+    width: 100%;
+}
+}
+
+/* Hide print-only text in normal view */
+.print-only-text {
+display: inline !important;
+color: black;
+font-weight: normal;
+}
+
+/* Style for screen-only inputs */
+.screen-only-input {
+display: inline-block;
+margin: 0 5px;
+padding: 2px 5px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
 
 .confirm-button {
-  background-color: green;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 20px;
+background-color: green;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+margin-top: 20px;
 
 }
 .confirm-button:hover {
-  background-color: darkgreen;
+background-color: darkgreen;
 }
 .button-group{
-  display: flex;
-  gap: 20px;
+display: flex;
+gap: 20px;
 
 }
 .input-container input::placeholder,
 .input-container textarea::placeholder {
-    color: black; 
-    font-size: 16px;
-    letter-spacing: 2px;
-    content: "●●●●";
+  color: black; 
+  font-size: 16px;
+  letter-spacing: 2px;
+  content: "●●●●";
 }
 
 .input-container input {
-  border: none;
-  outline : none
+border: none;
+outline : none
 }
+/* Add a proper focus style for inputs and textareas */
 .input-container input:focus,
 .input-container textarea:focus {
+border-color: #007bff;
+box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
-
-  
-  
-  

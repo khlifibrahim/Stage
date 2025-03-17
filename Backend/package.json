@@ -24,6 +24,8 @@
     "mysql2": "^3.12.0",
     "netlify-cli": "^12.14.0",
     "netlify-lambda": "^2.0.16",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.10.0",
     "react-bootstrap": "^2.10.7",
     "react-router-dom": "^7.1.1",
     "react-select": "^5.10.0",

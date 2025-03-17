@@ -5,8 +5,9 @@ import { connectSQL } from "../database/connectDB.js";
 // Endpoints of FamillyProducts
 export const createFamilleProduit = async (req, res) => {
     const { libelle } = req.body;
+    const pool = await connectSQL();
+    const connect = await pool.getConnection();
     try {
-        const connect = await connectSQL();
 
         const query = 'INSERT INTO famille_produit (libelle) VALUES (?)';
         const [result] = await connect.query(query, [libelle]);
@@ -29,12 +30,15 @@ export const createFamilleProduit = async (req, res) => {
             success: false,
             error: error.message 
         });
+    }finally {
+        connect.release(); // Toujours libérer la connexion
     }
 }
 
 export const getAllFamilleProduits = async (req, res) => {
+    const pool = await connectSQL();
+    const connect = await pool.getConnection();
     try {
-        const connect = await connectSQL();
 
         const query = 'SELECT * FROM familleproduit;';
         const [results] = await connect.query(query);
@@ -47,6 +51,8 @@ export const getAllFamilleProduits = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }finally {
+        connect.release(); // Toujours libérer la connexion
     }
 }
 
@@ -62,18 +68,26 @@ export const getFamilleProduitById = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }finally {
+        connect.release(); // Toujours libérer la connexion
     }
 }
 
 export const updateFamilleProduit = async (req, res) => {
     const { id } = req.params;
     const { libelle } = req.body;
+
+    const pool = await connectSQL();
+    const connect = await pool.getConnection();
+
     try {
         const query = 'UPDATE famille_produit SET libelle = ? WHERE id_familleproduit = ?';
-        await connectDB.query(query, [libelle, id]);
+        await connect.query(query, [libelle, id]);
         res.status(200).json({ id, libelle });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }finally {
+        connect.release(); // Toujours libérer la connexion
     }
 }
 
@@ -86,14 +100,17 @@ export const deleteFamilleProduit = async (req, res) => {
         res.status(200).json({ message: 'Famille de produit supprimée' });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }finally {
+        connect.release(); // Toujours libérer la connexion
     }
 }
 
 // Endpoints of Products
 export const createProduit = async (req, res) => {
     const { productName, productFamillyId } = req.body;
+    const pool = await connectSQL();
+    const connect = await pool.getConnection();
     try {
-        const connect = await connectSQL();
 
         const query = 'INSERT INTO produit (nom_produit, id_familleproduit) VALUES (?, ?)';
         const [result] = await connect.query(query, [productName, productFamillyId]);
@@ -107,12 +124,15 @@ export const createProduit = async (req, res) => {
         res.status(500).json({ 
             error: error.message 
         });
+    }finally {
+        connect.release(); // Toujours libérer la connexion
     }
 }
 
 export const getAllProduits = async (req, res) => {
+    const pool = await connectSQL();
+    const connect = await pool.getConnection();
     try {
-        const connect = await connectSQL();
 
         const query = 'SELECT * FROM produit';
         const [results] = await connect.query(query);
@@ -125,14 +145,17 @@ export const getAllProduits = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }finally {
+        connect.release(); // Toujours libérer la connexion
     }
 }
 
 export const getProductById = async (req, res) => {
     const { id } = req.params;
 
+    const pool = await connectSQL();
+    const connect = await pool.getConnection();
     try {
-        const connect = await connectSQL();
 
         const query = 'SELECT * FROM produit WHERE id_produit = ?';
         const [results] = await connect.query(query, [id]);
@@ -144,13 +167,16 @@ export const getProductById = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }finally {
+        connect.release(); // Toujours libérer la connexion
     }
 }
 
 export const getProduitByFamille = async (req, res) => {
     const { id_familleproduit } = req.params;
+    const pool = await connectSQL();
+    const connect = await pool.getConnection();
     try {
-        const connect = await connectSQL();
 
         const query = 'SELECT * FROM produit WHERE id_familleproduit = ?';
         const results = await connect.query(query, [id_familleproduit]);
@@ -161,28 +187,34 @@ export const getProduitByFamille = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }finally {
+        connect.release(); // Toujours libérer la connexion
     }
 }
 
 export const updateProduit = async (req, res) => {
     const { id } = req.params;
     const { nom_produit, id_familleproduit } = req.body; // Suppression de critercontrole
+    const pool = await connectSQL();
+    const connect = await pool.getConnection();
     try {
-        const connect = await connectSQL();
 
         const query = 'UPDATE produit SET nom_produit = ?, id_familleproduit = ? WHERE id_produit = ?';
         await connect.query(query, [nom_produit, id_familleproduit, id]);
         res.status(200).json({ id, nom_produit, id_familleproduit });
     } catch (error) {
         res.status(500).json({ error: error.message });
-    }
+    }finally {
+        connect.release(); // Toujours libérer la connexion
+      }
 }
 
 export const deleteProduit = async (req, res) => {
     const { id } = req.params;
     
+    const pool = await connectSQL();
+    const connect = await pool.getConnection();
     try {
-        const connect = await connectSQL();
 
         const query = 'DELETE FROM produit WHERE id_produit = ?';
         await connect.query(query, [id]);
@@ -193,5 +225,7 @@ export const deleteProduit = async (req, res) => {
         res.status(500).json({ 
             error: error.message 
         });
-    }
+    }finally {
+        connect.release(); // Toujours libérer la connexion
+      }
 }

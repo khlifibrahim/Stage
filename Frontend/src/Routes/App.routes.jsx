@@ -15,6 +15,9 @@ import NewControl31 from '../Pages/Mission/Control/Control-31-08'
 import NewControl24 from '../Pages/Mission/Control/Control-24-09'
 import ListEnterprise from '../Pages/Enterprise/ListEnterprise'
 import AddEnterprise from '../Pages/Enterprise/AddEnterprise'
+import IndhList from '../Components/INDH/IndhList'
+import IndhForm from '../Components/INDH/IndhForm'
+import IndhDetail from '../Components/INDH/IndhDetail'
 import Unauthorized from '../Pages/unauthorized/unauthorized'
 import CarsList from '../Pages/Cars/CarsList'
 import ProfilePage from '../Pages/Profile/ProfilePage'
@@ -52,6 +55,13 @@ function AppRoutes() {
           <Route path="entreprise" >
             <Route path="list" element={<ListEnterprise role={role} />} />
             <Route path="add" element={<AddEnterprise />} />
+          </Route>
+
+          <Route path="indh" >
+            <Route path="list" element={<IndhList />} />
+            <Route path="add" element={<IndhForm />} />
+            <Route path="edit/:id" element={<IndhForm />} />
+            <Route path="view/:id" element={<IndhDetail />} />
           </Route>
 
           <Route path="voitures" element={<CarsList />} />

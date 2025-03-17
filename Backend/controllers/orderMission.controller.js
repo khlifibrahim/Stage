@@ -108,7 +108,7 @@ export const getOrderMission = async (req, res) => {
                         JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
                         JOIN grade g ON c.grade_id = g.grade_id
                         JOIN Destination d ON m.Id_des = d.id_des
-                        JOIN Object o ON m.Id_object = o.Id_object
+                        JOIN Objects o ON m.Id_object = o.Id_object
                         ;
                     `;
                 break;
@@ -130,7 +130,7 @@ export const getOrderMission = async (req, res) => {
                     JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
                     JOIN grade g ON c.grade_id = g.grade_id
                     JOIN Destination d ON m.Id_des = d.id_des
-                    JOIN Object o ON m.Id_object = o.Id_object
+                    JOIN Objects o ON m.Id_object = o.Id_object
                     ;
                 `;
                 break;
@@ -153,7 +153,7 @@ export const getOrderMission = async (req, res) => {
                     JOIN Utilisateur u ON c.id_utilisateur = u.id_utilisateur
                     JOIN grade g ON c.grade_id = g.grade_id
                     JOIN Destination d ON m.Id_des = d.id_des
-                    JOIN Object o ON m.Id_object = o.Id_object
+                    JOIN Objects o ON m.Id_object = o.Id_object
                     WHERE m.status = 'En Cours' AND u.id_utilisateur = ?
                 `;
                 // query = `
@@ -253,14 +253,67 @@ export const getServiceCars = async (req, res) => {
 export const getObjectOptions = async (req, res) => {
     try {
         const connect = await connectSQL();
-        const query = 'SELECT * FROM Object';
-        const [objects] = await connect.query(query);
-        console.log(objects)
         
-        res.status(200).json({
+        // If the table has hierarchical structure, use the hierarchical query
+        const query = `
+            SELECT * FROM Objects 
+            ORDER BY 
+                CASE 
+                    WHEN level_type = 'axe' THEN 1 
+                    WHEN level_type = 'sous_axe' THEN 2 
+                    WHEN level_type = 'mission' THEN 3 
+                    ELSE 4 
+                END, 
+                order_num ASC
+        `;
+        
+        const [objects] = await connect.query(query);
+        
+        // Create hierarchical structure
+        const axes = [];
+        const sousAxes = {};
+        const missions = {};
+        
+        // Group objects by level
+        objects.forEach(obj => {
+            if (obj.level_type === 'axe') {
+                axes.push({
+                    ...obj,
+                    sousAxes: []
+                });
+            } else if (obj.level_type === 'sous_axe') {
+                sousAxes[obj.Id_object] = {
+                    ...obj,
+                    missions: []
+                };
+            } else if (obj.level_type === 'mission') {
+                missions[obj.Id_object] = obj;
+            }
+        });
+        
+        // Build the hierarchy
+        // Add missions to sous_axes
+        objects.forEach(obj => {
+            if (obj.level_type === 'mission' && sousAxes[obj.parent_id]) {
+                sousAxes[obj.parent_id].missions.push(obj);
+            }
+        });
+        
+        // Add sous_axes to axes
+        objects.forEach(obj => {
+            if (obj.level_type === 'sous_axe') {
+                const parentAxe = axes.find(axe => axe.Id_object === obj.parent_id);
+                if (parentAxe) {
+                    parentAxe.sousAxes.push(sousAxes[obj.Id_object]);
+                }
+            }
+        });
+        
+        return res.status(200).json({
             success: true,
-            objects: objects
-        })
+            objects: objects,
+            hierarchicalObjects: axes
+        });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ error: 'Internal Server Error' });
