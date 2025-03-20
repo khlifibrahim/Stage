@@ -20,7 +20,7 @@ function NewControl24() {
   const [famillies, setFamillies] = useState({})
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [DispalyError, setDispalyError] = useState(null)
-  const [step, setStep] = useState(5)
+  const [step, setStep] = useState(1)
   const steps = Array.from(document.getElementsByClassName('step'))
   const [stepValid, setStepVaid] = useState()
 
@@ -437,12 +437,12 @@ const handleStatus = (status) => {
                   />
                 </div>
                 <div className="flex justify-end mt-4">
-                  <button
+                  {/* <button
                     type="button"
                     className="px-3 py-2 bg-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue transition-colors"
                   >
                     Imprimer
-                  </button>
+                  </button> */}
                 </div>
               </div>
               <div className={`${tab === 2 ? 'block' : 'hidden'}`}>
@@ -453,12 +453,12 @@ const handleStatus = (status) => {
                   />
                 </div>
                 <div className="flex justify-end mt-4">
-                  <button
+                  {/* <button
                     type="button"
                     className="px-3 py-2 bg-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue transition-colors"
                   >
                     Imprimer
-                  </button>
+                  </button> */}
                 </div>
               </div>
               <div className={`${tab === 3 ? '!block' : 'hidden'}`}>
