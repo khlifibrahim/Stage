@@ -49,7 +49,7 @@ function ListMissions({role, user}) {
     { id: 0, label: "Tous" },
     { id: 1, label: "En Attente" },
     { id: 2, label: "En Cours" },
-    { id: 3, label: "Validé" }
+    { id: 3, label: "Cloturé" }
   ];
 
   const toggleMissionMenu = (id)=> {
@@ -62,7 +62,7 @@ function ListMissions({role, user}) {
 
   const handleFilterChange = orderMissions.filter((mission) => {
     if (!filter || filter === 'Tous') return true;
-    return mission.status === filter
+    return mission.status === filter || mission.closed === 1
   })
   let filterMenuRef = useRef()
   useOnClickOutside(filterMenuRef, () => setFilterMenuOpen(false) )
@@ -226,7 +226,7 @@ function ListMissions({role, user}) {
           {orderMissions.length > 0 ? handleFilterChange.slice(start, end).map((mission, i) => (
             <div key={i} className="table-rows flex lg:flex-nowrap items-center justify-evenly max-lg:flex-wrap-reverse max-lg:justify-start max-lg:items-start py-3 my-2 border border-[#E4E4E4] rounded-[10px] cursor-pointer transition-colors hover:bg-[#F9F9F9] hover:!border-[#E4E4E4]">
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:basis-1/2"><p className="text-[#727272] rounded bg-transparent border-none max-lg:font-bold max-lg:text-lg">{`${mission.cadre_nom} ${mission.cadre_prenom}` || 'Mission name'}</p></div>
-              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:basis-1/2 "><p className="text-[#727272] rounded bg-transparent border-none ">{mission.Object_type || 'Aucun'}</p></div>
+              <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full truncate max-w-[200px] max-lg:basis-1/2 "><p className="text-[#727272] rounded bg-transparent border-none">{mission.Object_type || 'Aucun'}</p></div>
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:hidden "><p className="text-[#727272] rounded bg-transparent border-none">{mission.Destination || 'Oujda angade'}</p></div>
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:hidden"><p className="text-[#727272] rounded bg-transparent border-none">{dateFormat(mission.departure_date) || 'August 1, 2024'}</p></div>
               <div onClick={() => handleDetails(mission.mission_id)} className="table-base-row px-3 w-full max-lg:basis-1/2"> { /* mission.status === "En Attente" ? "!bg-[rgba(255,156,156,0.44)]" : mission.status === "En Cours" ? "!bg-[rgba(183,255,159,0.44)]" :  "!bg-[rgba(131,131,131,0.44)]" */}

@@ -481,8 +481,8 @@ export const createOrderMission  = async (req, res)=> {
             durationDays,
             companion || null,
             plateNumber || null,
-            depHour,
-            arrHour,
+            depHour || null,
+            arrHour || null,
             destinationId,
             objectId
         ]);

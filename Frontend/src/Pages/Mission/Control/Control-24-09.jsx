@@ -6,6 +6,8 @@ import { fetchEnterprise, getEnterpriseById } from '../../../Redux/Actions/enter
 import { createControl24 } from '../../../Redux/Actions/control24.actions';
 import Select from 'react-select';
 import DQSM301bis from './forms-to-print/DQSM301bis'
+import DQSM30103 from './forms-to-print/DQSM30103';
+import BonDeCommande from './forms-to-print/bandCommand';
 
 function NewControl24() {
   const dispatch = useDispatch()
@@ -21,6 +23,11 @@ function NewControl24() {
   const [step, setStep] = useState(5)
   const steps = Array.from(document.getElementsByClassName('step'))
   const [stepValid, setStepVaid] = useState()
+
+  const [tab, setTab] = useState(1)
+  const handleTabNavigation = (e) => {
+    setTab(e)
+  }
 
   const missionID = theLocation.state?.id
   const cadreid = theLocation.state?.cadreId
@@ -193,6 +200,7 @@ const handleStatus = (status) => {
     dispatch(createControl24(control));
     setStep(2)
   }
+
 
   return (
     <div className='px-6 flex flex-col max-md:px-0'>
@@ -407,9 +415,56 @@ const handleStatus = (status) => {
           </div>
         </div>
         <div className={`step ${step === 5 ? '' : 'hidden'} w-full`}>
-          <p className='text-xl font-semibold mb-2'><span className=''>{step}</span> - Prelevement</p>
+          <p className='text-xl font-semibold mb-2'><span>{step}</span> - Prelevement</p>
           <div>
-              <DQSM301bis data={control} />
+            <div className="tabs flex gap-1 rounded-[10px] overflow-hidden">
+              <div onClick={() => handleTabNavigation(1)} className={`tab1 py-1.5 w-full text-center font-medium cursor-pointer ${tab === 1 ? 'border-b-2 border-bg-blue text-blue' : ''}`}>
+                ملصق العينات
+              </div>
+              <div onClick={() => handleTabNavigation(2)} className={`tab2 py-1.5 w-full text-center font-medium cursor-pointer ${tab === 2 ? 'border-b-2 border-bg-blue text-blue' : ''}`}>
+                محضر أخذ العينات
+              </div>
+              <div onClick={() => handleTabNavigation(3)} className={`tab3 py-1.5 w-full text-center font-medium cursor-pointer ${tab === 3 ? 'border-b-2 border-bg-blue text-blue' : ''}`}>
+                BON DE COMMANDE
+              </div>
+            </div>
+            <div className="container">
+              <div className={`${tab === 1 ? 'block' : 'hidden'}`}>
+                <div className="printable-content">
+                  <DQSM301bis 
+                    data={{ ...control, enterprise: Enterprise }} 
+                    onDataChange={'handleDQSM301bisData'}
+                  />
+                </div>
+                <div className="flex justify-end mt-4">
+                  <button
+                    type="button"
+                    className="px-3 py-2 bg-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue transition-colors"
+                  >
+                    Imprimer
+                  </button>
+                </div>
+              </div>
+              <div className={`${tab === 2 ? 'block' : 'hidden'}`}>
+                <div className="printable-content">
+                  <DQSM30103 
+                    data={{ ...control, enterprise: Enterprise }} 
+                    onDataChange={'handleDQSM30103Data'}
+                  />
+                </div>
+                <div className="flex justify-end mt-4">
+                  <button
+                    type="button"
+                    className="px-3 py-2 bg-[#E4E4E4] font-medium font-poppins text-base rounded-[10px] hover:!bg-bg-blue hover:text-blue transition-colors"
+                  >
+                    Imprimer
+                  </button>
+                </div>
+              </div>
+              <div className={`${tab === 3 ? '!block' : 'hidden'}`}>
+                <BonDeCommande />
+              </div>
+            </div>
           </div>
         </div>
         <div className={`step ${step === 6 ? '' : 'hidden'} w-full max-md:text-sm`}>

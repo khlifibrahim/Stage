@@ -1,50 +1,59 @@
 import { useEffect, useState } from "react";
 import Instance from '../../../../Api/axios';
 
-const DQSM301bis = ({ data }) => {
+const DQSM301bis = ({ data, onDataChange }) => {
   console.log('Data insided Print: ', data)
-  console.log('Data insided Print: ', data.productname)
+  
+  const [formData, setFormData] = useState({
+    productName: data?.productname || "",
+    reportNumber: "",
+    name: "",
+    title: "",
+    institution: data?.enterprise?.raison_sociale || "",
+    address: data?.enterprise?.adresse_siege || "",
+    samples: data?.productname || "",
+    cityCode: "",
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+  });
+
   useEffect(() => {
     const fetchCadre = async () => {
       try {
-        const response = await Instance.get(`/missions/getCadre/${5}`);
-        // const cadrenom = response.data.cadres.nom
-        console.log('Prenom :', response.data.prenom)
-        const inspector = `${response.data.cadres.nom} ${response.data.prenom}`
-        setFormData(prev => ({
-          ...prev,
-          cadrename: inspector
-        }));
+        const response = await Instance.get(`/missions/getCadre/${data.cadreId}`);
+        const inspector = `${response.data.cadres.nom} ${response.data.prenom}`;
+        
+        const updatedFormData = {
+          ...formData,
+          cadrename: inspector,
+          name: inspector,
+          title: response.data.cadres.grade || ""
+        };
+        
+        setFormData(updatedFormData);
+        if (onDataChange) {
+          onDataChange(updatedFormData);
+        }
       } catch (error) {
         console.error(error);
       }
     };
+    
     fetchCadre();
+    
+    // Update form data when enterprise or product changes
+    setFormData(prev => ({
+      ...prev,
+      productName: data?.productname || "",
+      institution: data?.enterprise?.raison_sociale || "",
+      address: data?.enterprise?.adresse_siege || "",
+      samples: data?.productname || ""
+    }));
   }, [data]);
 
-  const [formData, setFormData] = useState({
-    productName: data?.productname || ""
-  });
-
-  console.log('DQSM301bis:', formData)
-  const [pdfBlob, setPdfBlob] = useState(null);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await Instance.post("http://localhost:5000/generate-pdf", formData, {
-        responseType: "blob",
-      });
-      setPdfBlob(response.data);
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-    }
-  };
-
+ const handleChange = () => {
+  
+ }
   return (
     <div className="min-h-screen p-4 md:p-8 max-w-3xl mx-auto">
       <div className="text-center mb-6">
@@ -54,7 +63,7 @@ const DQSM301bis = ({ data }) => {
         <h3 className="text-center mt-4 font-bold">ملحق العينات</h3>
       </div>
 
-      <form onSubmit={handleSubmit} dir="rtl" className="space-y-6">
+      <form  dir="rtl" className="space-y-6">
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <label htmlFor="reportNumber" className="text-right">
